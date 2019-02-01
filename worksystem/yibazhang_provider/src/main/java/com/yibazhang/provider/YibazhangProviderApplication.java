@@ -1,6 +1,7 @@
 package com.yibazhang.provider;
 
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,7 @@ import java.util.concurrent.CountDownLatch;
 
 @SpringBootApplication
 @EnableDubbo
+@MapperScan("com.yibazhang.provider.mapper")
 public class YibazhangProviderApplication {
     private static final Logger logger = LoggerFactory.getLogger(YibazhangProviderApplication.class);
 

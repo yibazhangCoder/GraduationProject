@@ -1,6 +1,7 @@
 package com.yibazhang.consumer.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.yibazhang.api.bean.Student;
 import com.yibazhang.api.service.helloApi;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +20,6 @@ public class HelloService {
     public String sayHello(String name){
         return helloApi.sayHello(name);
     }
+
+    public Student select(int sId){return helloApi.selectById(sId);}
 }

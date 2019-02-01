@@ -1,5 +1,7 @@
 package com.yibazhang.api.service;
 
+import com.yibazhang.api.bean.Student;
+
 /**
  * @Author 一巴掌
  * @Date 2019/1/26 9:53
@@ -8,4 +10,6 @@ package com.yibazhang.api.service;
  **/
 public interface helloApi {
     String sayHello(String name);
+
+    Student selectById(int sid);
 }
