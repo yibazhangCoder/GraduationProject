@@ -97,7 +97,7 @@ public class DataSourseConfig {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sqlSessionFactoryBean.setTypeAliasesPackage("com.yibazhang.provider.entity");
         sqlSessionFactoryBean.setConfigLocation(resolver.getResource("classpath:/config/mybatis-config.xml"));
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:/mapper/*.xml"));
+        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath*:mapper/**/*.xml"));
         return sqlSessionFactoryBean.getObject();
     }
 

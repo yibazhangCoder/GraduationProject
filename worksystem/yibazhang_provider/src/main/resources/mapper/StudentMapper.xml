@@ -3,16 +3,17 @@
 <mapper namespace="com.yibazhang.provider.mapper.StudentMapper">
   <resultMap id="BaseResultMap" type="com.yibazhang.provider.entity.Student">
     <id column="s_id" jdbcType="INTEGER" property="sId" />
+    <result column="s_age" jdbcType="INTEGER" property="sAge" />
     <result column="s_name" jdbcType="VARCHAR" property="sName" />
     <result column="s_sex" jdbcType="CHAR" property="sSex" />
-    <result column="s_age" jdbcType="INTEGER" property="sAge" />
-    <result column="s_phone" jdbcType="VARCHAR" property="sPhone" />
+    <result column="s_mobile" jdbcType="VARCHAR" property="sMobile" />
+    <result column="s_email" jdbcType="VARCHAR" property="sEmail" />
     <result column="s_aca" jdbcType="INTEGER" property="sAca" />
-    <result column="s_class" jdbcType="VARCHAR" property="sClass" />
-    <result column="s_password" jdbcType="VARCHAR" property="sPassword" />
+    <result column="s_profession" jdbcType="INTEGER" property="sProfession" />
+    <result column="s_class" jdbcType="INTEGER" property="sClass" />
   </resultMap>
   <sql id="Base_Column_List">
-    s_id, s_name, s_sex, s_age, s_phone, s_aca, s_class, s_password
+    s_id, s_age, s_name, s_sex, s_mobile, s_email, s_aca, s_profession, s_class
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -25,12 +26,14 @@
     where s_id = #{sId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.yibazhang.provider.entity.Student">
-    insert into student (s_id, s_name, s_sex, 
-      s_age, s_phone, s_aca, 
-      s_class, s_password)
-    values (#{sId,jdbcType=INTEGER}, #{sName,jdbcType=VARCHAR}, #{sSex,jdbcType=CHAR}, 
-      #{sAge,jdbcType=INTEGER}, #{sPhone,jdbcType=VARCHAR}, #{sAca,jdbcType=INTEGER}, 
-      #{sClass,jdbcType=VARCHAR}, #{sPassword,jdbcType=VARCHAR})
+    insert into student (s_id, s_age, s_name, 
+      s_sex, s_mobile, s_email, 
+      s_aca, s_profession, s_class
+      )
+    values (#{sId,jdbcType=INTEGER}, #{sAge,jdbcType=INTEGER}, #{sName,jdbcType=VARCHAR}, 
+      #{sSex,jdbcType=CHAR}, #{sMobile,jdbcType=VARCHAR}, #{sEmail,jdbcType=VARCHAR}, 
+      #{sAca,jdbcType=INTEGER}, #{sProfession,jdbcType=INTEGER}, #{sClass,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.Student">
     insert into student
@@ -38,31 +41,37 @@
       <if test="sId != null">
         s_id,
       </if>
+      <if test="sAge != null">
+        s_age,
+      </if>
       <if test="sName != null">
         s_name,
       </if>
       <if test="sSex != null">
         s_sex,
       </if>
-      <if test="sAge != null">
-        s_age,
+      <if test="sMobile != null">
+        s_mobile,
       </if>
-      <if test="sPhone != null">
-        s_phone,
+      <if test="sEmail != null">
+        s_email,
       </if>
       <if test="sAca != null">
         s_aca,
       </if>
+      <if test="sProfession != null">
+        s_profession,
+      </if>
       <if test="sClass != null">
         s_class,
-      </if>
-      <if test="sPassword != null">
-        s_password,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sId != null">
         #{sId,jdbcType=INTEGER},
+      </if>
+      <if test="sAge != null">
+        #{sAge,jdbcType=INTEGER},
       </if>
       <if test="sName != null">
         #{sName,jdbcType=VARCHAR},
@@ -70,59 +79,63 @@
       <if test="sSex != null">
         #{sSex,jdbcType=CHAR},
       </if>
-      <if test="sAge != null">
-        #{sAge,jdbcType=INTEGER},
+      <if test="sMobile != null">
+        #{sMobile,jdbcType=VARCHAR},
       </if>
-      <if test="sPhone != null">
-        #{sPhone,jdbcType=VARCHAR},
+      <if test="sEmail != null">
+        #{sEmail,jdbcType=VARCHAR},
       </if>
       <if test="sAca != null">
         #{sAca,jdbcType=INTEGER},
       </if>
-      <if test="sClass != null">
-        #{sClass,jdbcType=VARCHAR},
+      <if test="sProfession != null">
+        #{sProfession,jdbcType=INTEGER},
       </if>
-      <if test="sPassword != null">
-        #{sPassword,jdbcType=VARCHAR},
+      <if test="sClass != null">
+        #{sClass,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.yibazhang.provider.entity.Student">
     update student
     <set>
+      <if test="sAge != null">
+        s_age = #{sAge,jdbcType=INTEGER},
+      </if>
       <if test="sName != null">
         s_name = #{sName,jdbcType=VARCHAR},
       </if>
       <if test="sSex != null">
         s_sex = #{sSex,jdbcType=CHAR},
       </if>
-      <if test="sAge != null">
-        s_age = #{sAge,jdbcType=INTEGER},
+      <if test="sMobile != null">
+        s_mobile = #{sMobile,jdbcType=VARCHAR},
       </if>
-      <if test="sPhone != null">
-        s_phone = #{sPhone,jdbcType=VARCHAR},
+      <if test="sEmail != null">
+        s_email = #{sEmail,jdbcType=VARCHAR},
       </if>
       <if test="sAca != null">
         s_aca = #{sAca,jdbcType=INTEGER},
       </if>
-      <if test="sClass != null">
-        s_class = #{sClass,jdbcType=VARCHAR},
+      <if test="sProfession != null">
+        s_profession = #{sProfession,jdbcType=INTEGER},
       </if>
-      <if test="sPassword != null">
-        s_password = #{sPassword,jdbcType=VARCHAR},
+      <if test="sClass != null">
+        s_class = #{sClass,jdbcType=INTEGER},
       </if>
     </set>
     where s_id = #{sId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yibazhang.provider.entity.Student">
     update student
-    set s_name = #{sName,jdbcType=VARCHAR},
+    set s_age = #{sAge,jdbcType=INTEGER},
+      s_name = #{sName,jdbcType=VARCHAR},
       s_sex = #{sSex,jdbcType=CHAR},
-      s_age = #{sAge,jdbcType=INTEGER},
-      s_phone = #{sPhone,jdbcType=VARCHAR},
+      s_mobile = #{sMobile,jdbcType=VARCHAR},
+      s_email = #{sEmail,jdbcType=VARCHAR},
       s_aca = #{sAca,jdbcType=INTEGER},
-      s_class = #{sClass,jdbcType=VARCHAR},
-      s_password = #{sPassword,jdbcType=VARCHAR}
+      s_profession = #{sProfession,jdbcType=INTEGER},
+      s_class = #{sClass,jdbcType=INTEGER}
     where s_id = #{sId,jdbcType=INTEGER}
   </update>
 </mapper>

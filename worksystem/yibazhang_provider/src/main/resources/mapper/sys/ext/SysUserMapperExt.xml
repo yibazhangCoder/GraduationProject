@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.sys.ext.SysUserMapperExt">
+    
+    <select id="checkUserPwd" resultType="com.yibazhang.provider.entity.sys.ext.SysUserExt">
+        SELECT
+            a.user_id userId,
+            a.user_name userName,
+            c.role_id userRoleId,
+            c.role_name userRoleName
+        FROM
+            sys_user a
+        LEFT JOIN sys_user_role b ON a.user_id = b.user_id
+        LEFT JOIN sys_role c ON b.role_id = c.role_id
+        WHERE
+            a.user_id = #{userId}
+        AND a.`password` = #{password}
+    </select>
+
+    <resultMap id="BaseResultMap" type="com.yibazhang.provider.entity.sys.SysMenu">
+        <id column="menu_id" jdbcType="INTEGER" property="menuId" />
+        <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+        <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" />
+        <result column="menu_level" jdbcType="INTEGER" property="menuLevel" />
+        <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    </resultMap>
+
+    <select id="findUserMenu" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT d.* FROM sys_user a
+        LEFT JOIN sys_user_role b ON a.user_id = b.user_id
+        LEFT JOIN sys_menu_role c ON b.role_id=c.role_id
+        LEFT JOIN sys_menu d ON c.menu_id =d.menu_id
+        WHERE a.user_id=#{userId}
+
+    </select>
+</mapper>
