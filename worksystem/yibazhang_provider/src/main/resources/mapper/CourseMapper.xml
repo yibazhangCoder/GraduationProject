@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.CourseMapper">
+  <resultMap id="BaseResultMap" type="com.yibazhang.provider.entity.Course">
+    <id column="cr_id" jdbcType="INTEGER" property="crId" />
+    <result column="cr_name" jdbcType="VARCHAR" property="crName" />
+    <result column="cr_aca" jdbcType="INTEGER" property="crAca" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cr_id, cr_name, cr_aca
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course
+    where cr_id = #{crId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course
+    where cr_id = #{crId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yibazhang.provider.entity.Course">
+    insert into course (cr_id, cr_name, cr_aca
+      )
+    values (#{crId,jdbcType=INTEGER}, #{crName,jdbcType=VARCHAR}, #{crAca,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.Course">
+    insert into course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="crId != null">
+        cr_id,
+      </if>
+      <if test="crName != null">
+        cr_name,
+      </if>
+      <if test="crAca != null">
+        cr_aca,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="crId != null">
+        #{crId,jdbcType=INTEGER},
+      </if>
+      <if test="crName != null">
+        #{crName,jdbcType=VARCHAR},
+      </if>
+      <if test="crAca != null">
+        #{crAca,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yibazhang.provider.entity.Course">
+    update course
+    <set>
+      <if test="crName != null">
+        cr_name = #{crName,jdbcType=VARCHAR},
+      </if>
+      <if test="crAca != null">
+        cr_aca = #{crAca,jdbcType=INTEGER},
+      </if>
+    </set>
+    where cr_id = #{crId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yibazhang.provider.entity.Course">
+    update course
+    set cr_name = #{crName,jdbcType=VARCHAR},
+      cr_aca = #{crAca,jdbcType=INTEGER}
+    where cr_id = #{crId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.ClassMapper">
+  <resultMap id="BaseResultMap" type="com.yibazhang.provider.entity.Class">
+    <id column="c_id" jdbcType="INTEGER" property="cId" />
+    <result column="c_name" jdbcType="VARCHAR" property="cName" />
+    <result column="c_profession" jdbcType="INTEGER" property="cProfession" />
+    <result column="c_aca" jdbcType="INTEGER" property="cAca" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    c_id, c_name, c_profession, c_aca
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from class
+    where c_id = #{cId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from class
+    where c_id = #{cId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yibazhang.provider.entity.Class">
+    insert into class (c_id, c_name, c_profession, 
+      c_aca)
+    values (#{cId,jdbcType=INTEGER}, #{cName,jdbcType=VARCHAR}, #{cProfession,jdbcType=INTEGER}, 
+      #{cAca,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.Class">
+    insert into class
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cId != null">
+        c_id,
+      </if>
+      <if test="cName != null">
+        c_name,
+      </if>
+      <if test="cProfession != null">
+        c_profession,
+      </if>
+      <if test="cAca != null">
+        c_aca,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cId != null">
+        #{cId,jdbcType=INTEGER},
+      </if>
+      <if test="cName != null">
+        #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="cProfession != null">
+        #{cProfession,jdbcType=INTEGER},
+      </if>
+      <if test="cAca != null">
+        #{cAca,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yibazhang.provider.entity.Class">
+    update class
+    <set>
+      <if test="cName != null">
+        c_name = #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="cProfession != null">
+        c_profession = #{cProfession,jdbcType=INTEGER},
+      </if>
+      <if test="cAca != null">
+        c_aca = #{cAca,jdbcType=INTEGER},
+      </if>
+    </set>
+    where c_id = #{cId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yibazhang.provider.entity.Class">
+    update class
+    set c_name = #{cName,jdbcType=VARCHAR},
+      c_profession = #{cProfession,jdbcType=INTEGER},
+      c_aca = #{cAca,jdbcType=INTEGER}
+    where c_id = #{cId,jdbcType=INTEGER}
+  </update>
+</mapper>

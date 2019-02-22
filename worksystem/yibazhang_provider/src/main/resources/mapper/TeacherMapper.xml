@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.TeacherMapper">
+  <resultMap id="BaseResultMap" type="com.yibazhang.provider.entity.Teacher">
+    <id column="t_id" jdbcType="INTEGER" property="tId" />
+    <result column="t_name" jdbcType="VARCHAR" property="tName" />
+    <result column="t_sex" jdbcType="CHAR" property="tSex" />
+    <result column="t_mobile" jdbcType="VARCHAR" property="tMobile" />
+    <result column="t_email" jdbcType="VARCHAR" property="tEmail" />
+    <result column="t_aca" jdbcType="INTEGER" property="tAca" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t_id, t_name, t_sex, t_mobile, t_email, t_aca
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from teacher
+    where t_id = #{tId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from teacher
+    where t_id = #{tId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yibazhang.provider.entity.Teacher">
+    insert into teacher (t_id, t_name, t_sex, 
+      t_mobile, t_email, t_aca
+      )
+    values (#{tId,jdbcType=INTEGER}, #{tName,jdbcType=VARCHAR}, #{tSex,jdbcType=CHAR}, 
+      #{tMobile,jdbcType=VARCHAR}, #{tEmail,jdbcType=VARCHAR}, #{tAca,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.Teacher">
+    insert into teacher
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tId != null">
+        t_id,
+      </if>
+      <if test="tName != null">
+        t_name,
+      </if>
+      <if test="tSex != null">
+        t_sex,
+      </if>
+      <if test="tMobile != null">
+        t_mobile,
+      </if>
+      <if test="tEmail != null">
+        t_email,
+      </if>
+      <if test="tAca != null">
+        t_aca,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tId != null">
+        #{tId,jdbcType=INTEGER},
+      </if>
+      <if test="tName != null">
+        #{tName,jdbcType=VARCHAR},
+      </if>
+      <if test="tSex != null">
+        #{tSex,jdbcType=CHAR},
+      </if>
+      <if test="tMobile != null">
+        #{tMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="tEmail != null">
+        #{tEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="tAca != null">
+        #{tAca,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yibazhang.provider.entity.Teacher">
+    update teacher
+    <set>
+      <if test="tName != null">
+        t_name = #{tName,jdbcType=VARCHAR},
+      </if>
+      <if test="tSex != null">
+        t_sex = #{tSex,jdbcType=CHAR},
+      </if>
+      <if test="tMobile != null">
+        t_mobile = #{tMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="tEmail != null">
+        t_email = #{tEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="tAca != null">
+        t_aca = #{tAca,jdbcType=INTEGER},
+      </if>
+    </set>
+    where t_id = #{tId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yibazhang.provider.entity.Teacher">
+    update teacher
+    set t_name = #{tName,jdbcType=VARCHAR},
+      t_sex = #{tSex,jdbcType=CHAR},
+      t_mobile = #{tMobile,jdbcType=VARCHAR},
+      t_email = #{tEmail,jdbcType=VARCHAR},
+      t_aca = #{tAca,jdbcType=INTEGER}
+    where t_id = #{tId,jdbcType=INTEGER}
+  </update>
+</mapper>

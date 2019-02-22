@@ -1,0 +1,55 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.ext.AcaMapperExt">
+
+    <select id="selectAcas"  parameterType="com.yibazhang.provider.entity.ext.AcaAndProAndClassExt" resultType="map">
+        SELECT aca_id acaId,aca_name acaName FROM academy a
+        where 1=1
+        <if test="acaId!=null">
+            and a.aca_id=#{acaId}
+        </if>
+        <if test="acaName!=null">
+            and a.aca_name=#{acaName}
+        </if>
+    </select>
+
+    <select id="selectAcaAndPro"  parameterType="com.yibazhang.provider.entity.ext.AcaAndProAndClassExt" resultType="map">
+        SELECT
+            a.aca_id acaId,
+            a.aca_name acaName,
+            p.profession_id professionId,
+            p.profession_name professionName
+        FROM
+            profession p
+        LEFT JOIN academy a ON p.profession_aca = a.aca_id
+        where 1=1
+        <if test="professionId!=null">
+            and p.profession_id=#{professionId}
+        </if>
+        <if test="professionName!=null">
+            and p.profession_name=#{professionName}
+        </if>
+    </select>
+
+
+    <select id="selectAcaAndProAndClass"  parameterType="com.yibazhang.provider.entity.ext.AcaAndProAndClassExt" resultType="map">
+           SELECT
+                a.aca_id acaId,
+                a.aca_name acaName,
+                p.profession_id professionId,
+                p.profession_name professionName,
+                c.c_id cId,
+                c.c_name cName
+            FROM
+                class c
+            LEFT JOIN profession p ON c.c_profession = p.profession_id
+            LEFT JOIN academy a ON c.c_aca = a.aca_id
+            where 1=1
+            <if test="cId!=null">
+                and  c.c_id=#{cId}
+            </if>
+            <if test="cName!=null">
+                and c.c_name=#{cName}
+            </if>
+
+    </select>
+</mapper>

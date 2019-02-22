@@ -6,7 +6,11 @@ import com.yibazhang.api.bean.sys.UserDTO;
 import com.yibazhang.consumer.common.BaseController;
 import com.yibazhang.consumer.service.sys.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * @Author 一巴掌
@@ -14,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @Description TODO
  * @Version 1.0
  **/
-@RestController
+@Controller
 @RequestMapping("/sys")
 public class UserController extends BaseController {
 
@@ -27,11 +31,19 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
-    public JSONObject userLogin( UserDTO userDTO){
-        JSONObject jsonObject = new JSONObject();
-        if (userDTO==null)return fail4Param("参数异常！");
-        jsonObject.put("loginInfo",service.userLogin(userDTO.getUserId(),userDTO.getPassword()));
-        return success(jsonObject);
+    @ResponseBody
+    public JSONObject userLogin(UserDTO userDTO,HttpSession session){
+        if (userDTO.getUserId()==null||userDTO.getPassword()==null) {
+            return fail4Param("用户名和密码不能为空！");
+        }
+        UserDTO dto = service.userLogin(userDTO.getUserId(),userDTO.getPassword());
+        if(dto!=null){
+            session.setAttribute("userInfo",dto);
+            return success("登陆成功！");
+        }else {
+            return fail(405,"用户名或密码错误！");
+        }
+
     }
 
     /**
@@ -40,6 +52,7 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/userRegister",method = RequestMethod.POST)
+    @ResponseBody
     public JSONObject userRegister( Student student){
         JSONObject jsonObject =  new JSONObject();
         if (student.getSId()==null
@@ -53,5 +66,11 @@ public class UserController extends BaseController {
         )return fail4Param("参数异常");
         jsonObject.put("registerInfo",service.userRegister(student));
         return success(jsonObject);
+    }
+
+    @RequestMapping("/userLogout")
+    public String userLogout(HttpSession session){
+        session.setAttribute("userInfo",null);
+        return "redirect:/";
     }
 }

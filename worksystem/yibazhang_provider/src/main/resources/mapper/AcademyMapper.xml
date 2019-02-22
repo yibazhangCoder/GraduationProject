@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.AcademyMapper">
+  <resultMap id="BaseResultMap" type="com.yibazhang.provider.entity.Academy">
+    <id column="aca_id" jdbcType="INTEGER" property="acaId" />
+    <result column="aca_name" jdbcType="VARCHAR" property="acaName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    aca_id, aca_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from academy
+    where aca_id = #{acaId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from academy
+    where aca_id = #{acaId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yibazhang.provider.entity.Academy">
+    insert into academy (aca_id, aca_name)
+    values (#{acaId,jdbcType=INTEGER}, #{acaName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.Academy">
+    insert into academy
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="acaId != null">
+        aca_id,
+      </if>
+      <if test="acaName != null">
+        aca_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="acaId != null">
+        #{acaId,jdbcType=INTEGER},
+      </if>
+      <if test="acaName != null">
+        #{acaName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yibazhang.provider.entity.Academy">
+    update academy
+    <set>
+      <if test="acaName != null">
+        aca_name = #{acaName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where aca_id = #{acaId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yibazhang.provider.entity.Academy">
+    update academy
+    set aca_name = #{acaName,jdbcType=VARCHAR}
+    where aca_id = #{acaId,jdbcType=INTEGER}
+  </update>
+</mapper>
