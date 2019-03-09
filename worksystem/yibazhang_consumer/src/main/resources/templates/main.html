@@ -5,6 +5,12 @@
     <title>主页面</title>
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
     <link th:href="@{/css/base.css}" rel="stylesheet">
+    <style type="text/css">
+        li{
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -12,53 +18,52 @@
         <div class="layui-logo">作业系统</div>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
-                <a href="javascript:;" th:text="${session.userInfo.userName}">
-                </a>
+                <a href="javascript:;" th:text="${session.userInfo.userName}"></a>
                 <dl class="layui-nav-child">
                     <dd><a href="">个人信息设置</a></dd>
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a th:href="@{/sys/userLogout}">退出</a></li>
+            <li class="layui-nav-item"><a  id="logout">退出</a>
         </ul>
     </div>
 
     <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test" >
+                <li class="layui-nav-item layui-nav-itemed" th:if="${session.userInfo.student}">
                     <a class="" href="javascript:;">我的作业</a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;">作业列表</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item">
+                <li class="layui-nav-item " th:if="${session.userInfo.teacher}">
                     <a href="javascript:;">作业分发</a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;">作业列表</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item">
+                <li class="layui-nav-item " th:if="${session.userInfo.admin}">
                     <a class="" href="javascript:;">权限管理</a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;">权限列表</a></dd>
                         <dd><a href="javascript:;">权限设置</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item">
+                <li class="layui-nav-item " th:if="${session.userInfo.admin}">
                     <a class="" href="javascript:;">信息管理</a>
                     <dl class="layui-nav-child">
                         <dd><a href="/admin/AcaManage" th:target="main">学院信息</a></dd>
-                        <dd><a href="javascript:;">课程信息</a></dd>
-                        <dd><a href="javascript:;">教师信息</a></dd>
+                        <dd><a href="/admin/courseInfoManage" th:target="main">课程信息</a></dd>
+                        <dd><a href="/admin/teaInfoList" th:target="main">教师信息</a></dd>
                         <dd><a href="javascript:;">学生信息</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item">
+                <li class="layui-nav-item " th:if="${session.userInfo.teacher or session.userInfo.student }">
                     <a class="" href="javascript:;">选课管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">选择课程</a></dd>
+                        <dd><a href="/course/selectCourse" th:target="main">选择课程</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -77,9 +82,17 @@
 <script th:src="@{/layui/layui.js}"></script>
 <script>
     //JavaScript代码区域
-    layui.use('element', function(){
-        var element = layui.element;
+    layui.use(['element','layer'], function(){
+        var element = layui.element
+            ,$ = layui.$;
 
+        $("#logout").on('click',function () {
+            layer.confirm('提示：您确定要退出登录？', {icon: 7, title: '提示', btn: ['取消', '确定']}, function (index) {
+                layer.close(index)
+            }, function (index) {
+                window.location.href = '/sys/userLogout'
+            });
+        })
     });
 </script>
 </body>

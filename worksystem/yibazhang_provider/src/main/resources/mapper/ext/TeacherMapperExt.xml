@@ -20,6 +20,9 @@
        <if test="tName!=null">
            and t.t_name=#{tName}
        </if>
+       <if test="acaName!=null">
+           and a.aca_name = #{acaName}
+       </if>
    </select>
 
 </mapper>

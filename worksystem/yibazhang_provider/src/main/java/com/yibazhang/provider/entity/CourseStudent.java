@@ -9,6 +9,8 @@ public class CourseStudent implements Serializable {
 
     private Integer crId;
 
+    private Integer selectStatus;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -35,6 +37,14 @@ public class CourseStudent implements Serializable {
         this.crId = crId;
     }
 
+    public Integer getSelectStatus() {
+        return selectStatus;
+    }
+
+    public void setSelectStatus(Integer selectStatus) {
+        this.selectStatus = selectStatus;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -49,7 +59,8 @@ public class CourseStudent implements Serializable {
         CourseStudent other = (CourseStudent) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getsId() == null ? other.getsId() == null : this.getsId().equals(other.getsId()))
-            && (this.getCrId() == null ? other.getCrId() == null : this.getCrId().equals(other.getCrId()));
+            && (this.getCrId() == null ? other.getCrId() == null : this.getCrId().equals(other.getCrId()))
+            && (this.getSelectStatus() == null ? other.getSelectStatus() == null : this.getSelectStatus().equals(other.getSelectStatus()));
     }
 
     @Override
@@ -59,6 +70,7 @@ public class CourseStudent implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getsId() == null) ? 0 : getsId().hashCode());
         result = prime * result + ((getCrId() == null) ? 0 : getCrId().hashCode());
+        result = prime * result + ((getSelectStatus() == null) ? 0 : getSelectStatus().hashCode());
         return result;
     }
 }

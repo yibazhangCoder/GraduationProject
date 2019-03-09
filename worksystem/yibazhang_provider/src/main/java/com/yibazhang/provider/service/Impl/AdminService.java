@@ -8,6 +8,7 @@ import com.yibazhang.provider.domain.AdminDomain;
 import com.yibazhang.provider.entity.*;
 import com.yibazhang.provider.entity.Class;
 import com.yibazhang.provider.entity.ext.AcaAndProAndClassExt;
+import com.yibazhang.provider.entity.ext.CourseExt;
 import com.yibazhang.provider.entity.ext.TeacherExt;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,5 +95,12 @@ public class AdminService  implements AdminApi {
         TeacherExt teacherExt = new TeacherExt();
         BeanUtils.copyProperties(teacherDTO,teacherExt);
         return adminDomain.selectTeachers(teacherExt);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectCourses(CourseDTO courseDTO) {
+        CourseExt courseExt = new CourseExt();
+        BeanUtils.copyProperties(courseDTO,courseExt);
+        return adminDomain.selectCourses(courseExt);
     }
 }

@@ -1,10 +1,7 @@
 package com.yibazhang.consumer.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.yibazhang.api.bean.AcademyDTO;
-import com.yibazhang.api.bean.ClassDTO;
-import com.yibazhang.api.bean.ProfessionDTO;
-import com.yibazhang.api.bean.TeacherDTO;
+import com.yibazhang.api.bean.*;
 import com.yibazhang.api.bean.ext.AcaDTOExt;
 import com.yibazhang.api.service.AdminApi;
 import org.springframework.stereotype.Service;
@@ -21,7 +18,7 @@ import java.util.Map;
 @Service
 public class AdminService {
 
-    @Reference(version = "${yibazhang.service.version}")
+    @Reference(version = "${yibazhang.service.version}",timeout = 5000)
     AdminApi adminApi;
 
     /**
@@ -46,6 +43,10 @@ public class AdminService {
         return teacherDTO==null?false:adminApi.addTeaInfo(teacherDTO);
     }
 
+    public boolean addCourseInfo(CourseDTO courseDTO){
+        return courseDTO==null?false:adminApi.addCourse(courseDTO);
+    }
+
     public List<Map<String,Object>> selectAcas(AcaDTOExt acaDTOExt){
         return adminApi.selectAca(acaDTOExt);
     }
@@ -57,4 +58,6 @@ public class AdminService {
     public List<Map<String,Object>> selectAcaAndProfessAndClass(AcaDTOExt acaDTOExt) {return  adminApi.selectAcaAndProAndClass(acaDTOExt);}
 
     public List<Map<String,Object>> selectTeachers(TeacherDTO teacherDTO){return adminApi.selectTeachers(teacherDTO);}
+
+    public List<Map<String,Object>> selectCourses(CourseDTO courseDTO){return adminApi.selectCourses(courseDTO);}
 }

@@ -19,4 +19,6 @@ public class TeacherDTO extends BaseDTO {
 
     private Integer tAca;
 
+    private String acaName;
+
 }

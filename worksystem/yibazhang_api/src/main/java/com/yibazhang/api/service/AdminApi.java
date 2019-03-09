@@ -76,4 +76,7 @@ public interface AdminApi {
      * @return
      */
     List<Map<String, Object>> selectTeachers(TeacherDTO teacherDTO);
+
+
+    List<Map<String,Object>> selectCourses(CourseDTO courseDTO);
 }

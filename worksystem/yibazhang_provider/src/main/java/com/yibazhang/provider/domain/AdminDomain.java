@@ -3,12 +3,14 @@ package com.yibazhang.provider.domain;
 import com.yibazhang.provider.entity.*;
 import com.yibazhang.provider.entity.Class;
 import com.yibazhang.provider.entity.ext.AcaAndProAndClassExt;
+import com.yibazhang.provider.entity.ext.CourseExt;
 import com.yibazhang.provider.entity.ext.TeacherExt;
 import com.yibazhang.provider.entity.sys.SysUser;
 import com.yibazhang.provider.entity.sys.SysUserRole;
 import com.yibazhang.provider.enumtype.RoleEnum;
 import com.yibazhang.provider.mapper.*;
 import com.yibazhang.provider.mapper.ext.AcaMapperExt;
+import com.yibazhang.provider.mapper.ext.CourseMapperExt;
 import com.yibazhang.provider.mapper.ext.TeacherMapperExt;
 import com.yibazhang.provider.mapper.sys.SysUserMapper;
 import com.yibazhang.provider.mapper.sys.SysUserRoleMapper;
@@ -58,6 +60,10 @@ public class AdminDomain {
 
     @Autowired
     CourseMapper courseMapper;
+
+
+    @Autowired
+    CourseMapperExt courseMapperExt;
     /**
      *
      * @param academy
@@ -140,5 +146,10 @@ public class AdminDomain {
 
     public List<Map<String,Object>> selectTeachers(TeacherExt teacherExt){
         return teacherMapperExt.selectTeachers(teacherExt);
+    }
+
+
+    public List<Map<String,Object>> selectCourses(CourseExt courseExt){
+        return courseMapperExt.selectCourses(courseExt);
     }
 }

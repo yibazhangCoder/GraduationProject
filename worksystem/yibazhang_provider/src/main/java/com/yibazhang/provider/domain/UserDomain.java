@@ -69,6 +69,9 @@ public class UserDomain {
      * @return
      */
     public Student userRegister(Student student){
+        Student student1 = studentMapper.selectByPrimaryKey(student.getsId());
+        SysUser user = sysUserMapper.selectByPrimaryKey(student.getsId());
+        if(student1.getsId()!=null||user.getUserId()!=null)return null;
         if (student==null) return null;
         Integer i = studentMapper.insertSelective(student);
         SysUser sysUser = new SysUser();

@@ -28,6 +28,9 @@
         <if test="professionName!=null">
             and p.profession_name=#{professionName}
         </if>
+        <if test="acaId!=null">
+            and a.aca_id = #{acaId}
+        </if>
     </select>
 
 
@@ -49,6 +52,12 @@
             </if>
             <if test="cName!=null">
                 and c.c_name=#{cName}
+            </if>
+            <if test="professionId!=null">
+                and p.profession_id=#{professionId}
+            </if>
+            <if test="acaId!=null">
+                and a.aca_id = #{acaId}
             </if>
 
     </select>

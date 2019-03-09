@@ -18,4 +18,12 @@ public class CourseDTO extends BaseDTO {
     private String crName;
 
     private Integer crAca;
+
+    private String acaName;
+
+    private String tName;
+
+    private Integer sId;
+
+    private Integer tId;
 }

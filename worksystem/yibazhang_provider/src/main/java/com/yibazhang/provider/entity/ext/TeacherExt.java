@@ -7,8 +7,18 @@ public class TeacherExt extends BaseExt {
     private Integer tId;
 
     private String tName;
+    private Integer acaId;
 
     private String acaName;
+
+    public Integer getAcaId() {
+        return acaId;
+    }
+
+    public void setAcaId(Integer acaId) {
+        this.acaId = acaId;
+    }
+
     public Integer gettId() {
         return tId;
     }

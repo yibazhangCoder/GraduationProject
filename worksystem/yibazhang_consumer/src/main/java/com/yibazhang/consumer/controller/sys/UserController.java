@@ -37,7 +37,13 @@ public class UserController extends BaseController {
             return fail4Param("用户名和密码不能为空！");
         }
         UserDTO dto = service.userLogin(userDTO.getUserId(),userDTO.getPassword());
-        if(dto!=null){
+        if(dto.getUserId()==null||dto.getUserName()==null||dto.getUserRoleId()==null)return fail(405,"用户名或密码错误！ ");
+        if(dto.getUserRoleId()!=null) {
+            if (dto.getUserRoleId() == 0) dto.setAdmin(true);
+            else if (dto.getUserRoleId() == 1) dto.setStudent(true);
+            else if (dto.getUserRoleId() == 2) dto.setTeacher(true);
+        }
+        if(dto!=null&&(dto.getUserId()!=null&&dto.getUserName()!=null)){
             session.setAttribute("userInfo",dto);
             return success("登陆成功！");
         }else {
@@ -64,7 +70,9 @@ public class UserController extends BaseController {
                 ||student.getSProfession()==null
                 ||student.getSClass()==null
         )return fail4Param("参数异常");
-        jsonObject.put("registerInfo",service.userRegister(student));
+        Student s = service.userRegister(student);
+        if(s==null)return fail(401,"用户信息已存在，请勿重复注册！");
+        jsonObject.put("registerInfo",s);
         return success(jsonObject);
     }
 

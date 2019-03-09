@@ -83,6 +83,65 @@
         </div>
     </form>
 </div>
+
+
+<div  class="layui-form" id="proPop" style="padding:10px;display: none;">
+    <form class="layui-form layui-form-pane" >
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属学院</label>
+            <div class="layui-input-block">
+                <select id="aca_select_pro"  name="stuAcaId" lay-filter="aca_select_pro">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专业编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="professionId" id="professionId" placeholder="请输入。。。" lay-verify="required|number"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专业名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="professionName" id="professionName" placeholder="请输入。。。"  lay-verify="required" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div  class="layui-form" id="classPop" style="padding:10px;display: none;">
+    <form class="layui-form layui-form-pane" >
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属学院</label>
+            <div class="layui-input-block">
+                <select id="aca_select_class"  name="aca_select_class" lay-filter="aca_select_class">
+                    <option value="">----请选择----</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属专业</label>
+            <div class="layui-input-block">
+                <select id="pro_select_class"  name="pro_select_class" lay-filter="pro_select_class">
+                    <option value="">----请选择----</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">班级编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="cId" id="cId" placeholder="请输入。。。" lay-verify="required|number"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">班级名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="cName" id="cName" placeholder="请输入。。。"  lay-verify="required" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
     <script th:inline="none">
         layui.use(['table', 'layer','form'], function(){
             var table = layui.table
@@ -187,7 +246,25 @@
                                     return;
                                 }
                                 $.ajax({
+                                    url:'/admin/addAcaAnaProAndClassInfo'
+                                    ,data:{
+                                        acaId:acaId,
+                                        acaName:acaName,
+                                        type:0
+                                    }
+                                    ,type:'post'
+                                    ,success:function (res) {
+                                      console.log(res);
+                                          if(res.code==401||res.code==400){
+                                              layer.msg(res.msg,{icon: 5})
+                                                return;
+                                          }else {
+                                              layer.msg(res.data,function(){
+                                                  location.reload();
+                                              });
+                                          }
 
+                                    }
                                 });
 
                             },
@@ -268,7 +345,61 @@
                                 layer.msg('你考虑好再来');
                             });
                         };
-                        //layer.alert(JSON.stringify(data));
+                        break;
+                    case 'addInfo':
+                        getAcademys("#aca_select_pro",0);
+                        layer.open({
+                            type:1,
+                            skin:"layui-layer-molv",
+                            title:"专业信息添加",
+                            anim: 1,
+                            area:['300px','300px'],
+                            content:$("#proPop"),
+                            btn:['提交','取消'],
+                            yes:function (index, layero) {
+                                var regId = new RegExp("^\\d{6,15}$");
+                                var regName = new RegExp("^[0-9]*$");
+                                var pro_acaId = $("#aca_select_pro").val();
+                                var professionId = $("#professionId").val();
+                                var professionName = $("#professionName").val();
+                                if(professionId==null||professionId==''){layer.msg("专业编号不能为空",{icon:5});return;}
+                                if(!regId.test(professionId)) {
+                                    layer.msg("专业编号必须是6-15位数字！",{icon: 5});
+                                    return;
+                                }
+                                if(professionName==null||professionName==''){layer.msg("专业名称不能为空",{icon:5});return;}
+                                if(regName.test(professionName)) {
+                                    layer.msg("专业名称不能为数字！",{icon: 5});
+                                    return;
+                                }
+
+                                console.log(pro_acaId);
+                                $.ajax({
+                                    url:'/admin/addAcaAnaProAndClassInfo'
+                                    ,data:{
+                                        acaId:pro_acaId,
+                                        professionId:professionId,
+                                        professionName:professionName,
+                                        type:1
+                                    }
+                                    ,type:'post'
+                                    ,success:function (res) {
+                                        console.log(res);
+                                        if(res.code==401||res.code==400){
+                                            layer.msg(res.msg,{icon: 5})
+                                            return;
+                                        }else {
+                                            layer.msg(res.data,function(){
+                                                location.reload();
+                                            });
+                                        }
+                                    }
+                                });
+                            },
+                            end:function () {
+                                window.location.reload();
+                            }
+                        });
                         break;
                 };
             });
@@ -347,8 +478,141 @@
                             });
                         };
                         break;
+                    case 'addInfo':
+                        getAcademys("#aca_select_class",1);
+                       // var temp =$("#aca_select_class").val();
+                        form.on('select(aca_select_class)',function (data) {
+                            $("#pro_select_class").empty();
+                            $.ajax({
+                                       url:'/admin/selectAcaInfo',
+                                       data:{
+                                           type:1,
+                                           acaId:data.value
+                                       } ,
+                                        success:function (res) {
+                                            var result  = $.parseJSON(res).data
+                                            for(var i =0;i<result.length;i++){
+                                                $("#pro_select_class").append('<option value='+result[i].professionId+'>'+result[i].professionName+'</option>');
+                                            }
+                                            form.render();
+                                            form.render('select');
+                                        }
+                                    });
+
+                        });
+                        layer.open({
+                            type:1,
+                            skin:"layui-layer-molv",
+                            title:"班级信息添加",
+                            anim: 1,
+                            area:['300px','400px'],
+                            content:$("#classPop"),
+                            btn:['提交','取消'],
+                            yes:function (index, layero) {
+                                var regId = new RegExp("^\\d{6,15}$");
+                                var regName = new RegExp("^[0-9]*$");
+                                var cId = $("#cId").val();
+                                var cName = $("#cName").val();
+                                var class_aca=$("#aca_select_class").val();
+                                var clas_pro=$("#pro_select_class").val();
+                                if(cId==null||cId==''){layer.msg("班级编号不能为空",{icon:5});return;}
+                                if(!regId.test(cId)) {
+                                    layer.msg("班级编号必须是6-15位数字！",{icon: 5});
+                                    return;
+                                }
+                                if(cName==null||cName==''){layer.msg("班级名称不能为空",{icon:5});return;}
+                                if(regName.test(cName)) {
+                                    layer.msg("班级名称不能为数字！",{icon: 5});
+                                    return;
+                                }
+                                $.ajax({
+                                    url:'/admin/addAcaAnaProAndClassInfo'
+                                    ,data:{
+                                        acaId:class_aca,
+                                        professionId:clas_pro,
+                                        cId:cId,
+                                        cName:cName,
+                                        type:2
+                                    }
+                                    ,type:'post'
+                                    ,success:function (res) {
+                                        console.log(res);
+                                        if(res.code==401||res.code==400){
+                                            layer.msg(res.msg,{icon: 5})
+                                            return;
+                                        }else {
+                                            layer.msg(res.data,function(){
+                                                location.reload();
+                                            });
+                                        }
+                                    }
+                                });
+
+                            },
+                            end:function () {
+                                window.location.reload();
+                            }
+                        });
+                        break;
                 };
             });
+
+            // function getProfessions(ele,aId) {
+            //     $.ajax({
+            //        url:'/admin/selectAcaInfo',
+            //        data:{
+            //            type:1,
+            //            acaId:aId
+            //        } ,
+            //         success:function (res) {
+            //             var result  = $.parseJSON(res).data
+            //             createProOption(ele,result);
+            //             form.render(); //更新全部
+            //             form.render('select');
+            //         }
+            //     });
+            // }
+
+            function getAcademys(ele,type){
+                $.ajax({
+                    url:'/admin/selectAcaInfo',
+                    data:{
+                        type:type
+                    },
+                    success:function(res){
+                        var result  = $.parseJSON(res).data;
+                        var h = {};
+                        var arr = new Array();
+                        for(var i=0;i<result.length;i++){
+                            if(!h[result[i].acaId]){
+                                h[result[i].acaId]=true;
+                                arr.push(result[i]);
+                            }
+                        }
+                        createOption(ele,arr);
+                        form.render(); //更新全部
+                        form.render('select');
+                    }
+                });
+            }
+            //
+            // function createProOption(ele,data) {
+            //     var html='';
+            //     for(var i=0;i<data.length;i++){
+            //         html+='<option value='+data[i].professionId+'>'+data[i].professionName+'</option>';
+            //     }
+            //     $(ele).append(html);
+            // }
+
+            //动态创建Option
+            function createOption(ele,data){
+                var html='';
+                for(var i=0;i<data.length;i++){
+                    html+='<option value='+data[i].acaId+'>'+data[i].acaName+'</option>';
+                }
+                $(ele).append(html);
+            }
+
         });
     </script>
 
@@ -356,7 +620,7 @@
     <script type="text/html" id="toolbar">
         <div class="layui-btn-container">
             <button class="layui-btn layui-btn-radius layui-btn-danger" lay-event="getCheckData">批量删除</button>
-            <button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="addInfo">学院添加</button>
+            <button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="addInfo">信息添加</button>
         </div>
     </script>
     <script type="text/html" id="bar">

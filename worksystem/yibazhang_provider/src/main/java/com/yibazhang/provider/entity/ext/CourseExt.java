@@ -19,4 +19,10 @@ public class CourseExt extends BaseExt {
 
     private String acaName;
 
+    private String tName;
+
+    private Integer sId;
+
+    private Integer tId;
+
 }

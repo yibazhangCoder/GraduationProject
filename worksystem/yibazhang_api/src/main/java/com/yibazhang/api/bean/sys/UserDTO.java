@@ -24,4 +24,10 @@ public class UserDTO implements Serializable {
     private String userRoleName;
 
     private String password;
+
+    private boolean admin;
+
+    private boolean teacher;
+
+    private boolean student;
 }

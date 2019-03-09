@@ -5,9 +5,10 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="t_id" jdbcType="INTEGER" property="tId" />
     <result column="cr_id" jdbcType="INTEGER" property="crId" />
+    <result column="select_status" jdbcType="INTEGER" property="selectStatus" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, t_id, cr_id
+    id, t_id, cr_id, select_status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -20,10 +21,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.yibazhang.provider.entity.CourseTeacher">
-    insert into course_teacher (id, t_id, cr_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{tId,jdbcType=INTEGER}, #{crId,jdbcType=INTEGER}
-      )
+    insert into course_teacher (id, t_id, cr_id, 
+      select_status)
+    values (#{id,jdbcType=INTEGER}, #{tId,jdbcType=INTEGER}, #{crId,jdbcType=INTEGER}, 
+      #{selectStatus,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.CourseTeacher">
     insert into course_teacher
@@ -37,6 +38,9 @@
       <if test="crId != null">
         cr_id,
       </if>
+      <if test="selectStatus != null">
+        select_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -47,6 +51,9 @@
       </if>
       <if test="crId != null">
         #{crId,jdbcType=INTEGER},
+      </if>
+      <if test="selectStatus != null">
+        #{selectStatus,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -59,13 +66,17 @@
       <if test="crId != null">
         cr_id = #{crId,jdbcType=INTEGER},
       </if>
+      <if test="selectStatus != null">
+        select_status = #{selectStatus,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yibazhang.provider.entity.CourseTeacher">
     update course_teacher
     set t_id = #{tId,jdbcType=INTEGER},
-      cr_id = #{crId,jdbcType=INTEGER}
+      cr_id = #{crId,jdbcType=INTEGER},
+      select_status = #{selectStatus,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

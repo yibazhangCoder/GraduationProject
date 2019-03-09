@@ -20,4 +20,97 @@
             and a.aca_name=#{acaName}
         </if>
     </select>
+
+
+    <select id="selectCourseWithTeacher" parameterType="com.yibazhang.provider.entity.ext.CourseExt" resultType="map">
+            SELECT
+                ct.id id,
+                c.cr_id crId,
+                c.cr_name crName,
+                a.aca_name acaName,
+                t.t_name tName,
+                ct.select_status selectStatus
+            FROM
+                course_teacher ct
+            LEFT JOIN course c ON ct.cr_id = c.cr_id
+            LEFT JOIN teacher t ON t.t_id = ct.t_id
+            LEFT JOIN academy a ON a.aca_id = c.cr_aca
+            where 1=1 and ct.select_status=1
+            <if test="crId!=null">
+                and c.cr_id=#{crId}
+            </if>
+            <if test="crName!=null">
+                and c.cr_name=#{crName}
+            </if>
+            <if test="acaName!=null">
+                and a.aca_name=#{acaName}
+            </if>
+            <if test="tName!=null">
+                and t.t_name=#{tName}
+            </if>
+            <if test="tId">
+                and t.t_id=#{tId}
+            </if>
+    </select>
+
+    <select id="selectCourseWithStudent" parameterType="com.yibazhang.provider.entity.ext.CourseExt" resultType="map">
+        SELECT
+            cs.id id,
+            c.cr_id crId,
+            c.cr_name crName,
+            a.aca_name acaNameWithCr,
+            t.t_name tName,
+            s.s_name sName,
+            a1.aca_name acaNameWithStu
+        FROM
+            course_student cs
+        LEFT JOIN course c ON cs.cr_id = c.cr_id
+        LEFT JOIN academy a ON a.aca_id = c.cr_aca
+        LEFT JOIN student s ON s.s_id = cs.s_id
+        LEFT JOIN academy a1 ON a1.aca_id=s.s_aca
+        left join course_teacher ct on cs.cr_id=ct.cr_id
+        left join teacher t on t.t_id=ct.t_id
+        where 1=1 and cs.select_status=1 and ct.select_status=1
+        <if test="sId!=null">
+          and  s.s_id=#{sId}
+        </if>
+    </select>
+
+
+    <!--学生选课-->
+    <insert id="insertCourseWithStudent" parameterType="map">
+        insert into course_student (s_id, cr_id,select_status
+      )
+      values
+      <foreach collection="crIds" item="crId" separator=",">
+        ( #{sId,jdbcType=INTEGER}, #{crId,jdbcType=INTEGER},#{selectStatus,jdbcType=BIT})
+      </foreach>
+    </insert>
+
+    <insert id="insertCourseWithTeacher" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into course_teacher ( t_id, cr_id,select_status)
+    values
+    <foreach collection="crIds" item="crId" separator=",">
+      ( #{tId,jdbcType=INTEGER}, #{crId,jdbcType=INTEGER},#{selectStatus,jdbcType=BIT} )
+    </foreach>
+    </insert>
+
+    <update id="courseUpdataWithTeacher" parameterType="java.util.Map">
+          update course_teacher
+            set
+            <foreach collection="ids" item="id" separator=",">
+                  select_status = #{selectStatus,jdbcType=INTEGER}
+                where id = #{id,jdbcType=INTEGER}
+            </foreach>
+    </update>
+
+    <update id="courseUpdateWithStudent" parameterType="java.util.Map">
+         update course_student
+            set
+            <foreach collection="ids" item="id" separator=",">
+                select_status = #{selectStatus,jdbcType=INTEGER}
+                where id = #{id,jdbcType=INTEGER}
+            </foreach>
+
+    </update>
 </mapper>

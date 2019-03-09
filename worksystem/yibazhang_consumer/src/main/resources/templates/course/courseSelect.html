@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
+    <script th:src="@{/jquery.js}"></script>
+    <script th:src="@{/layui/layui.js}"></script>
+    <style type="text/css">
+        .layui-elem-field {
+            background-color: #f2f2f2;
+            width: 700px;
+            margin-right: auto;
+            margin-left: auto;
+            padding:40px;
+        }
+    </style>
+</head>
+<body>
+<div style="margin-left:50px;margin-top: 30px">
+    <input hidden id="userId" th:value="${session.userInfo.userId}">
+    <section id="teacherSection" th:if="${session.userInfo.teacher}">
+        <fieldset class="layui-elem-field" style="margin-top: 50px;">
+            <legend>课程选择</legend>
+                <div class="layui-input-inline">
+                    <select name="selType" lay-verify="selected" id="selType1" class="layui-select">
+                        <option value="">请选择查询选项</option>
+                        <option value="0">课程编号</option>
+                        <option value="1">课程名称</option>
+                        <option value="2">所属学院</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <input class="layui-input" name="selVal" id="selVal1" autocomplete="off">
+                </div>
+            <button class="layui-btn" id="selSearch1">搜索</button>
+            <table class="layui-hide" id="courseTable" lay-filter="courseTable"></table>
+        </fieldset>
+        <hr class="layui-bg-blue">
+        <fieldset class="layui-elem-field" style="margin-top: 50px;">
+            <legend>已经选课程</legend>
+            <table class="layui-hide" id="courseTabled" lay-filter="courseTabled"></table>
+        </fieldset>
+    </section>
+
+    <section id="studentSection" th:if="${session.userInfo.student}">
+        <fieldset class="layui-elem-field" style="margin-top: 50px;">
+            <legend>课程选择</legend>
+            <div class="layui-input-inline">
+                <select name="selType" lay-verify="selected" id="selType2" class="layui-select">
+                    <option value="">请选择查询选项</option>
+                    <option value="0">课程编号</option>
+                    <option value="1">课程名称</option>
+                    <option value="2">所属学院</option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <input class="layui-input" name="selVal" id="selVal2" autocomplete="off">
+            </div>
+            <button class="layui-btn" id="selSearch2">搜索</button>
+            <table class="layui-hide" id="courseTable1" lay-filter="courseTable1"></table>
+        </fieldset>
+        <hr class="layui-bg-blue">
+        <fieldset class="layui-elem-field" style="margin-top: 50px;">
+            <legend>已经选课程</legend>
+            <table class="layui-hide" id="courseTabled1" lay-filter="courseTabled1"></table>
+        </fieldset>
+    </section>
+</div>
+
+<script th:inline="none">
+    layui.use(['table', 'layer','form'], function(){
+        var table = layui.table
+            ,$=layui.$
+            ,layer=layui.layer
+            ,form=layui.form;
+
+        //第一个实例
+        var courseTable = table.render({
+            elem: '#courseTable'
+            ,height: 300
+            ,width:650
+            ,skin:'row'
+            ,even:true
+            ,toolbar:'#toolbar'
+            ,url: '/admin/seleceCourses' //数据接口
+            , loading: true
+            , text:{none:'没有查到更多数据～'}
+            ,page: true //开启分页
+            ,id:'courseTable'
+            ,cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'crId', title: '课程编号', width:160,align:'center'}
+                ,{field: 'crName', title: '课程名', width:180,align:'center'}
+                ,{field: 'acaName', title: '所属学院', width:160,align:'center'}
+                ,{fixed: 'right', title:'操作', toolbar: '#bar', width:100,align:'center'}
+            ]]
+        });
+
+        $("#selSearch1").on('click',function () {
+            courseTable.reload({
+                url:'/admin/seleceCourses',
+                where:{
+                    selType:$("#selType1").val(),
+                    selVal:$("#selVal1").val()
+                },
+                page:{
+                    curr:1
+                }
+            })
+        });
+
+        table.on('toolbar(courseTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'addInfo':
+                    var data = checkStatus.data;
+                    var names="";
+                    var crIds = new Array();
+                    $.each(data,function(){
+                        crIds.push(this.crId);
+                        names+=this.crName+",";
+                    });
+                     names=names.substring(0,names.length-1);
+                     if(crIds.length==0){
+                        layer.msg("请至少选择一门课程！");
+                    }else{
+                        layer.confirm('确定要选择【'+names+'】课程吗？', {
+                            btn: ['确定','不了，不了'] //按钮
+                        }, function(){
+                            $.ajax({
+                                url:'/course/courseInsertWithTeacher',
+                                type:'post',
+                                data:{
+                                  tId:$("#userId").val(),
+                                  crIds:crIds
+                                },
+                                success:function(result){
+                                    layer.msg(result.msg,function(){
+                                        location.reload();
+                                    });
+                                }
+                            });
+                        }, function(){
+                            layer.msg('你考虑好再来');
+                        });
+                    };
+                    //layer.alert(JSON.stringify(data));
+                    break;
+            };
+        });
+
+
+        //教师已选课程
+        var courseTabled = table.render({
+            elem: '#courseTabled'
+            ,height: 300
+            ,width:650
+            ,skin:'row'
+            ,even:true
+            ,toolbar:'#toolbared'
+            ,url: '/course/selectCourseWithTeacher' //数据接口
+            ,where:{
+                tId:$("#userId").val()
+            }
+            , loading: true
+            , text:{none:'没有查到更多数据～'}
+            ,page: true //开启分页
+            ,id:'courseTabled'
+            ,cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'id', title: 'id', width:120,align:'center',hide:true}
+                ,{field: 'crId', title: '课程编号', width:120,align:'center'}
+                ,{field: 'crName', title: '课程名', width:140,align:'center'}
+                ,{field: 'acaName', title: '所属学院', width:160,align:'center'}
+                ,{field: 'selectStatus', title: '状态', width:100,align:'center', templet: function (d) {
+                        return d.selectStatus==1?'正常':'已退';
+                    }}
+                ,{fixed: 'right', title:'操作', toolbar: '#bared', width:100,align:'center'}
+            ]]
+        });
+
+        table.on('toolbar(courseTabled)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'addInfo':
+                    var data = checkStatus.data;
+                    var names="";
+                    var ids = new Array();
+                    $.each(data,function(){
+                        ids.push(this.id);
+                        names+=this.crName+",";
+                    });
+                    console.log(ids);
+                    names=names.substring(0,names.length-1);
+                    if(ids.length==0){
+                        layer.msg("请至少选择一门课程！");
+                    }else{
+                        layer.confirm('确定要退选【'+names+'】课程吗？', {
+                            btn: ['确定','不了，不了'] //按钮
+                        }, function(){
+                            $.ajax({
+                                url:'/course/updateCourseWithTeacher',
+                                type:'post',
+                                data:{
+                                    ids:ids
+                                },
+                                success:function(result){
+                                    layer.msg(result.msg,function(){
+                                        location.reload();
+                                    });
+                                }
+                            });
+                        }, function(){
+                            layer.msg('你考虑好再来');
+                        });
+                    };
+                    //layer.alert(JSON.stringify(data));
+                    break;
+            };
+        });
+
+
+
+        //学生选课
+        var courseTable1 = table.render({
+            elem: '#courseTable1'
+            ,height: 300
+            ,width:650
+            ,skin:'row'
+            ,even:true
+            ,toolbar:'#toolbar'
+            ,url: '/course/selectCourseWithTeacher' //数据接口
+            , loading: true
+            , text:{none:'没有查到更多数据～'}
+            ,page: true //开启分页
+            ,id:'courseTable1'
+            ,cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'crId', title: '课程编号', width:120,align:'center'}
+                ,{field: 'crName', title: '课程名', width:140,align:'center'}
+                ,{field: 'acaName', title: '所属学院', width:160,align:'center'}
+                ,{field: 'tName', title: '任课教师', width:140,align:'center'}
+                ,{field: 'selectStatus', title: '状态', width:100,align:'center', templet: function (d) {
+                        return d.selectStatus==1?'可选':'不可选';
+                    }}
+                ,{fixed: 'right', title:'操作', toolbar: '#bar', width:100,align:'center'}
+            ]]
+        });
+
+        $("#selSearch2").on('click',function () {
+            courseTable1.reload({
+                url:'/course/selectCourseWithTeacher',
+                where:{
+                    selType:$("#selType2").val(),
+                    selVal:$("#selVal2").val()
+                },
+                page:{
+                    curr:1
+                }
+            })
+        });
+
+        table.on('toolbar(courseTable1)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'addInfo':
+                    var data = checkStatus.data;
+                    var names="";
+                    var crIds = new Array();
+                    $.each(data,function(){
+                        crIds.push(this.crId);
+                        names+=this.crName+",";
+                    });
+                    names=names.substring(0,names.length-1);
+                    if(crIds.length==0){
+                        layer.msg("请至少选择一门课程！");
+                    }else{
+                        layer.confirm('确定要选择【'+names+'】课程吗？', {
+                            btn: ['确定','不了，不了'] //按钮
+                        }, function(){
+                            $.ajax({
+                                url:'/course/courseInsertWithStudent',
+                                type:'post',
+                                data:{
+                                    sId:$("#userId").val(),
+                                    crIds:crIds
+                                },
+                                success:function(result){
+                                    layer.msg(result.msg,function(){
+                                        location.reload();
+                                    });
+                                }
+                            });
+                        }, function(){
+                            layer.msg('你考虑好再来');
+                        });
+                    };
+                    break;
+            };
+        });
+
+
+        //学生已选课程
+        var courseTabled1 = table.render({
+            elem: '#courseTabled1'
+            ,height: 300
+            ,width:650
+            ,skin:'row'
+            ,even:true
+            ,toolbar:'#toolbared'
+            ,url: '/course/selectCourseWithStudent' //数据接口
+            ,where:{
+                sId:$("#userId").val()
+            }
+            , loading: true
+            , text:{none:'没有查到更多数据～'}
+            ,page: true //开启分页
+            ,id:'courseTabled1'
+            ,cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'crId', title: '课程编号', width:160,align:'center'}
+                ,{field: 'crName', title: '课程名', width:180,align:'center'}
+                ,{field: 'acaNameWithCr', title: '所属学院', width:160,align:'center'}
+                ,{field: 'tName', title: '任课老师', width:160,align:'center'}
+                ,{fixed: 'right', title:'操作', toolbar: '#bared', width:100,align:'center'}
+            ]]
+        });
+
+
+        table.on('toolbar(courseTabled1)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'addInfo':
+                    var data = checkStatus.data;
+                    var names="";
+                    var ids = new Array();
+                    $.each(data,function(){
+                        ids.push(this.id);
+                        names+=this.crName+",";
+                    });
+                    console.log(ids);
+                    names=names.substring(0,names.length-1);
+                    if(ids.length==0){
+                        layer.msg("请至少选择一门课程！");
+                    }else{
+                        layer.confirm('确定要退选【'+names+'】课程吗？', {
+                            btn: ['确定','不了，不了'] //按钮
+                        }, function(){
+                            $.ajax({
+                                url:'/course/updateCourseWithStudent',
+                                type:'post',
+                                data:{
+                                    ids:ids
+                                },
+                                success:function(result){
+                                    layer.msg(result.msg,function(){
+                                        location.reload();
+                                    });
+                                }
+                            });
+                        }, function(){
+                            layer.msg('你考虑好再来');
+                        });
+                    };
+                    //layer.alert(JSON.stringify(data));
+                    break;
+            };
+        });
+
+    });
+</script>
+<!--工具栏-->
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="addInfo">批量选择</button>
+    </div>
+</script>
+<script type="text/html" id="toolbared">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="addInfo">批量退选</button>
+    </div>
+</script>
+
+<script type="text/html" id="bar">
+    <a class="layui-btn layui-btn-xs layui-btn-radius" lay-event="edit">选择</a>
+</script>
+
+<script type="text/html" id="bared">
+    <a class="layui-btn layui-btn-xs layui-btn-radius" lay-event="edit">退选</a>
+</script>
+</body>
+</html>
