@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
-    <script th:src="@{/jquery.js}"></script>
-    <script th:src="@{/layui/layui.js}"></script>
+    <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet">
+    <script th:src="@{/static/js/jquery.js}"></script>
+    <script th:src="@{/static/layui/layui.js}"></script>
     <style type="text/css">
         .layui-elem-field {
             background-color: #f2f2f2;
@@ -14,13 +14,17 @@
             margin-left: auto;
             padding:40px;
         }
+        .boder-class{
+            border-radius: 10px;
+            border: 2px solid skyblue;
+        }
     </style>
 </head>
 <body>
 <div style="margin-left:50px;margin-top: 30px">
     <input hidden id="userId" th:value="${session.userInfo.userId}">
     <section id="teacherSection" th:if="${session.userInfo.teacher}">
-        <fieldset class="layui-elem-field" style="margin-top: 50px;">
+        <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;">
             <legend>课程选择</legend>
                 <div class="layui-input-inline">
                     <select name="selType" lay-verify="selected" id="selType1" class="layui-select">
@@ -36,15 +40,15 @@
             <button class="layui-btn" id="selSearch1">搜索</button>
             <table class="layui-hide" id="courseTable" lay-filter="courseTable"></table>
         </fieldset>
-        <hr class="layui-bg-blue">
-        <fieldset class="layui-elem-field" style="margin-top: 50px;">
+        <hr class="layui-bg-orange">
+        <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;">
             <legend>已经选课程</legend>
             <table class="layui-hide" id="courseTabled" lay-filter="courseTabled"></table>
         </fieldset>
     </section>
 
     <section id="studentSection" th:if="${session.userInfo.student}">
-        <fieldset class="layui-elem-field" style="margin-top: 50px;">
+        <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;">
             <legend>课程选择</legend>
             <div class="layui-input-inline">
                 <select name="selType" lay-verify="selected" id="selType2" class="layui-select">
@@ -60,8 +64,8 @@
             <button class="layui-btn" id="selSearch2">搜索</button>
             <table class="layui-hide" id="courseTable1" lay-filter="courseTable1"></table>
         </fieldset>
-        <hr class="layui-bg-blue">
-        <fieldset class="layui-elem-field" style="margin-top: 50px;">
+        <hr class="layui-bg-orange">
+        <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;">
             <legend>已经选课程</legend>
             <table class="layui-hide" id="courseTabled1" lay-filter="courseTabled1"></table>
         </fieldset>

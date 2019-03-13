@@ -20,17 +20,17 @@
 <div style="margin-left:50px;margin-top: 30px">
     <fieldset class="layui-elem-field" style="margin-top: 50px;">
         <legend>教师信息</legend>
-            <div class="layui-input-inline">
-                <select name="selType" lay-verify="selected" id="selType" class="layui-select">
-                    <option value="">请选择查询选项</option>
-                    <option value="0">教师编号</option>
-                    <option value="1">教师名称</option>
-                    <option value="2">所属学院</option>
-                </select>
-            </div>
-            <div class="layui-inline">
-                <input class="layui-input" name="selVal" id="selVal" autocomplete="off">
-            </div>
+        <div class="layui-input-inline">
+            <select name="selType" lay-verify="selected" id="selType" class="layui-select">
+                <option value="">请选择查询选项</option>
+                <option value="0">教师编号</option>
+                <option value="1">教师名称</option>
+                <option value="2">所属学院</option>
+            </select>
+        </div>
+        <div class="layui-inline">
+            <input class="layui-input" name="selVal" id="selVal" autocomplete="off">
+        </div>
         <button class="layui-btn" id="selSearch">搜索</button>
         <table class="layui-hide" id="teaTable" lay-filter="teaTable"></table>
     </fieldset>
@@ -120,7 +120,7 @@
                     //layer.alert(JSON.stringify(data));
                     break;
                 case 'addInfo':
-                        window.location.href="/admin/teaInfoAdd"
+                    window.location.href="/admin/teaInfoAdd"
                     break;
             };
         });

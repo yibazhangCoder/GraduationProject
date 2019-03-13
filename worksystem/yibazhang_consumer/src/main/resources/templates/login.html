@@ -43,7 +43,7 @@
                         <div class="layui-input-inline">
                             <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input layui-btn-radius">
                         </div>
-                        <span><a th:href="@{/toForgetPWD}" style="color: #0000FF">忘记密码？</a></span>
+                        <span><a th:href="@{/toForgetPWD}" >忘记密码？</a></span>
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-input-block">
@@ -76,7 +76,7 @@
                         if(res.code==200){
                             window.location="/success.html";
                         }
-                        layer.msg(res.msg);
+                        layer.msg(res.msg,{icon:3});
                     }
                 });
                 return false;

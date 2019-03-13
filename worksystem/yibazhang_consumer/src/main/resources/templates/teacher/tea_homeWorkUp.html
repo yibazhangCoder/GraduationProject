@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet">
+    <script th:src="@{/static/js/jquery.js}"></script>
+    <script th:src="@{/static/layui/layui.js}"></script>
+    <style type="text/css">
+        .layui-elem-field {
+            background-color: #f2f2f2;
+            width: 700px;
+            margin-right: auto;
+            margin-left: auto;
+            padding:40px;
+        }
+        .boder-class{
+            border-radius: 10px;
+            border: 2px solid skyblue;
+        }
+    </style>
+</head>
+<body>
+<div style="margin-left:50px;margin-top: 30px">
+    <fieldset class="layui-elem-field boder-class" style="margin-top: 30px;width: 90%;">
+        <form class="layui-form" action="">
+            <input type="text" id="tId" th:value="${session.userInfo.userId}" hidden>
+            <div class="layui-form-item">
+                <div class="layui-input-inline" style="width: 330px">
+                    <label class="layui-form-label">课程编号：</label>
+                    <div class="layui-input-inline">
+                        <select name="crId" id="crId" lay-filter="nextQueryProject">
+                            <option value="-1">--请选择--</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-input-inline" style="margin-left: -50px;width: 350px">
+                    <label class="layui-form-label">课程名称：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="crName" id="crName"  autocomplete="off" class="layui-input layui-disabled" disabled>
+                    </div>
+                </div>
+                <div class="layui-input-inline" style="margin-left: -50px;width: 360px">
+                    <label class="layui-form-label">作业名称：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="hName"   autocomplete="off" class="layui-input layui-disabled" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item"  style="margin-top: 50px">
+                <div class="layui-input-inline" style="width: 350px">
+                    <label class="layui-form-label">发布时间：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" class="layui-input" name="startTime" id="startTime" placeholder="yyyy-MM-dd HH:mm:ss">
+                    </div>
+                </div>
+                <div class="layui-input-inline" style="margin-left: -50px;width: 350px">
+                    <label class="layui-form-label">截至时间：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" class="layui-input" id="endTime" name="endTime" placeholder="yyyy-MM-dd HH:mm:ss">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 50px">
+                <div class="layui-input-inline" style="width: 400px">
+                    <label class="layui-form-label" style="width: 100px">按选课发布：</label>
+                    <div class="layui-input-inline" style="margin-left: 50px">
+                        <input  type="radio" name="publictype" value="0"  lay-filter="publictype" checked>
+                    </div>
+                </div>
+                <div class="layui-input-inline" style="margin-left: -50px;width: 400px">
+                    <label class="layui-form-label" style="width: 100px">按专业发布：</label>
+                    <div class="layui-input-inline" style="margin-left: 50px">
+                        <input  type="radio" name="publictype" value="1" lay-filter="publictype" style="margin-left: 50px">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-hide" style="margin-top: 50px" id="selectPro" hidden>
+                <div class="layui-input-inline" style="width: 600px">
+                    <label class="layui-form-label" style="width: 100px">请选择专业：</label>
+                    <div class="layui-input-inline" style="width:400px;">
+                        <select class="layui-input" name="professionId">
+                            <option value="">--请选择--</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 50px">
+                <label class="layui-form-label" style="width: 100px">作业上传：</label>
+                <div class="layui-input-block">
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn layui-btn-normal" id="fileSelectBtn">选择作业</button>
+                        <div class="layui-upload-list">
+                            <table class="layui-table">
+                                <thead>
+                                <tr><th>文件名</th>
+                                    <th>大小</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr></thead>
+                                <tbody id="fileList"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 50px">
+                <div class="layui-input-inline" style="width: 600px">
+                    <label class="layui-form-label" style="width: 100px">作业说明：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="comments" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 50px">
+                <div class="layui-input-block" >
+                    <button type="button" class="layui-btn" id="fileListAction" style="margin-left: 40%">提交</button>
+                </div>
+            </div>
+        </form>
+    </fieldset>
+</div>
+<script th:inline="none">
+    layui.use(['table', 'layer','form','laydate','upload'], function(){
+        var table = layui.table
+            ,$=layui.$
+            ,layer=layui.layer
+            ,form=layui.form
+            ,laydate=layui.laydate
+            ,upload=layui.upload;
+
+        laydate.render({
+            elem: '#startTime'
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endTime'
+            ,type: 'datetime'
+        });
+
+        $("#fileListAction").on('click',function (data) {
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            var date1 = new Date(startTime);
+            var date2 = new Date(endTime);
+            console.log(date1.getTime())
+            if(date1>date2){
+                layer.msg("请选择正确的时间阶段！",{icon:5})
+            }
+        })
+
+        form.on('radio(publictype)',function (data) {
+            console.log(data.value);
+            var typeVal = data.value;
+            if(typeVal==0){
+                $("#selectPro").addClass('layui-hide').attr('hidden',true);
+            }else if(typeVal==1){
+                $("#selectPro").removeAttr('hidden').removeClass('layui-hide');
+            }
+
+        });
+
+        //多文件列表示例
+        var demoListView = $('#fileList')
+            ,uploadListIns = upload.render({
+            elem: '#fileSelectBtn'
+            ,url: '/upload/'
+            ,accept: 'file'
+            ,multiple: true
+            ,auto: false
+            ,bindAction: '#fileListAction'
+            ,choose: function(obj){
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function(index, file, result){
+                    var tr = $(['<tr id="upload-'+ index +'">'
+                        ,'<td>'+ file.name +'</td>'
+                        ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+                        ,'<td>等待上传</td>'
+                        ,'<td>'
+                        ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                        ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                        ,'</td>'
+                        ,'</tr>'].join(''));
+
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function(){
+                        obj.upload(index, file);
+                    });
+
+                    //删除
+                    tr.find('.demo-delete').on('click', function(){
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+
+                    demoListView.append(tr);
+                });
+            }
+            ,done: function(res, index, upload){
+                if(res.code == 0){ //上传成功
+                    var tr = demoListView.find('tr#upload-'+ index)
+                        ,tds = tr.children();
+                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(3).html(''); //清空操作
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                }
+                this.error(index, upload);
+            }
+            ,error: function(index, upload){
+                var tr = demoListView.find('tr#upload-'+ index)
+                    ,tds = tr.children();
+                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+        $(function () {
+           getCourses("#crId");
+        });
+        function getCourses(ele){
+            $.ajax({
+                url:'/course/selectCourseWithTeacher',
+                data:{
+                    tId:$("#tId").val()
+                },
+                success:function(res){
+                    var result  = $.parseJSON(res).data;
+                    var h = {};
+                    var arr = new Array();
+                    for(var i=0;i<result.length;i++){
+                        if(!h[result[i].crId]){
+                            h[result[i].crId]=true;
+                            arr.push(result[i]);
+                        }
+                    }
+                    createOption(ele,arr);
+                    form.render(); //更新全部
+                    form.render('select');
+                }
+            });
+        }
+
+        //动态创建课程Option
+        function createOption(ele,data){
+            var html='';
+            for(var i=0;i<data.length;i++){
+                html+='<option value='+data[i].crId+'>'+data[i].crName+'</option>';
+            }
+            $(ele).append(html);
+        }
+
+
+
+    });
+</script>
+</body>
+</html>

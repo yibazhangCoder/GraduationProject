@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>主页面</title>
-    <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
-    <link th:href="@{/css/base.css}" rel="stylesheet">
+    <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/base.css}" rel="stylesheet">
     <style type="text/css">
         li{
             background-color: rgba(0,0,0,0.5);
@@ -35,13 +35,13 @@
                 <li class="layui-nav-item layui-nav-itemed" th:if="${session.userInfo.student}">
                     <a class="" href="javascript:;">我的作业</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">作业列表</a></dd>
+                        <dd><a href="/student/hwList" th:target="main">作业列表</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item " th:if="${session.userInfo.teacher}">
                     <a href="javascript:;">作业分发</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">作业列表</a></dd>
+                        <dd><a href="/teacher/hwList" th:target="main">作业列表</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item " th:if="${session.userInfo.admin}">
@@ -79,7 +79,7 @@
         © autor - yibazhang
     </div>
 </div>
-<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/static/layui/layui.js}"></script>
 <script>
     //JavaScript代码区域
     layui.use(['element','layer'], function(){
