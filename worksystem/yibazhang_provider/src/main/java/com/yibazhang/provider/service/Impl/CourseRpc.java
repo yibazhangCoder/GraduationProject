@@ -61,4 +61,14 @@ public class CourseRpc implements CourseApi {
     public Boolean updateCourseWithStudent(Map<String, Object> map) {
         return courseDomain.updateCourseWithStudent(map);
     }
+
+    @Override
+    public List<Map<String, Object>> checkStudentSelectCourse(Map<String, Object> map) {
+        return courseDomain.checkStudentSelectCourse(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> checkTeacherSelectCourse(Map<String, Object> map) {
+        return courseDomain.checkTeacherSelectCourse(map);
+    }
 }

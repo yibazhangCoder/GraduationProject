@@ -30,7 +30,13 @@ public class CourseController extends BaseController {
     @Autowired
     CourseService courseService;
 
-
+    /**
+     * 学生选课状态
+     * selectStatus 0：退选 1：已选 3：已修
+     * @param sId
+     * @param crIds
+     * @return
+     */
     @RequestMapping(value = "/courseInsertWithStudent",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject insertCourseWithStudent(Integer sId ,@RequestParam(required = false,value = "crIds[]") List crIds){
@@ -39,6 +45,10 @@ public class CourseController extends BaseController {
         map.put("sId",sId);
         map.put("crIds",crIds);
         map.put("selectStatus",1);
+        List<Map<String,Object>> list = courseService.checkStudnetSelectCourse(map);
+        if(!list.isEmpty()){
+            return fail(401,"请勿重复选课");
+        }
         return courseService.insertCourseWithStudent(map)?success("选课成功"):fail(401,"选课失败");
     }
 
@@ -51,6 +61,10 @@ public class CourseController extends BaseController {
         map.put("tId",tId);
         map.put("crIds",crIds);
         map.put("selectStatus",1);
+        List<Map<String,Object>> list = courseService.checkTeacherSelectCourse(map);
+        if(!list.isEmpty()){
+            return fail(401,"请勿重复选课");
+        }
         return courseService.insertCourseWithTeacher(map)?success("选课成功"):fail(401,"选课失败");
     }
 

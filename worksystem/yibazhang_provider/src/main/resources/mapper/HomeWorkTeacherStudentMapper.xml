@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.HomeWorkTeacherStudentMapper">
+  <resultMap id="BaseResultMap" type="com.yibazhang.provider.entity.HomeWorkTeacherStudent">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="t_id" jdbcType="INTEGER" property="tId" />
+    <result column="h_id" jdbcType="BIGINT" property="hId" />
+    <result column="s_id" jdbcType="INTEGER" property="sId" />
+    <result column="is_received" jdbcType="INTEGER" property="isReceived" />
+    <result column="t_remark" jdbcType="VARCHAR" property="tRemark" />
+    <result column="s_score" jdbcType="DOUBLE" property="sScore" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, t_id, h_id, s_id, is_received, t_remark, s_score
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from homework_teacher_student
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from homework_teacher_student
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yibazhang.provider.entity.HomeWorkTeacherStudent">
+    insert into homework_teacher_student (id, t_id, h_id, 
+      s_id, is_received, t_remark, 
+      s_score)
+    values (#{id,jdbcType=INTEGER}, #{tId,jdbcType=INTEGER}, #{hId,jdbcType=BIGINT}, 
+      #{sId,jdbcType=INTEGER}, #{isReceived,jdbcType=INTEGER}, #{tRemark,jdbcType=VARCHAR}, 
+      #{sScore,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.HomeWorkTeacherStudent">
+    insert into homework_teacher_student
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tId != null">
+        t_id,
+      </if>
+      <if test="hId != null">
+        h_id,
+      </if>
+      <if test="sId != null">
+        s_id,
+      </if>
+      <if test="isReceived != null">
+        is_received,
+      </if>
+      <if test="tRemark != null">
+        t_remark,
+      </if>
+      <if test="sScore != null">
+        s_score,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tId != null">
+        #{tId,jdbcType=INTEGER},
+      </if>
+      <if test="hId != null">
+        #{hId,jdbcType=BIGINT},
+      </if>
+      <if test="sId != null">
+        #{sId,jdbcType=INTEGER},
+      </if>
+      <if test="isReceived != null">
+        #{isReceived,jdbcType=INTEGER},
+      </if>
+      <if test="tRemark != null">
+        #{tRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="sScore != null">
+        #{sScore,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yibazhang.provider.entity.HomeWorkTeacherStudent">
+    update homework_teacher_student
+    <set>
+      <if test="tId != null">
+        t_id = #{tId,jdbcType=INTEGER},
+      </if>
+      <if test="hId != null">
+        h_id = #{hId,jdbcType=BIGINT},
+      </if>
+      <if test="sId != null">
+        s_id = #{sId,jdbcType=INTEGER},
+      </if>
+      <if test="isReceived != null">
+        is_received = #{isReceived,jdbcType=INTEGER},
+      </if>
+      <if test="tRemark != null">
+        t_remark = #{tRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="sScore != null">
+        s_score = #{sScore,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yibazhang.provider.entity.HomeWorkTeacherStudent">
+    update homework_teacher_student
+    set t_id = #{tId,jdbcType=INTEGER},
+      h_id = #{hId,jdbcType=BIGINT},
+      s_id = #{sId,jdbcType=INTEGER},
+      is_received = #{isReceived,jdbcType=INTEGER},
+      t_remark = #{tRemark,jdbcType=VARCHAR},
+      s_score = #{sScore,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

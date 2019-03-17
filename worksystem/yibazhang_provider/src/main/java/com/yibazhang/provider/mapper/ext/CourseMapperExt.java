@@ -14,11 +14,20 @@ import java.util.Map;
  **/
 public interface CourseMapperExt {
 
+    /**
+     * 查询所有可选课程   可模糊查询
+     * @param courseExt
+     * @return
+     */
     List<Map<String,Object>> selectCourses(CourseExt courseExt);
 
     List<Map<String,Object>> selectCourseWithTeacher(CourseExt courseExt);
 
     List<Map<String,Object>> selectCourseWithStudent(CourseExt courseExt);
+
+    List<Map<String,Object>> selectTeacherWithCourse(Map<String,Object> map);
+
+    List<Map<String,Object>> selectStudentWithCourse(Map<String,Object> map);
 
     Boolean insertCourseWithStudent(Map<String,Object> map);
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.ext.StudentMapperExt">
+
+    <select id="selectStudents" parameterType="com.yibazhang.provider.entity.Student" resultType="map" >
+         SELECT
+            s.s_id sId,
+            s.s_name sName,
+            s.s_age sAge,
+            s.s_email sEmail,
+            s.s_mobile sMobile,
+            s.s_sex sSex,
+            a.aca_name acaName,
+            p.profession_name professionName,
+            c.c_name cName
+        FROM
+            student s
+        LEFT JOIN academy a ON a.aca_id=s.s_aca
+        LEFT JOIN profession p ON p.profession_id =s.s_profession AND p.profession_aca=a.aca_id
+        LEFT JOIN class c ON c.c_id = s.s_class AND c.c_profession=p.profession_id AND c.c_aca=a.aca_id
+        WHERE 1=1
+         <if test="sAca!=null">
+           and  s.s_aca=#{sAca}
+         </if>
+         <if test="sProfession!=null">
+             and s.s_profession=#{sProfession}
+         </if>
+         <if test="sClass!=null">
+             and s.s_class=#{sClass}
+         </if>
+         <if test="sId!=null">
+             and s.s_id=#{sId}
+         </if>
+    </select>
+</mapper>

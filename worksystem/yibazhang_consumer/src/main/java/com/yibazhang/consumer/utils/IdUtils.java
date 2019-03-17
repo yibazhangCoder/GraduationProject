@@ -1,6 +1,5 @@
-package com.yibazhang.provider.utils;
+package com.yibazhang.consumer.utils;
 
-import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;

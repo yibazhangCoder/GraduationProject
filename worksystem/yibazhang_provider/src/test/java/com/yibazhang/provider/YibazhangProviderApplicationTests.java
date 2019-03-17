@@ -1,12 +1,16 @@
 package com.yibazhang.provider;
 
+import com.yibazhang.provider.entity.HomeWork;
 import com.yibazhang.provider.entity.Student;
 import com.yibazhang.provider.entity.sys.ext.SysUserExt;
+import com.yibazhang.provider.mapper.HomeWorkMapper;
 import com.yibazhang.provider.mapper.StudentMapper;
 import com.yibazhang.provider.mapper.ext.AcaMapperExt;
 import com.yibazhang.provider.mapper.ext.CourseMapperExt;
+import com.yibazhang.provider.mapper.ext.StudentMapperExt;
 import com.yibazhang.provider.mapper.sys.ext.SysUserMapperExt;
 import com.yibazhang.provider.service.Impl.MailService;
+import com.yibazhang.provider.utils.IdUtils;
 import com.yibazhang.provider.utils.MD5Utils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +47,11 @@ public class YibazhangProviderApplicationTests {
     @Autowired
     CourseMapperExt courseMapperExt;
 
+    @Autowired
+    HomeWorkMapper homeWorkMapper;
 
+    @Autowired
+    StudentMapperExt studentMapperExt;
     @Test
     public void contextLoads() {
         String password = MD5Utils.encrypt("123456");
@@ -88,5 +96,26 @@ public class YibazhangProviderApplicationTests {
     @Test
     public void testSendEmail(){
         //mailService.sendMail("574844241@qq.com","作业系统");
+    }
+
+
+    @Test
+    public void testInsertHomeWork(){
+        HomeWork homeWork = new HomeWork();
+        homeWork.sethId(IdUtils.make());
+        homeWorkMapper.insertSelective(homeWork);
+    }
+
+
+
+    @Test
+    public void testSelectStudent(){
+        Student student =new Student();
+        student.setsAca(10001);
+        student.setsProfession(100001);
+        List<Map<String,Object>> list = studentMapperExt.selectStudents(student);
+        for(Map<String,Object> map:list){
+            System.out.println(map.get("sId"));
+        }
     }
 }

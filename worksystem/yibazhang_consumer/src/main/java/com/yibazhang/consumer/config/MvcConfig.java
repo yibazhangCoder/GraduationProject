@@ -1,7 +1,9 @@
 package com.yibazhang.consumer.config;
 
+import com.yibazhang.consumer.compoent.DateConverter;
 import com.yibazhang.consumer.compoent.LoginHandlerInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -45,4 +47,8 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/toForgetPWD").setViewName("admin/forgetPWD");
     }
 
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new DateConverter());
+    }
 }

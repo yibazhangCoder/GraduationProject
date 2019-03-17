@@ -1,6 +1,5 @@
 package com.yibazhang.provider.domain;
 
-import com.yibazhang.provider.entity.Course;
 import com.yibazhang.provider.entity.ext.CourseExt;
 import com.yibazhang.provider.mapper.ext.CourseMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,4 +59,14 @@ public class CourseDomain {
     public List<Map<String,Object>> selectCourseWithStudent(CourseExt courseExt){
         return courseMapperExt.selectCourseWithStudent(courseExt);
     }
+
+    public List<Map<String, Object>> checkStudentSelectCourse(Map<String,Object> map){
+        return courseMapperExt.selectStudentWithCourse(map);
+    }
+
+
+    public List<Map<String,Object>> checkTeacherSelectCourse(Map<String,Object> map){
+        return courseMapperExt.selectTeacherWithCourse(map);
+    }
+
 }

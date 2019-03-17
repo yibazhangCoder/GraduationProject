@@ -14,10 +14,10 @@
             and c.cr_id=#{crId}
         </if>
         <if test="crName!=null">
-            and c.cr_name=#{crName}
+            and c.cr_name like   concat(concat('%',#{crName}),'%')
         </if>
         <if test="acaName!=null">
-            and a.aca_name=#{acaName}
+            and a.aca_name like   concat(concat('%',#{acaName}),'%')
         </if>
     </select>
 
@@ -74,6 +74,80 @@
         <if test="sId!=null">
           and  s.s_id=#{sId}
         </if>
+    </select>
+
+    <!--查询教师选课-->
+    <select id="selectTeacherWithCourse" resultType="map" parameterType="map">
+        SELECT
+            ct.cr_id crId,
+            ct.t_id tId
+        FROM
+            course_teacher ct
+        WHERE
+            1 = 1
+        AND ct.select_status = 1
+
+        <if test="tId!=null">
+            and ct.t_id=#{tId}
+        </if>
+
+        <if test="tIds!=null">
+            and  ct.t_id in
+            <foreach collection="tIds" item="item1" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="crId!=null">
+            and ct.cr_id=#{crId}
+        </if>
+        <if test="crIds!=null">
+            and ct.cr_id in
+            <foreach collection="crIds" item="item2" index="index" open="(" separator="," close=")">
+                #{item2}
+            </foreach>
+        </if>
+    </select>
+
+    <!--查询学生选课-->
+    <select id="selectStudentWithCourse" parameterType="map" resultType="map">
+            SELECT
+                cs.s_id sId,
+                cs.cr_id crId
+            FROM
+                course_student cs
+            LEFT JOIN course_teacher ct ON cs.cr_id = ct.cr_id
+            WHERE
+                1 = 1
+            AND cs.select_status = 1
+            AND ct.select_status = 1
+            <if test="crId!=null">
+                and cs.cr_id=#{crId}
+            </if>
+            <if test="crIds!=null">
+              AND cs.cr_id in
+              <foreach collection="crIds" item="item1" index="index" open="(" separator="," close=")">
+                  #{item1}
+              </foreach>
+            </if>
+            <if test="sId!=null">
+                and cs.s_id=#{sId}
+            </if>
+            <if test="sIds!=null">
+              and cs.s_id in
+                <foreach collection="sIds" item="item2" index="index" open="(" separator="," close=")">
+                    #{item2}
+                </foreach>
+            </if>
+            <if test="tId!=null">
+                and ct.t_id=#{tId}
+            </if>
+            <if test="tIds">
+            AND ct.t_id in
+                <foreach collection="tIds" item="item3" index="index" open="(" separator="," close=")">
+                    #{item2}
+                </foreach>
+            </if>
     </select>
 
 

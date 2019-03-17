@@ -106,12 +106,14 @@ public class AdminController extends BaseController {
                 if (acaDTOExt.getSelType() == 1) acaDTOExt.setProfessionName(acaDTOExt.getSelVal());
             }
             list = adminService.selectAcaAndProfess(acaDTOExt);
-        }else {
+        }else if(acaDTOExt.getType()==2){
             if(acaDTOExt.getSelType()!=null&&(acaDTOExt.getSelVal()!=""&&acaDTOExt.getSelVal()!=null)) {
                 if (acaDTOExt.getSelType() == 0) acaDTOExt.setCId(Integer.parseInt(acaDTOExt.getSelVal()));
                 if (acaDTOExt.getSelType() == 1) acaDTOExt.setCName(acaDTOExt.getSelVal());
             }
             list=adminService.selectAcaAndProfessAndClass(acaDTOExt);
+        }else{
+            return "参数错误";
         }
         PageInfo<Map<String,Object>> pageInfo =  new PageInfo<>(list,5);
         Long count = pageInfo.getTotal();

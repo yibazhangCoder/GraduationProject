@@ -38,4 +38,12 @@ public class CourseService {
     public Boolean updateCourseWithTeacher(Map<String,Object> map){return courseApi.updateCourseWithTeacher(map);}
 
     public Boolean updateCourseWithStudent(Map<String,Object> map){return courseApi.updateCourseWithStudent(map);}
+
+    public List<Map<String,Object>> checkStudnetSelectCourse(Map<String,Object> map){
+        return courseApi.checkStudentSelectCourse(map);
+    }
+
+    public List<Map<String,Object>> checkTeacherSelectCourse(Map<String,Object> map){
+        return courseApi.checkTeacherSelectCourse(map);
+    }
 }

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.HomeWorkMapper">
+  <resultMap id="BaseResultMap" type="com.yibazhang.provider.entity.HomeWork">
+    <id column="h_id" jdbcType="BIGINT" property="hId" />
+    <result column="h_uuidname" jdbcType="VARCHAR" property="hUuidname" />
+    <result column="h_realname" jdbcType="VARCHAR" property="hRealname" />
+    <result column="h_path" jdbcType="VARCHAR" property="hPath" />
+    <result column="h_class" jdbcType="INTEGER" property="hClass" />
+    <result column="h_course" jdbcType="INTEGER" property="hCourse" />
+    <result column="h_uper" jdbcType="INTEGER" property="hUper" />
+    <result column="h_uptime" jdbcType="TIMESTAMP" property="hUptime" />
+    <result column="h_starttime" jdbcType="TIMESTAMP" property="hStarttime" />
+    <result column="h_endtime" jdbcType="TIMESTAMP" property="hEndtime" />
+    <result column="h_deltime" jdbcType="TIMESTAMP" property="hDeltime" />
+    <result column="h_status" jdbcType="INTEGER" property="hStatus" />
+    <result column="h_comment" jdbcType="VARCHAR" property="hComment" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    h_id, h_uuidname, h_realname, h_path, h_class, h_course, h_uper, h_uptime, h_starttime, 
+    h_endtime, h_deltime, h_status, h_comment
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from home_work
+    where h_id = #{hId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from home_work
+    where h_id = #{hId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yibazhang.provider.entity.HomeWork">
+    insert into home_work (h_id, h_uuidname, h_realname, 
+      h_path, h_class, h_course, 
+      h_uper, h_uptime, h_starttime, 
+      h_endtime, h_deltime, h_status, 
+      h_comment)
+    values (#{hId,jdbcType=BIGINT}, #{hUuidname,jdbcType=VARCHAR}, #{hRealname,jdbcType=VARCHAR}, 
+      #{hPath,jdbcType=VARCHAR}, #{hClass,jdbcType=INTEGER}, #{hCourse,jdbcType=INTEGER}, 
+      #{hUper,jdbcType=INTEGER}, #{hUptime,jdbcType=TIMESTAMP}, #{hStarttime,jdbcType=TIMESTAMP}, 
+      #{hEndtime,jdbcType=TIMESTAMP}, #{hDeltime,jdbcType=TIMESTAMP}, #{hStatus,jdbcType=INTEGER}, 
+      #{hComment,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.HomeWork">
+    insert into home_work
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="hId != null">
+        h_id,
+      </if>
+      <if test="hUuidname != null">
+        h_uuidname,
+      </if>
+      <if test="hRealname != null">
+        h_realname,
+      </if>
+      <if test="hPath != null">
+        h_path,
+      </if>
+      <if test="hClass != null">
+        h_class,
+      </if>
+      <if test="hCourse != null">
+        h_course,
+      </if>
+      <if test="hUper != null">
+        h_uper,
+      </if>
+      <if test="hUptime != null">
+        h_uptime,
+      </if>
+      <if test="hStarttime != null">
+        h_starttime,
+      </if>
+      <if test="hEndtime != null">
+        h_endtime,
+      </if>
+      <if test="hDeltime != null">
+        h_deltime,
+      </if>
+      <if test="hStatus != null">
+        h_status,
+      </if>
+      <if test="hComment != null">
+        h_comment,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="hId != null">
+        #{hId,jdbcType=BIGINT},
+      </if>
+      <if test="hUuidname != null">
+        #{hUuidname,jdbcType=VARCHAR},
+      </if>
+      <if test="hRealname != null">
+        #{hRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="hPath != null">
+        #{hPath,jdbcType=VARCHAR},
+      </if>
+      <if test="hClass != null">
+        #{hClass,jdbcType=INTEGER},
+      </if>
+      <if test="hCourse != null">
+        #{hCourse,jdbcType=INTEGER},
+      </if>
+      <if test="hUper != null">
+        #{hUper,jdbcType=INTEGER},
+      </if>
+      <if test="hUptime != null">
+        #{hUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hStarttime != null">
+        #{hStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hEndtime != null">
+        #{hEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hDeltime != null">
+        #{hDeltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hStatus != null">
+        #{hStatus,jdbcType=INTEGER},
+      </if>
+      <if test="hComment != null">
+        #{hComment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yibazhang.provider.entity.HomeWork">
+    update home_work
+    <set>
+      <if test="hUuidname != null">
+        h_uuidname = #{hUuidname,jdbcType=VARCHAR},
+      </if>
+      <if test="hRealname != null">
+        h_realname = #{hRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="hPath != null">
+        h_path = #{hPath,jdbcType=VARCHAR},
+      </if>
+      <if test="hClass != null">
+        h_class = #{hClass,jdbcType=INTEGER},
+      </if>
+      <if test="hCourse != null">
+        h_course = #{hCourse,jdbcType=INTEGER},
+      </if>
+      <if test="hUper != null">
+        h_uper = #{hUper,jdbcType=INTEGER},
+      </if>
+      <if test="hUptime != null">
+        h_uptime = #{hUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hStarttime != null">
+        h_starttime = #{hStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hEndtime != null">
+        h_endtime = #{hEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hDeltime != null">
+        h_deltime = #{hDeltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hStatus != null">
+        h_status = #{hStatus,jdbcType=INTEGER},
+      </if>
+      <if test="hComment != null">
+        h_comment = #{hComment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where h_id = #{hId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yibazhang.provider.entity.HomeWork">
+    update home_work
+    set h_uuidname = #{hUuidname,jdbcType=VARCHAR},
+      h_realname = #{hRealname,jdbcType=VARCHAR},
+      h_path = #{hPath,jdbcType=VARCHAR},
+      h_class = #{hClass,jdbcType=INTEGER},
+      h_course = #{hCourse,jdbcType=INTEGER},
+      h_uper = #{hUper,jdbcType=INTEGER},
+      h_uptime = #{hUptime,jdbcType=TIMESTAMP},
+      h_starttime = #{hStarttime,jdbcType=TIMESTAMP},
+      h_endtime = #{hEndtime,jdbcType=TIMESTAMP},
+      h_deltime = #{hDeltime,jdbcType=TIMESTAMP},
+      h_status = #{hStatus,jdbcType=INTEGER},
+      h_comment = #{hComment,jdbcType=VARCHAR}
+    where h_id = #{hId,jdbcType=BIGINT}
+  </update>
+</mapper>

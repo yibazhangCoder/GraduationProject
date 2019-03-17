@@ -24,4 +24,9 @@ public interface CourseApi {
     Boolean updateCourseWithTeacher(Map<String,Object> map);
 
     Boolean updateCourseWithStudent(Map<String,Object> map);
+
+    List<Map<String,Object>> checkStudentSelectCourse(Map<String,Object> map);
+
+    List<Map<String,Object>> checkTeacherSelectCourse(Map<String,Object> map);
+
 }

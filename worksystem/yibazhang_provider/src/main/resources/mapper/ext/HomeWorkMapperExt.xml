@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.ext.HomeWorkMapperExt">
+
+    <insert id="insertHomeworkToStudentBatch" parameterType="map">
+        insert into homework_student (s_id, h_id, h_status_stu)
+        values
+        <foreach collection="sIds" item="sId" separator=",">
+          ( #{sId,jdbcType=INTEGER}, #{hId,jdbcType=BIGINT},#{hStatusStu,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+</mapper>
