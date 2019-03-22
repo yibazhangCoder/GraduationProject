@@ -1,12 +1,14 @@
 package com.yibazhang.consumer.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yibazhang.api.bean.HomeWorkDTO;
 import com.yibazhang.api.bean.sys.UserDTO;
 import com.yibazhang.consumer.common.BaseController;
-import com.yibazhang.consumer.queryVO.UpLoadFileVO;
 import com.yibazhang.consumer.service.HomeWorkService;
 import com.yibazhang.consumer.utils.DateUtils;
+import com.yibazhang.consumer.utils.EnclosureJsonData;
 import com.yibazhang.consumer.utils.FolderCreateUtils;
 import com.yibazhang.consumer.utils.IdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -62,21 +60,42 @@ public class HomeWorkController extends BaseController {
                String filename = UUID.randomUUID() + suffix;
                homeWorkDTO.setHId(IdUtils.make());
                homeWorkDTO.setHUuidname(filename);
+               homeWorkDTO.setHRealname(f.getOriginalFilename().substring(0,f.getOriginalFilename().lastIndexOf(".")));
                homeWorkDTO.setHPath(path);
                homeWorkDTO.setHUper(userDTO.getUserId());
                homeWorkDTO.setHUptime(DateUtils.getDate());
                homeWorkDTO.setHStatus(0);
                executeUpload(path,f,filename);
                boolean flag = homeWorkService.saveHomework(homeWorkDTO);
-               if(flag)homeWorkService.insertHomeworkToStudent(homeWorkDTO);
+               if(flag){
+                   int j =homeWorkService.insertHomeworkToStudent(homeWorkDTO);
+                   if(j==100)return fail(401,"该专业无学生！请联系管理员添加学生后重新发放！");
+                   if(j==101)return fail(401,"暂无选该课程的学生，请通知相关同学选课后重新发放！");
+               }
            }
-       }catch (Exception e){
+       }catch (IOException e){
            e.printStackTrace();
-           return fail(401,"上传失败");
+           return fail(408,"上传失败");
        }
 
         return success("上传成功");
     }
+
+
+
+    @RequestMapping("/teaSelectHomeWork")
+    @ResponseBody
+    public String selectHomeworkOfTeacher(HomeWorkDTO homeWorkDTO,HttpServletRequest request){
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("userInfo");
+        homeWorkDTO.setHUper(userDTO.getUserId());
+        if(homeWorkDTO.getPage()==null)homeWorkDTO.setPage(1);
+        if(homeWorkDTO.getLimit()==null)homeWorkDTO.setLimit(5);
+        PageHelper.startPage(homeWorkDTO.getPage(),homeWorkDTO.getLimit());
+        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(homeWorkService.selectHomeworkOfTeacher(homeWorkDTO),5);
+        return EnclosureJsonData.getJSONData(pageInfo.getTotal(),pageInfo.getList());
+    }
+
+
 
 
     private void executeUpload(String uploadDir, MultipartFile file,String uuidName) throws IOException {
@@ -85,4 +104,5 @@ public class HomeWorkController extends BaseController {
         // 将上传的文件写入到服务器端文件内
         file.transferTo(serverFile);
     }
+
 }

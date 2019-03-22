@@ -2,6 +2,7 @@ package com.yibazhang.provider.domain;
 
 import com.yibazhang.provider.entity.HomeWork;
 import com.yibazhang.provider.entity.HomeWorkStudent;
+import com.yibazhang.provider.entity.ext.HomeWorkExt;
 import com.yibazhang.provider.mapper.HomeWorkMapper;
 import com.yibazhang.provider.mapper.HomeWorkStudentMapper;
 import com.yibazhang.provider.mapper.ext.HomeWorkMapperExt;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,5 +51,10 @@ public class HomeworkDomain {
         if(map.isEmpty())return 0;
         if(map.get("hId")==null)return 0;
         return homeWorkMapperExt.insertHomeworkToStudentBatch(map);
+    }
+
+
+    public List<Map<String,Object>>  selectTeacherOfHomework(HomeWorkExt homeWorkExt){
+        return homeWorkMapperExt.selectHomeworkOfTeacher(homeWorkExt);
     }
 }

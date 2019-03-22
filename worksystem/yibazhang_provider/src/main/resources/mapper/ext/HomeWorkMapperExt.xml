@@ -9,4 +9,48 @@
           ( #{sId,jdbcType=INTEGER}, #{hId,jdbcType=BIGINT},#{hStatusStu,jdbcType=INTEGER})
         </foreach>
     </insert>
+
+    <select id="selectHomeworkOfTeacher" parameterType="com.yibazhang.provider.entity.ext.HomeWorkExt" resultType="map">
+        SELECT
+            hw.h_id hId,
+            hw.h_realname hName,
+            c.cr_id crId,
+            c.cr_name crName,
+            hw.h_uptime hUptime,
+            hw.h_starttime hStarttime,
+            hw.h_endtime hEndtime
+        FROM
+            home_work hw
+        LEFT JOIN course c ON hw.h_course = c.cr_id
+        WHERE 1=1
+        <if test="hUper!=null">
+           and hw.h_uper = #{hUper}
+        </if>
+        <if test="hRealname!=null">
+            and hw.h_realname like   concat(concat('%',#{hRealname}),'%')
+        </if>
+        <if test="crId!=null">
+            and c.cr_id=#{crId}
+        </if>
+        <if test="crName!=null">
+            and c.cr_name like    concat(concat('%',#{crName}),'%')
+        </if>
+        <if test="hStatus!=null">
+            <choose>
+                <when test="hStatus==0">
+                    and hw.h_status=0
+                </when>
+                <when test="hStatus==1">
+                    and  NOW() between hw.h_starttime and hw.h_endtime
+                </when>
+                <when test="hStatus==2">
+                    <![CDATA[ AND NOW() >= hw.h_endtime ]]>
+                </when>
+            </choose>
+        </if>
+        <if test="hStarttime!=null and hEndtime!=null">
+            and hw.h_starttime <![CDATA[ >= ]]> #{hStarttime}
+            and hw.h_endtime  <![CDATA[ <= ]]> #{hEndtime}
+        </if>
+    </select>
 </mapper>

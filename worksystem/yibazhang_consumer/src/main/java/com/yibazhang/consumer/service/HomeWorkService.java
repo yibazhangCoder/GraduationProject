@@ -45,6 +45,7 @@ public class HomeWorkService {
             student.setSAca(homeWorkDTO.getAcaId());
             student.setSProfession(homeWorkDTO.getProfessionId());
             List<Map<String,Object>> students = studentApi.getStudents(student);
+            if(students.isEmpty())return 100;
             for (Map<String,Object> map:
                  students) {
                 list.add((Integer) map.get("sId"));
@@ -54,6 +55,7 @@ public class HomeWorkService {
             map.put("crId",homeWorkDTO.getHCourse());
             map.put("tId",homeWorkDTO.getHUper());
             List<Map<String,Object>> crIds = courseService.checkStudnetSelectCourse(map);
+            if(crIds.isEmpty())return 101;
             for (Map<String, Object> objectMap :crIds ) {
                 list.add((Integer)objectMap.get("sId"));
             }
@@ -62,5 +64,11 @@ public class HomeWorkService {
         param.put("hId",homeWorkDTO.getHId());
         param.put("sIds",list);
         return homeworkApi.insertHomeworkToStudentBatch(param);
+    }
+
+
+    public List<Map<String,Object>> selectHomeworkOfTeacher(HomeWorkDTO homeWorkDTO){
+        if(homeWorkDTO.getHUper()==null)return null;
+        return homeworkApi.selctHomeworkOfTeacher(homeWorkDTO);
     }
 }

@@ -3,6 +3,7 @@ package com.yibazhang.api.service;
 import com.yibazhang.api.bean.HomeWorkDTO;
 import com.yibazhang.api.bean.HomeWorkStudentDTO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,4 +19,6 @@ public interface HomeworkApi {
     boolean insertHomeworkToStduent(HomeWorkStudentDTO homeWorkStudentDTO);
 
     int insertHomeworkToStudentBatch(Map<String,Object> map);
+
+    List<Map<String,Object>> selctHomeworkOfTeacher(HomeWorkDTO homeWorkDTO);
 }

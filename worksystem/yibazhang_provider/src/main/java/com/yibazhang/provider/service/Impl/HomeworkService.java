@@ -7,10 +7,12 @@ import com.yibazhang.api.service.HomeworkApi;
 import com.yibazhang.provider.domain.HomeworkDomain;
 import com.yibazhang.provider.entity.HomeWork;
 import com.yibazhang.provider.entity.HomeWorkStudent;
+import com.yibazhang.provider.entity.ext.HomeWorkExt;
 import com.yibazhang.provider.utils.IdUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,5 +47,13 @@ public class HomeworkService implements HomeworkApi {
     public int insertHomeworkToStudentBatch(Map<String, Object> map) {
         if(map.isEmpty())return 0;
         return homeworkDomain.insertHomeworkToStudentBatch(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> selctHomeworkOfTeacher(HomeWorkDTO homeWorkDTO) {
+        if(homeWorkDTO.getHUper()==null)return null;
+        HomeWorkExt homeWorkExt = new HomeWorkExt();
+        BeanUtils.copyProperties(homeWorkDTO,homeWorkExt);
+        return homeworkDomain.selectTeacherOfHomework(homeWorkExt);
     }
 }
