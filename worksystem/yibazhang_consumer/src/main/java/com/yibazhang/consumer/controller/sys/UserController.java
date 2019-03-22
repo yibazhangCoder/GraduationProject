@@ -37,6 +37,7 @@ public class UserController extends BaseController {
             return fail4Param("用户名和密码不能为空！");
         }
         UserDTO dto = service.userLogin(userDTO.getUserId(),userDTO.getPassword());
+        if(dto==null)return fail(405,"用户名或密码错误！");
         if(dto.getUserId()==null||dto.getUserName()==null||dto.getUserRoleId()==null)return fail(405,"用户名或密码错误！ ");
         if(dto.getUserRoleId()!=null) {
             if (dto.getUserRoleId() == 0) dto.setAdmin(true);
