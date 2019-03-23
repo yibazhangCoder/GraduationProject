@@ -90,6 +90,12 @@ public class HomeWorkController extends BaseController {
         homeWorkDTO.setHUper(userDTO.getUserId());
         if(homeWorkDTO.getPage()==null)homeWorkDTO.setPage(1);
         if(homeWorkDTO.getLimit()==null)homeWorkDTO.setLimit(5);
+        if(homeWorkDTO.getSelType()!=null&&!"".equals(homeWorkDTO.getSelVal())){
+            if(homeWorkDTO.getSelType()==0)homeWorkDTO.setHId((Long.parseLong( homeWorkDTO.getSelVal())));
+            if(homeWorkDTO.getSelType()==1)homeWorkDTO.setHRealname(homeWorkDTO.getSelVal());
+            if(homeWorkDTO.getSelType()==2)homeWorkDTO.setCrId(Integer.parseInt(homeWorkDTO.getSelVal()));
+            if(homeWorkDTO.getSelType()==3)homeWorkDTO.setCrName(homeWorkDTO.getSelVal());
+        }
         PageHelper.startPage(homeWorkDTO.getPage(),homeWorkDTO.getLimit());
         PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(homeWorkService.selectHomeworkOfTeacher(homeWorkDTO),5);
         return EnclosureJsonData.getJSONData(pageInfo.getTotal(),pageInfo.getList());

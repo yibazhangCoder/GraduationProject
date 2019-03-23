@@ -23,7 +23,7 @@
 <body>
 <div style="margin-left:50px;margin-top: 30px">
     <fieldset class="layui-elem-field boder-class" style="margin-top: 30px;width: 888px;">
-        <form class="layui-form" action="">
+        <form class="layui-form" >
             <div class="layui-form-item">
                 <div class="layui-input-inline" style="width: 350px">
                     <label class="layui-form-label">查询条件：</label>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="layui-input-inline" style="margin-left: -50px">
-                    <input id="queryKeyword" type="text" name="selValue"   placeholder="请输入查询关键字" autocomplete="off" class="layui-input layui-disabled" disabled>
+                    <input id="queryKeyword" type="text" name="selVal"   placeholder="请输入查询关键字" autocomplete="off" class="layui-input layui-disabled" disabled>
                 </div>
                 <div class="layui-input-inline" style="margin-left: -50px;width: 350px">
                     <label class="layui-form-label">状态</label>
@@ -56,24 +56,24 @@
                 <div class="layui-inline" >
                     <label class="layui-form-label">作业时间:</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="hStarttime" placeholder="开始时间" id="first" autocomplete="off"
+                        <input type="text" name="hStarttime" placeholder="开始时间" id="startTime" autocomplete="off"
                                class="layui-input">
                     </div>
                     <div class="layui-form-mid">-</div>
                     <div class="layui-input-inline">
-                        <input type="text" name="hEndtime" placeholder="结束时间" id="second" autocomplete="off"
+                        <input type="text" name="hEndtime" placeholder="结束时间" id="endTime" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-input-block " style="float: right;margin-right: 130px">
-                    <button class="layui-btn" lay-submit lay-filter="*">查询</button>
+                    <button type="button" class="layui-btn" lay-submit lay-filter="*">查询</button>
                 </div>
             </div>
         </form>
     </fieldset>
     <fieldset class="layui-elem-field boder-class" style="margin-top: 10px;">
         <legend>作业信息</legend>
-        <table class="layui-hide" id="teaTable" lay-filter="teaTable"></table>
+        <table class="layui-hide" id="homeworkTable" lay-filter="homeworkTable"></table>
     </fieldset>
 </div>
 <script th:inline="none">
@@ -84,6 +84,17 @@
             ,form=layui.form
             ,laydate=layui.laydate;
 
+
+
+        laydate.render({
+            elem: '#startTime'
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endTime'
+            ,type: 'datetime'
+        });
+
         form.on('select(nextQueryProject)',function (data) {
             if (data.value=='-1') {
                 $('#queryKeyword').val('').addClass('layui-disabled').attr('disabled',true);
@@ -93,9 +104,10 @@
         });
 
 
+
         //第一个实例
-        var teaTable = table.render({
-            elem: '#teaTable'
+        var homeworkTable = table.render({
+            elem: '#homeworkTable'
             ,height: 350
             ,width:888
             ,skin:'row'
@@ -134,20 +146,26 @@
             ]]
         });
 
-        $("#selSearch").on('click',function () {
-            teaTable.reload({
-                url:'/admin/selectTeachers',
-                where:{
-                    selType:$("#selType").val(),
-                    selVal:$("#selVal").val()
-                },
+        form.on('submit(*)',function (data) {
+            var reg = new RegExp("^[0-9]*$");
+            if(data.field.selType==0||data.field.selType==2){
+                var temp = data.field.selVal;
+                if(!reg.test(temp)){
+                    layer.msg("请输入数字",{icon:5})
+                    return;
+                }
+            }
+            console.log(data.field.selType);
+            homeworkTable.reload({
+                url:'/homework/teaSelectHomeWork',
+                where:data.field,
                 page:{
                     curr:1
                 }
-            })
+            });
         });
 
-        table.on('toolbar(teaTable)', function(obj){
+        table.on('toolbar(homeworkTable)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
             switch(obj.event){
                 case 'getCheckData':

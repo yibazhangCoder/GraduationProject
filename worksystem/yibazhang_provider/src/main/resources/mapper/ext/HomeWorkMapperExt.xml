@@ -38,7 +38,7 @@
         <if test="hStatus!=null">
             <choose>
                 <when test="hStatus==0">
-                    and hw.h_status=0
+                    and NOW() between hw.h_uptime and hw.h_starttime
                 </when>
                 <when test="hStatus==1">
                     and  NOW() between hw.h_starttime and hw.h_endtime
