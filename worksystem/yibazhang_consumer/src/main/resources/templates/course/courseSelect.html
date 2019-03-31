@@ -187,7 +187,7 @@
         table.on('toolbar(courseTabled)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
             switch(obj.event){
-                case 'addInfo':
+                case 'delInfo':
                     var data = checkStatus.data;
                     var names="";
                     var ids = new Array();
@@ -327,6 +327,9 @@
                 ,{field: 'crName', title: '课程名', width:180,align:'center'}
                 ,{field: 'acaNameWithCr', title: '所属学院', width:160,align:'center'}
                 ,{field: 'tName', title: '任课老师', width:160,align:'center'}
+                ,,{field: 'selectStatus', title: '课程状态', width:160,align:'center',templet: function (d) {
+                        return d.selectStatus==1?'正常':'不可用';
+                    }}
                 ,{fixed: 'right', title:'操作', toolbar: '#bared', width:100,align:'center'}
             ]]
         });
@@ -335,7 +338,7 @@
         table.on('toolbar(courseTabled1)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
             switch(obj.event){
-                case 'addInfo':
+                case 'delInfo':
                     var data = checkStatus.data;
                     var names="";
                     var ids = new Array();
@@ -367,7 +370,6 @@
                             layer.msg('你考虑好再来');
                         });
                     };
-                    //layer.alert(JSON.stringify(data));
                     break;
             };
         });
@@ -382,7 +384,7 @@
 </script>
 <script type="text/html" id="toolbared">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="addInfo">批量退选</button>
+        <button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="delInfo">批量退选</button>
     </div>
 </script>
 
@@ -391,7 +393,7 @@
 </script>
 
 <script type="text/html" id="bared">
-    <a class="layui-btn layui-btn-xs layui-btn-radius" lay-event="edit">退选</a>
+    <a class="layui-btn layui-btn-xs layui-btn-radius" lay-event="del">退选</a>
 </script>
 </body>
 </html>

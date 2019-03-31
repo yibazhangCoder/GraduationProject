@@ -6,6 +6,8 @@ import java.util.Date;
 public class StudentHomeworkCommit implements Serializable {
     private Integer id;
 
+    private Long hId;
+
     private Integer sId;
 
     private String sName;
@@ -14,11 +16,7 @@ public class StudentHomeworkCommit implements Serializable {
 
     private String studentHomeworkName;
 
-    private Integer isCommited;
-
     private Date commitedTime;
-
-    private Integer isReceive;
 
     private Date receiveTime;
 
@@ -72,28 +70,12 @@ public class StudentHomeworkCommit implements Serializable {
         this.studentHomeworkName = studentHomeworkName == null ? null : studentHomeworkName.trim();
     }
 
-    public Integer getIsCommited() {
-        return isCommited;
-    }
-
-    public void setIsCommited(Integer isCommited) {
-        this.isCommited = isCommited;
-    }
-
     public Date getCommitedTime() {
         return commitedTime;
     }
 
     public void setCommitedTime(Date commitedTime) {
         this.commitedTime = commitedTime;
-    }
-
-    public Integer getIsReceive() {
-        return isReceive;
-    }
-
-    public void setIsReceive(Integer isReceive) {
-        this.isReceive = isReceive;
     }
 
     public Date getReceiveTime() {
@@ -153,9 +135,7 @@ public class StudentHomeworkCommit implements Serializable {
             && (this.getsName() == null ? other.getsName() == null : this.getsName().equals(other.getsName()))
             && (this.getStudentHomeworkPath() == null ? other.getStudentHomeworkPath() == null : this.getStudentHomeworkPath().equals(other.getStudentHomeworkPath()))
             && (this.getStudentHomeworkName() == null ? other.getStudentHomeworkName() == null : this.getStudentHomeworkName().equals(other.getStudentHomeworkName()))
-            && (this.getIsCommited() == null ? other.getIsCommited() == null : this.getIsCommited().equals(other.getIsCommited()))
             && (this.getCommitedTime() == null ? other.getCommitedTime() == null : this.getCommitedTime().equals(other.getCommitedTime()))
-            && (this.getIsReceive() == null ? other.getIsReceive() == null : this.getIsReceive().equals(other.getIsReceive()))
             && (this.getReceiveTime() == null ? other.getReceiveTime() == null : this.getReceiveTime().equals(other.getReceiveTime()))
             && (this.getDifficult() == null ? other.getDifficult() == null : this.getDifficult().equals(other.getDifficult()))
             && (this.getUseTime() == null ? other.getUseTime() == null : this.getUseTime().equals(other.getUseTime()))
@@ -172,9 +152,7 @@ public class StudentHomeworkCommit implements Serializable {
         result = prime * result + ((getsName() == null) ? 0 : getsName().hashCode());
         result = prime * result + ((getStudentHomeworkPath() == null) ? 0 : getStudentHomeworkPath().hashCode());
         result = prime * result + ((getStudentHomeworkName() == null) ? 0 : getStudentHomeworkName().hashCode());
-        result = prime * result + ((getIsCommited() == null) ? 0 : getIsCommited().hashCode());
         result = prime * result + ((getCommitedTime() == null) ? 0 : getCommitedTime().hashCode());
-        result = prime * result + ((getIsReceive() == null) ? 0 : getIsReceive().hashCode());
         result = prime * result + ((getReceiveTime() == null) ? 0 : getReceiveTime().hashCode());
         result = prime * result + ((getDifficult() == null) ? 0 : getDifficult().hashCode());
         result = prime * result + ((getUseTime() == null) ? 0 : getUseTime().hashCode());

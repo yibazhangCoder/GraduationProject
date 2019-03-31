@@ -56,4 +56,25 @@ public class HomeworkService implements HomeworkApi {
         BeanUtils.copyProperties(homeWorkDTO,homeWorkExt);
         return homeworkDomain.selectTeacherOfHomework(homeWorkExt);
     }
+
+    @Override
+    public List<Map<String, Object>> selectHomeworkOfStudent(HomeWorkDTO homeWorkDTO) {
+        if(homeWorkDTO.getSId()==null)return null;
+        HomeWorkExt homeWorkExt = new HomeWorkExt();
+        BeanUtils.copyProperties(homeWorkDTO,homeWorkExt);
+        return homeworkDomain.selectHomeworkOfStudent(homeWorkExt);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectDownloadFile(Map<String, Object> map,Integer type) {
+        if(type==null)return null;
+        if(map.get("ids")==null)return null;
+        return homeworkDomain.selectDownloadFile(map,type);
+    }
+
+    @Override
+    public int updateHomeworkStatusBatch(Map<String, Object> map, Integer type) {
+        if(type==null||map.get("ids")==null)return 0;
+        return homeworkDomain.updateHomeworkStatusBatch(map,type);
+    }
 }

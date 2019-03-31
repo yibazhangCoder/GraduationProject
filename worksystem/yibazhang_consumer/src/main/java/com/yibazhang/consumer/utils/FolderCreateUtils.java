@@ -44,9 +44,16 @@ public class FolderCreateUtils {
 //        Date date = Date.from(instant);
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        System.out.println(simpleDateFormat.format(date));
-
-
-
-
+        String path = "C:\\Users\\一巴掌\\Desktop\\毕业设计\\project\\GraduationProject\\worksystem\\static\\upload/2019/teacher/2019-03/";
+        String fileName = "85d9176b-baa6-4ed0-ae44-cd48a198f51e.docx";
+        File file = new File(path+fileName);
+//        if(file.isFile()){
+//            System.out.println(file.getAbsolutePath());
+//            System.out.println("this is file!");
+//        }
+//        if(file.exists()){
+//            System.out.println("file is exists!");
+//        }
+        System.out.println(file.getName().substring(file.getName().lastIndexOf(".")));
     }
 }

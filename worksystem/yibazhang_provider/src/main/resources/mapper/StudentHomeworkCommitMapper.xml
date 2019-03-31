@@ -3,13 +3,12 @@
 <mapper namespace="com.yibazhang.provider.mapper.StudentHomeworkCommitMapper">
   <resultMap id="BaseResultMap" type="com.yibazhang.provider.entity.StudentHomeworkCommit">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="h_id" jdbcType="BIGINT" property="hId" />
     <result column="s_id" jdbcType="INTEGER" property="sId" />
     <result column="s_name" jdbcType="VARCHAR" property="sName" />
     <result column="student_homework_path" jdbcType="VARCHAR" property="studentHomeworkPath" />
     <result column="student_homework_name" jdbcType="VARCHAR" property="studentHomeworkName" />
-    <result column="is_commited" jdbcType="INTEGER" property="isCommited" />
     <result column="commited_time" jdbcType="TIMESTAMP" property="commitedTime" />
-    <result column="is_receive" jdbcType="INTEGER" property="isReceive" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
     <result column="difficult" jdbcType="INTEGER" property="difficult" />
     <result column="use_time" jdbcType="TIMESTAMP" property="useTime" />
@@ -17,8 +16,8 @@
     <result column="student_homework_status" jdbcType="INTEGER" property="studentHomeworkStatus" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, s_id, s_name, student_homework_path, student_homework_name, is_commited, commited_time, 
-    is_receive, receive_time, difficult, use_time, pleasured, student_homework_status
+    id,h_id, s_id, s_name, student_homework_path, student_homework_name, commited_time, receive_time,
+    difficult, use_time, pleasured, student_homework_status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -31,22 +30,25 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.yibazhang.provider.entity.StudentHomeworkCommit">
-    insert into student_homework_commit (id, s_id, s_name, 
+    insert into student_homework_commit (id,h_id, s_id, s_name,
       student_homework_path, student_homework_name, 
-      is_commited, commited_time, is_receive, 
-      receive_time, difficult, use_time, 
-      pleasured, student_homework_status)
-    values (#{id,jdbcType=INTEGER}, #{sId,jdbcType=INTEGER}, #{sName,jdbcType=VARCHAR}, 
+      commited_time, receive_time, difficult, 
+      use_time, pleasured, student_homework_status
+      )
+    values (#{id,jdbcType=INTEGER}, #{hId,jdbcType=BIGINT},#{sId,jdbcType=INTEGER}, #{sName,jdbcType=VARCHAR},
       #{studentHomeworkPath,jdbcType=VARCHAR}, #{studentHomeworkName,jdbcType=VARCHAR}, 
-      #{isCommited,jdbcType=INTEGER}, #{commitedTime,jdbcType=TIMESTAMP}, #{isReceive,jdbcType=INTEGER}, 
-      #{receiveTime,jdbcType=TIMESTAMP}, #{difficult,jdbcType=INTEGER}, #{useTime,jdbcType=TIMESTAMP}, 
-      #{pleasured,jdbcType=INTEGER}, #{studentHomeworkStatus,jdbcType=INTEGER})
+      #{commitedTime,jdbcType=TIMESTAMP}, #{receiveTime,jdbcType=TIMESTAMP}, #{difficult,jdbcType=INTEGER}, 
+      #{useTime,jdbcType=TIMESTAMP}, #{pleasured,jdbcType=INTEGER}, #{studentHomeworkStatus,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.StudentHomeworkCommit">
     insert into student_homework_commit
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="hId !=null">
+        h_id,
       </if>
       <if test="sId != null">
         s_id,
@@ -60,14 +62,8 @@
       <if test="studentHomeworkName != null">
         student_homework_name,
       </if>
-      <if test="isCommited != null">
-        is_commited,
-      </if>
       <if test="commitedTime != null">
         commited_time,
-      </if>
-      <if test="isReceive != null">
-        is_receive,
       </if>
       <if test="receiveTime != null">
         receive_time,
@@ -89,6 +85,9 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
+      <if test="hId!=null">
+        #{hId,jdbcType=BIGINT},
+      </if>
       <if test="sId != null">
         #{sId,jdbcType=INTEGER},
       </if>
@@ -101,14 +100,8 @@
       <if test="studentHomeworkName != null">
         #{studentHomeworkName,jdbcType=VARCHAR},
       </if>
-      <if test="isCommited != null">
-        #{isCommited,jdbcType=INTEGER},
-      </if>
       <if test="commitedTime != null">
         #{commitedTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isReceive != null">
-        #{isReceive,jdbcType=INTEGER},
       </if>
       <if test="receiveTime != null">
         #{receiveTime,jdbcType=TIMESTAMP},
@@ -130,6 +123,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.yibazhang.provider.entity.StudentHomeworkCommit">
     update student_homework_commit
     <set>
+      <if test="hId!=null">
+        h_id = #{hId,jdbcType=BIGINT},
+      </if>
       <if test="sId != null">
         s_id = #{sId,jdbcType=INTEGER},
       </if>
@@ -142,14 +138,8 @@
       <if test="studentHomeworkName != null">
         student_homework_name = #{studentHomeworkName,jdbcType=VARCHAR},
       </if>
-      <if test="isCommited != null">
-        is_commited = #{isCommited,jdbcType=INTEGER},
-      </if>
       <if test="commitedTime != null">
         commited_time = #{commitedTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isReceive != null">
-        is_receive = #{isReceive,jdbcType=INTEGER},
       </if>
       <if test="receiveTime != null">
         receive_time = #{receiveTime,jdbcType=TIMESTAMP},
@@ -171,13 +161,12 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yibazhang.provider.entity.StudentHomeworkCommit">
     update student_homework_commit
-    set s_id = #{sId,jdbcType=INTEGER},
+    set h_id = #{hId,jdbcType=BIGINT},
+      s_id = #{sId,jdbcType=INTEGER},
       s_name = #{sName,jdbcType=VARCHAR},
       student_homework_path = #{studentHomeworkPath,jdbcType=VARCHAR},
       student_homework_name = #{studentHomeworkName,jdbcType=VARCHAR},
-      is_commited = #{isCommited,jdbcType=INTEGER},
       commited_time = #{commitedTime,jdbcType=TIMESTAMP},
-      is_receive = #{isReceive,jdbcType=INTEGER},
       receive_time = #{receiveTime,jdbcType=TIMESTAMP},
       difficult = #{difficult,jdbcType=INTEGER},
       use_time = #{useTime,jdbcType=TIMESTAMP},

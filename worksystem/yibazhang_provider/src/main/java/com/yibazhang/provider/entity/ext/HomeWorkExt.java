@@ -45,4 +45,8 @@ public class HomeWorkExt extends BaseExt {
     private Integer crId;
 
     private String crName;
+
+    private String tName;
+
+    private Integer sId;
 }

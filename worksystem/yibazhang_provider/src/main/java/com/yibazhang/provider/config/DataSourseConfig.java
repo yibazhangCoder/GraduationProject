@@ -83,7 +83,7 @@ public class DataSourseConfig {
             dataSource.setTestOnReturn(testOnReturn);
             dataSource.setTestWhileIdle(testWhileIdle);
         } catch (Exception e) {
-            log.error("datasource init error", e);
+            log.error("datasource init common", e);
         }
         return dataSource;
     }

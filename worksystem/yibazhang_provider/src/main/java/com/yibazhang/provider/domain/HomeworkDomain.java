@@ -3,6 +3,7 @@ package com.yibazhang.provider.domain;
 import com.yibazhang.provider.entity.HomeWork;
 import com.yibazhang.provider.entity.HomeWorkStudent;
 import com.yibazhang.provider.entity.ext.HomeWorkExt;
+import com.yibazhang.provider.enumtype.RoleEnum;
 import com.yibazhang.provider.mapper.HomeWorkMapper;
 import com.yibazhang.provider.mapper.HomeWorkStudentMapper;
 import com.yibazhang.provider.mapper.ext.HomeWorkMapperExt;
@@ -56,5 +57,24 @@ public class HomeworkDomain {
 
     public List<Map<String,Object>>  selectTeacherOfHomework(HomeWorkExt homeWorkExt){
         return homeWorkMapperExt.selectHomeworkOfTeacher(homeWorkExt);
+    }
+
+    public List<Map<String,Object>> selectHomeworkOfStudent(HomeWorkExt homeWorkExt){
+        return homeWorkMapperExt.selectHomeworkOfStudent(homeWorkExt);
+    }
+
+    public List<Map<String,Object>> selectDownloadFile(Map<String,Object> map,Integer type){
+        if(map.get("ids")==null)return null;
+        if(type!=null&&type == RoleEnum.STU_ENUM.getValue())return homeWorkMapperExt.selectDownloadFileOfStudent(map);
+        if(type!=null&&type == RoleEnum.TEA_ENUM.getValue())return homeWorkMapperExt.selectDownloadFileOfTeacher(map);
+        return null;
+    }
+
+
+    public int updateHomeworkStatusBatch(Map<String,Object> map,Integer type){
+        if(map.get("ids")==null||type==null)return 0;
+        if(type==RoleEnum.STU_ENUM.getValue())return homeWorkMapperExt.updateHomeworkStatuBatchStudent(map);
+        if(type==RoleEnum.TEA_ENUM.getValue())return 0;
+        return 0;
     }
 }

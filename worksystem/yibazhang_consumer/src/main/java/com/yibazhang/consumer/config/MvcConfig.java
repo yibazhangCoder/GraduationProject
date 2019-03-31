@@ -1,12 +1,24 @@
 package com.yibazhang.consumer.config;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.yibazhang.consumer.compoent.DateConverter;
 import com.yibazhang.consumer.compoent.LoginHandlerInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * @Author 一巴掌
@@ -14,6 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Description TODO
  * @Version 1.0
  **/
+@Order(0)
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
     @Override
@@ -45,10 +58,28 @@ public class MvcConfig implements WebMvcConfigurer {
 
         registry.addViewController("/toRegister").setViewName("student/studentRegister");
         registry.addViewController("/toForgetPWD").setViewName("admin/forgetPWD");
+
+
+        registry.addViewController("/error").setViewName("common/error");
+        registry.addViewController("/success").setViewName("common/success");
     }
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new DateConverter());
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper objectMapper = new ObjectMapper();
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(BigInteger.class,ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        objectMapper.registerModule(simpleModule);
+        jackson2HttpMessageConverter.setObjectMapper(objectMapper);
+        converters.add(jackson2HttpMessageConverter);
+        converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
     }
 }

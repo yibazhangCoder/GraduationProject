@@ -21,4 +21,10 @@ public interface HomeworkApi {
     int insertHomeworkToStudentBatch(Map<String,Object> map);
 
     List<Map<String,Object>> selctHomeworkOfTeacher(HomeWorkDTO homeWorkDTO);
+
+    List<Map<String,Object>> selectHomeworkOfStudent(HomeWorkDTO homeWorkDTO);
+
+    List<Map<String,Object>> selectDownloadFile(Map<String,Object> map,Integer type);
+
+    int updateHomeworkStatusBatch(Map<String,Object> map,Integer type);
 }

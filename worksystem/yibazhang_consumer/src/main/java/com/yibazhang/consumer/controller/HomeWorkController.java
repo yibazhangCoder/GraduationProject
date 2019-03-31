@@ -102,7 +102,29 @@ public class HomeWorkController extends BaseController {
     }
 
 
+    @RequestMapping("/stuSelectHomework")
+    @ResponseBody
+    public JSONObject selectHomeworkOfStudent(HomeWorkDTO homeWorkDTO,HttpServletRequest request){
+        JSONObject jsonObject = new JSONObject();
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("userInfo");
+        homeWorkDTO.setSId(userDTO.getUserId());
+        if(homeWorkDTO.getPage()==null)homeWorkDTO.setPage(1);
+        if(homeWorkDTO.getLimit()==null)homeWorkDTO.setLimit(5);
+        if(homeWorkDTO.getSelType()!=null&&!"".equals(homeWorkDTO.getSelVal())){
+            if(homeWorkDTO.getSelType()==0)homeWorkDTO.setHId((Long.parseLong( homeWorkDTO.getSelVal())));
+            if(homeWorkDTO.getSelType()==1)homeWorkDTO.setHRealname(homeWorkDTO.getSelVal());
+            if(homeWorkDTO.getSelType()==2)homeWorkDTO.setCrId(Integer.parseInt(homeWorkDTO.getSelVal()));
+            if(homeWorkDTO.getSelType()==3)homeWorkDTO.setCrName(homeWorkDTO.getSelVal());
+            if(homeWorkDTO.getSelType()==4)homeWorkDTO.setTName(homeWorkDTO.getSelVal());
+        }
 
+        PageHelper.startPage(homeWorkDTO.getPage(),homeWorkDTO.getLimit());
+        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(homeWorkService.selectHomeworkOfStudent(homeWorkDTO),5);
+        jsonObject.put("code",0);
+        jsonObject.put("count",pageInfo.getTotal());
+        jsonObject.put("data",pageInfo.getList());
+        return success(jsonObject);
+    }
 
     private void executeUpload(String uploadDir, MultipartFile file,String uuidName) throws IOException {
         // 服务器端保存的文件对象

@@ -113,7 +113,7 @@
     <select id="selectStudentWithCourse" parameterType="map" resultType="map">
             SELECT
                 cs.s_id sId,
-                cs.cr_id crId
+                cs.cr_id crId,
             FROM
                 course_student cs
             LEFT JOIN course_teacher ct ON cs.cr_id = ct.cr_id
@@ -172,18 +172,19 @@
     <update id="courseUpdataWithTeacher" parameterType="java.util.Map">
           update course_teacher
             set
-            <foreach collection="ids" item="id" separator=",">
-                  select_status = #{selectStatus,jdbcType=INTEGER}
-                where id = #{id,jdbcType=INTEGER}
+                select_status = #{selectStatus,jdbcType=INTEGER}
+                where id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                 #{id,jdbcType=INTEGER}
             </foreach>
     </update>
 
     <update id="courseUpdateWithStudent" parameterType="java.util.Map">
          update course_student
-            set
-            <foreach collection="ids" item="id" separator=",">
-                select_status = #{selectStatus,jdbcType=INTEGER}
-                where id = #{id,jdbcType=INTEGER}
+            set select_status = #{selectStatus,jdbcType=INTEGER}
+            where id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+               #{id,jdbcType=INTEGER}
             </foreach>
 
     </update>

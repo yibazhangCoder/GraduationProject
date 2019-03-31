@@ -71,4 +71,20 @@ public class HomeWorkService {
         if(homeWorkDTO.getHUper()==null)return null;
         return homeworkApi.selctHomeworkOfTeacher(homeWorkDTO);
     }
+
+    public List<Map<String,Object>> selectHomeworkOfStudent(HomeWorkDTO homeWorkDTO){
+        if(homeWorkDTO.getSId()==null)return null;
+        return homeworkApi.selectHomeworkOfStudent(homeWorkDTO);
+    }
+
+
+    public List<Map<String,Object>> getDownloadFiles(Map<String,Object> map,Integer type){
+        if(map.get("ids")==null)return null;
+        return homeworkApi.selectDownloadFile(map,type);
+    }
+
+
+    public int updateHomeworkStatusBatch(Map<String,Object> map,Integer type){
+        return homeworkApi.updateHomeworkStatusBatch(map,type);
+    }
 }

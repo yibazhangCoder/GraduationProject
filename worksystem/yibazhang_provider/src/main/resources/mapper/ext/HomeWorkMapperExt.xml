@@ -53,4 +53,98 @@
             and hw.h_endtime  <![CDATA[ <= ]]> #{hEndtime}
         </if>
     </select>
+
+    <select id="selectHomeworkOfStudent" resultType="map" parameterType="com.yibazhang.provider.entity.ext.HomeWorkExt">
+          SELECT
+            hs.h_id hId,
+            hw.h_realname hName,
+            c.cr_id crId,
+            c.cr_name crName,
+            t.t_name tName,
+            hw.h_starttime hStarttime,
+            hw.h_endtime hEndtime,
+            hs.h_status_stu hStatusStu,
+            hw.h_comment hComment
+        FROM
+            homework_student hs
+        LEFT JOIN home_work hw ON hw.h_id = hs.h_id
+        LEFT JOIN teacher t ON t.t_id = hw.h_uper
+        LEFT JOIN course c ON hw.h_course = c.cr_id
+        WHERE 1=1
+        <if test="sId!=null">
+           and hs.s_id=#{sId}
+        </if>
+        <if test="hId!=null">
+           and hs.h_id=#{hId}
+        </if>
+        <if test="hRealname!=null">
+           and hw.h_realname like   concat(concat('%',#{hRealname}),'%')
+        </if>
+        <if test="crId!=null">
+            and c.cr_id=#{crId}
+        </if>
+        <if test="crName!=null">
+            and c.cr_name like    concat(concat('%',#{crName}),'%')
+        </if>
+        <if test="tName!=null">
+            and t.t_name=#{tName}
+        </if>
+        <if test="hStatus!=null">
+            and hs.h_status_stu=#{hStatus}
+        </if>
+    </select>
+
+
+    <select id="selectDownloadFileOfStudent" parameterType="map" resultType="map">
+      SELECT
+            hw.h_path path,
+            hw.h_uuidname uuidName,
+            hw.h_realname realName
+        FROM
+            home_work hw
+        WHERE
+            hw.h_id in
+        <foreach collection="ids" item="hId" separator="," open="(" close=")">
+            #{hId}
+        </foreach>
+    </select>
+
+
+    <select id="selectDownloadFileOfTeacher" parameterType="map" resultType="map">
+        SELECT
+            shc.student_homework_path path,
+            shc.student_homework_name uuidName,
+            hw.h_realname realName
+        FROM student_homework_commit shc
+         left join  home_work hw on hw.h_id = shc.h_id
+         WHERE
+            shc.id in
+            <foreach collection="ids" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+    </select>
+
+
+    <!--更新作业状态-->
+    <update id="updateHomeworkStatuBatchStudent" parameterType="map">
+        update homework_student
+        <set>
+            <if test="hStatusStu != null">
+                h_status_stu = #{hStatusStu,jdbcType=INTEGER},
+            </if>
+        </set>
+        where  1=1
+        <if test="sId!=null">
+           and s_id = #{sId}
+        </if>
+        <if test="ids!=null">
+            and h_id in
+                <foreach collection="ids" item="hId" separator="," open="(" close=")">
+                    #{hId,jdbcType=INTEGER}
+                </foreach>
+        </if>
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+    </update>
 </mapper>

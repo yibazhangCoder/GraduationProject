@@ -44,6 +44,10 @@ public class HomeWorkDTO extends BaseDTO {
 
     private String crName;
 
+    private String tName;
+
+    private Integer sId;
+
 
     @Override
     public String toString() {
