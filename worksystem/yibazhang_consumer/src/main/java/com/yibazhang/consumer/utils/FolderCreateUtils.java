@@ -1,6 +1,9 @@
 package com.yibazhang.consumer.utils;
 
+import org.springframework.util.ResourceUtils;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -14,6 +17,22 @@ import java.util.Date;
  * @Version 1.0
  **/
 public class FolderCreateUtils {
+
+    public static String getRootPath(){
+        File path1 = null;
+        String uploadDir="";
+        try {
+            path1 = new File(ResourceUtils.getURL("classpath:").getPath());
+            if(!path1.exists()) path1 = new File("");
+            File upload = new File(path1.getAbsolutePath(),"static/upload/");
+            if(!upload.exists()) upload.mkdirs();
+            uploadDir= upload.getAbsolutePath();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return uploadDir;
+    }
 
     public static String createFolder(String des,int roleId){
         Date date = new Date();
@@ -39,21 +58,9 @@ public class FolderCreateUtils {
     }
 
     public static void main(String[] args) {
-//        LocalDateTime localDateTime = LocalDateTime.now();
-//        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-//        Date date = Date.from(instant);
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        System.out.println(simpleDateFormat.format(date));
         String path = "C:\\Users\\一巴掌\\Desktop\\毕业设计\\project\\GraduationProject\\worksystem\\static\\upload/2019/teacher/2019-03/";
         String fileName = "85d9176b-baa6-4ed0-ae44-cd48a198f51e.docx";
         File file = new File(path+fileName);
-//        if(file.isFile()){
-//            System.out.println(file.getAbsolutePath());
-//            System.out.println("this is file!");
-//        }
-//        if(file.exists()){
-//            System.out.println("file is exists!");
-//        }
-        System.out.println(file.getName().substring(file.getName().lastIndexOf(".")));
+        System.out.println(file.getName().substring(0,file.getName().lastIndexOf(".")));
     }
 }

@@ -61,7 +61,7 @@ public class HomeworkDownloadController extends BaseController {
             map.put("ids",list);
         }
         map.put("sId",userDTO.getUserId());
-        map.put("hStatusStu",0);
+        map.put("hStatusStu",1);
         List<Map<String,Object>> res = homeWorkService.getDownloadFiles(map,userDTO.getUserRoleId());
         if(res.isEmpty()){
             return;
@@ -74,9 +74,13 @@ public class HomeworkDownloadController extends BaseController {
             }
 
             int x=0;
-            if(again==null) x = homeWorkService.updateHomeworkStatusBatch(map,userDTO.getUserRoleId());
-            if(x>0) logger.info("Download the song successfully!");
-            else logger.error("状态更新失败！");
+            if(again==null) {
+                x = homeWorkService.updateHomeworkStatusBatch(map,userDTO.getUserRoleId());
+                if(x>0)logger.info("Download the song successfully!");
+                else logger.error("状态更新失败！");
+            }else {
+                logger.info("Download the song successfully!");
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

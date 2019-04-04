@@ -44,13 +44,7 @@ public class HomeWorkController extends BaseController {
     public JSONObject upLoadFile(HomeWorkDTO homeWorkDTO, MultipartFile[] file, HttpServletRequest request){
         try {
            UserDTO userDTO = (UserDTO) request.getSession().getAttribute("userInfo");
-            File path1 = new File(ResourceUtils.getURL("classpath:").getPath());
-            if(!path1.exists()) path1 = new File("");
-            File upload = new File(path1.getAbsolutePath(),"static/upload/");
-            if(!upload.exists()) {
-                upload.mkdirs();
-            }
-           String uploadDir = upload.getAbsolutePath();
+           String uploadDir = FolderCreateUtils.getRootPath();
            String path = FolderCreateUtils.createFolder(uploadDir,userDTO.getUserRoleId());
            for (MultipartFile f:
                    file) {
@@ -85,8 +79,9 @@ public class HomeWorkController extends BaseController {
 
     @RequestMapping("/teaSelectHomeWork")
     @ResponseBody
-    public String selectHomeworkOfTeacher(HomeWorkDTO homeWorkDTO,HttpServletRequest request){
+    public JSONObject selectHomeworkOfTeacher(HomeWorkDTO homeWorkDTO,HttpServletRequest request){
         UserDTO userDTO = (UserDTO) request.getSession().getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
         homeWorkDTO.setHUper(userDTO.getUserId());
         if(homeWorkDTO.getPage()==null)homeWorkDTO.setPage(1);
         if(homeWorkDTO.getLimit()==null)homeWorkDTO.setLimit(5);
@@ -98,7 +93,10 @@ public class HomeWorkController extends BaseController {
         }
         PageHelper.startPage(homeWorkDTO.getPage(),homeWorkDTO.getLimit());
         PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(homeWorkService.selectHomeworkOfTeacher(homeWorkDTO),5);
-        return EnclosureJsonData.getJSONData(pageInfo.getTotal(),pageInfo.getList());
+        jsonObject.put("code",0);
+        jsonObject.put("count",pageInfo.getTotal());
+        jsonObject.put("data",pageInfo.getList());
+        return success(jsonObject);
     }
 
 

@@ -1,5 +1,6 @@
 package com.yibazhang.provider;
 
+import com.yibazhang.provider.domain.HomeworkDomain;
 import com.yibazhang.provider.entity.HomeWork;
 import com.yibazhang.provider.entity.Student;
 import com.yibazhang.provider.entity.sys.ext.SysUserExt;
@@ -7,8 +8,10 @@ import com.yibazhang.provider.mapper.HomeWorkMapper;
 import com.yibazhang.provider.mapper.StudentMapper;
 import com.yibazhang.provider.mapper.ext.AcaMapperExt;
 import com.yibazhang.provider.mapper.ext.CourseMapperExt;
+import com.yibazhang.provider.mapper.ext.HomeWorkMapperExt;
 import com.yibazhang.provider.mapper.ext.StudentMapperExt;
 import com.yibazhang.provider.mapper.sys.ext.SysUserMapperExt;
+import com.yibazhang.provider.service.Impl.HomeworkService;
 import com.yibazhang.provider.service.Impl.MailService;
 import com.yibazhang.provider.utils.IdUtils;
 import com.yibazhang.provider.utils.MD5Utils;
@@ -49,6 +52,16 @@ public class YibazhangProviderApplicationTests {
 
     @Autowired
     HomeWorkMapper homeWorkMapper;
+
+
+    @Autowired
+    HomeWorkMapperExt homeWorkMapperExt;
+
+    @Autowired
+    HomeworkDomain homeworkDomain;
+
+    @Autowired
+    HomeworkService homeworkService;
 
     @Autowired
     StudentMapperExt studentMapperExt;
@@ -116,6 +129,20 @@ public class YibazhangProviderApplicationTests {
         List<Map<String,Object>> list = studentMapperExt.selectStudents(student);
         for(Map<String,Object> map:list){
             System.out.println(map.get("sId"));
+        }
+    }
+
+
+    @Test
+    public void testSelectDownloadFiles(){
+        Map<String,Object> map = new HashMap<>();
+        List<Long> ids = new ArrayList<>();
+        ids.add(1553242839000704392l);
+        map.put("ids",ids);
+        List<Map<String,Object>> list = homeworkService.selectDownloadFile(map,1);
+        for (Map<String,Object> temp:
+             list) {
+            System.out.println(temp.get("path").toString()+temp.get("uuidName"));
         }
     }
 }

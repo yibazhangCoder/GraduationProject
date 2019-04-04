@@ -5,6 +5,7 @@
     <title>Title</title>
     <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet">
     <script th:src="@{/static/js/jquery.js}"></script>
+    <script th:src="@{/static/js/timeStampToTime.js}"></script>
     <script th:src="@{/static/layui/layui.js}"></script>
     <style type="text/css">
         .layui-elem-field {
@@ -117,6 +118,14 @@
             , loading: true
             , text:{none:'没有查到更多数据～'}
             ,page: true //开启分页
+            ,parseData: function(res){ //res 即为原始返回的数据
+                return {
+                    "code": JSON.parse(res.data.code), //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.data //解析数据列表
+                };
+            }
             ,id:'teaTable'
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
@@ -124,9 +133,15 @@
                 ,{field: 'hName', title: '作业名称', width:160,align:'center'}
                 ,{field: 'crId', title: '课程编号', width:100,align:'center'}
                 ,{field: 'crName', title: '课程名称', width:140,align:'center'}
-                ,{field: 'hUptime', title: '作业上传时间', width:160,align:'center'}
-                ,{field: 'hStarttime', title: '作业发放时间', width:160,align:'center'}
-                ,{field: 'hEndtime', title: '作业结束时间', width:160,align:'center'}
+                ,{field: 'hUptime', title: '作业上传时间', width:160,align:'center',templet: function (d) {
+                        return d.hUptime != null ?timeStampToTime(d.hUptime): '';
+                }}
+                ,{field: 'hStarttime', title: '作业发放时间', width:160,align:'center',templet: function (d) {
+                        return d.hStarttime != null ?timeStampToTime(d.hStarttime): '';
+                }}
+                ,{field: 'hEndtime', title: '作业结束时间', width:160,align:'center',templet: function (d) {
+                        return d.hEndtime != null ?timeStampToTime(d.hEndtime): '';
+                }}
                 ,{field: 'hStatus', title: '作业状态', width:120,align:'center',templet: function (d) {
                     var startTime = new Date(d.hStarttime);
                     var endTime = new Date(d.hEndtime);

@@ -120,7 +120,6 @@
             ,text:{none:'没有查到更多数据～'}
             ,page: true //开启分页
             ,parseData: function(res){ //res 即为原始返回的数据
-                console.log(res);
                 return {
                     "code": JSON.parse(res.data.code), //解析接口状态
                     "msg": res.msg, //解析提示文本
@@ -158,7 +157,7 @@
                         return res;
                 }}
                 ,{field: 'hComment', title: '作业说明', width:160,align:'center'}
-                ,{fixed: 'right', title:'操作',align:'center', width:150,templet:'#buttons'}
+                ,{fixed: 'right', title:'操作',align:'center', width:150,toolbar:'#buttons'}
             ]]
         });
 
@@ -180,20 +179,39 @@
             });
         });
 
+        table.on("tool(homeworkTable)",function (obj) {
+            var data = obj.data;
+            var event = obj.event;
+            if(event === "getFile"){
+                setTimeout(function () {
+                    location.reload();
+                },5000);
+            }else if(event === "reGetFile"){
+            }else if(event === "detail"){
+                if(data.hStatusStu==2){
+                    layer.msg("已提交，作业状态正常",{icon:6});
+                }
+            }else if(event === "comment"){
+
+            }else if(event === "sub"){
+
+            }
+        });
+
     });
 </script>
 
 <script type="text/html" id="buttons">
     {{#  if(d.hStatusStu == 0){ }}
-         <a href="/download?hId={{d.hId}}&type=0" class="layui-btn  layui-btn-radius layui-btn-sm">领取</a>
+         <a href='/download?hId={{d.hId}}&type=0' class="layui-btn  layui-btn-radius layui-btn-sm" lay-event="getFile">领取</a>
     {{#  } else if(d.hStatusStu ==1){ }}
-         <a href="#" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-blue">提交</a>
-         <a href="/download?hId={{d.hId}}&type=0" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-orange">重新领取</a>
+         <a href="/studentCommit/toPage?hId={{d.hId}}&hUper={{d.hUper}}&hName={{d.hName}}&crId={{d.crId}}&crName={{d.crName}}&hEndtime={{d.hEndtime}}" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-blue" lay-event="sub">提交</a>
+         <a href="/download?hId={{d.hId}}&type=0&again=0" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-orange" lay-event="reGetFile">重新领取</a>
     {{#  } else if(d.hStatusStu ==2){ }}
-         <a href="#" class="layui-btn  layui-btn-radius layui-btn-sm layui-bg-red">查看</a>
+         <a  class="layui-btn  layui-btn-radius layui-btn-sm layui-bg-red" lay-event="detail">查看</a>
     {{#  } else if(d.hStatusStu ==3){ }}
-        <a href="#" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-red">查看</a>
-        <a href="#" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-cyan">评论</a>
+        <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-red" lay-event="detail">查看</a>
+        <a href="#" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-cyan" lay-event="comment">评论</a>
     {{#  }  }}
 
 </script>

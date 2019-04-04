@@ -64,13 +64,14 @@
             hw.h_starttime hStarttime,
             hw.h_endtime hEndtime,
             hs.h_status_stu hStatusStu,
-            hw.h_comment hComment
+            hw.h_comment hComment,
+            hw.h_uper hUper
         FROM
             homework_student hs
         LEFT JOIN home_work hw ON hw.h_id = hs.h_id
         LEFT JOIN teacher t ON t.t_id = hw.h_uper
         LEFT JOIN course c ON hw.h_course = c.cr_id
-        WHERE 1=1
+        WHERE 1=1 and hw.h_starttime  <![CDATA[ <= ]]> NOW()
         <if test="sId!=null">
            and hs.s_id=#{sId}
         </if>

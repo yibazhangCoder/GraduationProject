@@ -1,10 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet">
+    <script th:src="@{/static/js/jquery.js}"></script>
+    <script th:src="@{/static/js/timeStampToTime.js}"></script>
+    <script th:src="@{/static/layui/layui.js}"></script>
+    <style type="text/css">
+        .layui-elem-field {
+            background-color: #f2f2f2;
+            width: 700px;
+            margin-right: auto;
+            margin-left: auto;
+            padding:40px;
+        }
+        .boder-class{
+            border-radius: 10px;
+            border: 2px solid skyblue;
+        }
+    </style>
 </head>
 <body>
+<div style="margin-left:50px;margin-top: 30px">
+    <fieldset class="layui-elem-field boder-class" style="margin-top: 30px;width: 90%;">
+        <form class="layui-form" method="post" id="uploadForm" enctype="multipart/form-data">
+            <input type="text" id="tId" th:value="${tId}" class="layui-hide" hidden>
+            <input type="text" id="sId" th:value="${session.userInfo.userId}" class="layui-hide" hidden>
+            <input type="text" id="hEndtime" th:value="${hEndtime}" class="layui-hide" hidden>
+            <div class="layui-form-item">
+                <div class="layui-input-inline" style="width: 330px">
+                    <label class="layui-form-label">课程名称：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="crName" id="crName"  autocomplete="off" class="layui-input layui-disabled" disabled th:value="${crName}">
+                    </div>
+                </div>
 
+                <div class="layui-input-inline" style="margin-left:20px;width: 350px">
+                    <label class="layui-form-label">课程编号：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="crId" id="crId"  autocomplete="off" class="layui-input layui-disabled" disabled th:value="${crId}">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline" style="width: 330px">
+                    <label class="layui-form-label">作业名称：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="hName" id="hName"  autocomplete="off" class="layui-input layui-disabled" disabled th:value="${hName}">
+                    </div>
+                </div>
+
+                <div class="layui-input-inline" style="margin-left:20px;width: 350px">
+                    <label class="layui-form-label">作业编号：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="hId" id="hId"  autocomplete="off" class="layui-input layui-disabled" disabled th:value="${hId}">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 50px">
+                <label class="layui-form-label" style="width: 100px">作业上传：</label>
+                <div class="layui-input-block">
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn layui-btn-normal" id="fileSelectBtn"><i class="layui-icon"></i>选择作业</button>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-hide" style="margin-top: 50px" hidden id="tips">
+                <h1 style="color: red;margin-left: 10%">现在交作业已经没用了,作业已过提交时间了，准备好扣学分吧你就！</h1>
+            </div>
+            <div class="layui-form-item layui-hide" style="margin-top: 50px" hidden id="btn">
+                <div class="layui-input-block" >
+                    <button type="button" class="layui-btn"  lay-submit id="fileAction" lay-filter="*" style="margin-left: 40%">提交</button>
+                </div>
+            </div>
+        </form>
+    </fieldset>
+</div>
+<script th:inline="none">
+    layui.use(['table', 'layer','form','laydate','upload'], function(){
+        var $=layui.$
+            ,form=layui.form
+            ,layer=layui.layer
+            ,upload=layui.upload;
+        $(function () {
+            var hEndtime = $("#hEndtime").val();
+            if(hEndtime==1){
+                $("#btn").attr("hidden","hidden").addClass("layui-hide");
+                $("#tips").removeAttr("hidden").removeClass("layui-hide");
+            }else {
+                $("#btn").removeAttr("hidden").removeClass("layui-hide");
+                $("#tips").attr("hidden","hidden").addClass("layui-hide");
+            }
+        });
+        var signleFileUpload = upload.render({
+            elem: '#fileSelectBtn'
+            ,url: '/studentCommit/stuFileUpload'
+            ,auto: false
+            ,accept:'file'
+            ,exts:'zip|docx|doc|pdf'
+            ,bindAction: '#fileAction'
+            ,before:function (obj) {
+                layer.loading;
+                this.data={
+                    'tId':$("#tId").val(),
+                    'sId':$("#sId").val(),
+                    'hId':$("#hId").val(),
+                    'hName':$("#hName").val()
+                };
+            }
+            ,done: function(res){
+                if(res.code==200||res.code==0){
+                    layer.msg(res.msg,{icon:1,time:3000},function () {
+                        window.location.href="/student/hwList";
+                    });
+                }else {
+                    layer.msg(res.msg,{icon:5,time:3000});
+                }
+            }
+        });
+
+    });
+</script>
 </body>
 </html>

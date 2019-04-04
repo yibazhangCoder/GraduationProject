@@ -19,4 +19,12 @@ public class DateUtils {
         Date upTime = Date.from(instant);
         return upTime;
     }
+
+    public static void main(String[] args) {
+        Long temp = 1553529600000l;
+        Date date = new Date(temp);
+        Date date1 = new Date();
+        System.out.println(date);
+        System.out.println(getDate().getTime());
+    }
 }
