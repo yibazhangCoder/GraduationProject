@@ -185,6 +185,7 @@
                 ,url: '/homework/teaFileUpload'
                 ,accept: 'file'
                 ,multiple: true
+                ,number:5
                 ,auto: false
                 ,exts:'zip|docx|doc|pdf'
                 ,bindAction: '#fileListAction'
@@ -197,6 +198,7 @@
                         'professionId':$("#professionId").val(),
                         'hComment':$("#comments").val()
                     };
+                    layer.loading;
                 }
                 ,choose: function(obj){
                     var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列

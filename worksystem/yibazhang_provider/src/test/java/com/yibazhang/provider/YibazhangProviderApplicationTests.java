@@ -1,6 +1,7 @@
 package com.yibazhang.provider;
 
 import com.yibazhang.provider.domain.HomeworkDomain;
+import com.yibazhang.provider.domain.TeacherHomeworkReceiveAndOperatorDomain;
 import com.yibazhang.provider.entity.HomeWork;
 import com.yibazhang.provider.entity.Student;
 import com.yibazhang.provider.entity.sys.ext.SysUserExt;
@@ -65,6 +66,11 @@ public class YibazhangProviderApplicationTests {
 
     @Autowired
     StudentMapperExt studentMapperExt;
+
+    @Autowired
+    TeacherHomeworkReceiveAndOperatorDomain teacherHomeworkReceiveAndOperatorDomain;
+
+
     @Test
     public void contextLoads() {
         String password = MD5Utils.encrypt("123456");
@@ -143,6 +149,18 @@ public class YibazhangProviderApplicationTests {
         for (Map<String,Object> temp:
              list) {
             System.out.println(temp.get("path").toString()+temp.get("uuidName"));
+        }
+    }
+
+
+    @Test
+    public void testSelectCommitedStudents(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("tId","");
+        map.put("hId","");
+        for (Map<String,Object> map1:
+        teacherHomeworkReceiveAndOperatorDomain.selectCommitedHomeworkStudent(map)) {
+
         }
     }
 }

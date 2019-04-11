@@ -167,8 +167,8 @@ public class HomeworkDownloadController extends BaseController {
         try {
             zipStream = new ZipOutputStream(new FileOutputStream(zipFile));
             for (int i = 0; i <list.size() ; i++) {
-                String realFileName =  list.get(i).get("path").toString();
-                String realFilePath = list.get(i).get("realName").toString();
+                String realFilePath =  list.get(i).get("path").toString();
+                String realFileName = list.get(i).get("realName").toString();
                 File file = new File(realFilePath);
                 if(file.exists()){
                     zipSource = new FileInputStream(file);//将需要压缩的文件格式化为输入流
@@ -204,4 +204,7 @@ public class HomeworkDownloadController extends BaseController {
             zipFile.delete();
         }
     }
+
+
+
 }

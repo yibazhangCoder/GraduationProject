@@ -77,6 +77,31 @@
         <table class="layui-hide" id="homeworkTable" lay-filter="homeworkTable"></table>
     </fieldset>
 </div>
+
+
+<div  class="layui-form" id="homeworkPop" style="padding:10px;display: none;">
+    <form class="layui-form layui-form-pane" >
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-block">
+                <input type="text"  name="updateEndTime" id="updateStartTime"  class="layui-input ">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-block">
+                <input type="text"  name="updateEndTime" id="updateEndTime"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">作业说明</label>
+            <div class="layui-input-block">
+                <textarea rows="5" cols="5" id="updateComment" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
 <script th:inline="none">
     layui.use(['table', 'layer','form','laydate'], function(){
         var table = layui.table
@@ -95,6 +120,9 @@
             elem: '#endTime'
             ,type: 'datetime'
         });
+
+
+
 
         form.on('select(nextQueryProject)',function (data) {
             if (data.value=='-1') {
@@ -157,6 +185,7 @@
                     }
                     return res;
                 }}
+                ,{field: 'hComment', title: '作业说明', width:180,align:'center'}
                 ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150}
             ]]
         });
@@ -183,54 +212,179 @@
         table.on('toolbar(homeworkTable)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
             switch(obj.event){
-                case 'getCheckData':
-                    var data = checkStatus.data;
-                    var ids="";
-                    var names="";
-                    $.each(data,function(){
-                        ids+=this.tId+",";
-                        names+=this.tName+",";
-                    });
-                    ids=ids.substring(0,ids.length-1);
-                    names=names.substring(0,names.length-1);
-                    if(ids==''){
-                        layer.msg("请选择要删除的用户！");
-                    }else{
-                        layer.confirm('确定要删除【'+names+'】的信息吗？', {
-                            btn: ['确定','不了，不了'] //按钮
-                        }, function(){
-                            $.ajax({
-                                url:'${APP_PATH}/admin/students/delStudent?ids='+ids,
-                                type:'GET',
-                                success:function(result){
-                                    layer.msg(result.msg,function(){
-                                        location.reload();
-                                    });
-                                }
-                            });
-                        }, function(){
-                            layer.msg('你考虑好再来');
-                        });
-                    };
-                    //layer.alert(JSON.stringify(data));
-                    break;
                 case 'addInfo':
                     window.location.href="/teacher/hwAdd"
                     break;
             };
+        });
+
+
+        laydate.render({
+            elem: '#updateStartTime'
+            ,type: 'datetime'
+            ,min:1
+            ,max:15
+        });
+
+        laydate.render({
+            elem: '#updateEndTime'
+            ,type: 'datetime'
+            ,min:1
+            ,max:15
+        });
+
+        table.on('tool(homeworkTable)',function (obj) {
+            var data = obj.data;
+            var event = obj.event;
+            if(event === 'edit'){
+                $('#updateStartTime').val(timeStampToTime(data.hStarttime));
+                $('#updateEndTime').val(timeStampToTime(data.hEndtime));
+                $('#updateComment').val(data.hComment);
+                layer.open({
+                    type:1,
+                    skin:"layui-layer-molv",
+                    title:"作业信息修改",
+                    anim: 1,
+                    area:['350px','350px'],
+                    content:$("#homeworkPop"),
+                    btn:['提交','取消'],
+                    yes:function (index, layero) {
+                        var updateStartTime = $('#updateStartTime').val();
+                        var updateEndTime = $('#updateEndTime').val();
+                        var updateComment = $('#updateComment').val();
+                        var date1 = new Date(updateEndTime);
+                        var date2 = new Date(updateStartTime);
+                        if(updateEndTime==null
+                            ||updateEndTime==''
+                            ||updateStartTime==null
+                            ||updateStartTime==''){
+                            layer.msg("开始和结束时间不能为空！",{icon:5})
+                            return;
+                        }
+                        if(date2>date1){
+                            layer.msg("结束时间不能小于开始时间",{icon:5})
+                            return;
+                        }
+                        $.ajax({
+                            url:'/teacherHomework/updateHomework',
+                            type:'post',
+                            data:{
+                                hId:data.hId,
+                                hStarttime:updateStartTime,
+                                hEndtime:updateEndTime,
+                                hComment:updateComment
+                            },
+                            success:function (res) {
+                                if(res.code==200){
+                                    layer.msg(res.data,{icon:6},function () {
+                                        location.reload()
+                                    });
+                                }else {
+                                    layer.msg(res.msg,{icon:5})
+                                    return;
+                                }
+
+                            }
+                        });
+                    },
+                    end:function () {
+                        window.location.reload();
+                    }
+                });
+            }else if(event === 'del'){
+                layer.confirm("确定删除【"+data.hName+"】作业吗？"
+                    ,{btn:['确定','取消']},function () {
+                        $.ajax({
+                            url:'/teacherHomework/deleteHomework',
+                            type:'post',
+                            data:{
+                                hId:data.hId
+                            },
+                            success:function (res) {
+                                console.log(res)
+                                if(res.code==200){
+                                    layer.msg(res.data,{icon:6});
+                                }else {
+                                    layer.msg(res.msg,{icon:5});
+                                }
+                            }
+
+                        });
+                    },function () {
+                        layer.msg("没事别乱点！")
+                    });
+                
+            }else if(event === 'toDetail'){
+                $.ajax({
+                    url:'/teacherHomework/selectCommitedCount',
+                    type:'post',
+                    data:{
+                        hId:data.hId
+                    },
+                    success:function (res) {
+                        if(res.code==200) {
+                            if(res.data.hasCount==null||res.data.hasCount==''){
+                                layer.msg("当前没有人提交作业");
+                                return;
+                            }else {
+                                layer.msg("当前有【"+res.data.hasCount+"】人提交作业！",{time:3000},function () {
+                                    window.location.href='/teacherHomework/toDetail?' +
+                                        'crName='+data.crName+
+                                        '&crId='+data.crId+
+                                        '&hStarttime='+timeStampToTime(data.hStarttime)+
+                                        '&hEndtime='+timeStampToTime(data.hEndtime)+
+                                        '&hComment='+data.hComment+
+                                        '&hRealname='+data.hName+
+                                        '&hId='+data.hId+
+                                        '&hasCount='+res.data.hasCount+
+                                        '&shouldCount='+res.data.shouldCount;
+                                });
+                            }
+                        }
+                    }
+                });
+
+            }else if(event === 'detail'){
+                $.ajax({
+                    url:'/teacherHomework/selectCommitedCount',
+                    type:'post',
+                    data:{
+                        hId:data.hId
+                    },
+                    success:function (res) {
+                        if(res.code==200) {
+                            if(res.data.count==null||res.data.count==''){
+                                layer.msg("当前没有人提交作业");
+                            }else {
+                                layer.msg("当前有【"+res.data.hasCount+"】人提交作业！")
+                            }
+                        }
+                    }
+                });
+            }
+
         });
     });
 </script>
 <!--工具栏-->
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-radius layui-btn-danger" lay-event="getCheckData">批量删除</button>
         <button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="addInfo">上传作业</button>
     </div>
 </script>
 <script type="text/html" id="bar">
-    <a class="layui-btn layui-btn-xs layui-btn-radius" lay-event="edit">修改</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="del">删除</a>
+    {{#  var startTime = new Date(d.hStarttime)}}
+    {{#  var endTime = new Date(d.hEndtime)}}
+    {{#  var today = new Date()}}
+    {{#  if(startTime>today){ }}
+        <a class="layui-btn layui-btn-xs layui-btn-radius" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="del">删除</a>
+    {{#   }else if(today>endTime){ }}
+        <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-green" lay-event="toDetail">查看</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="del">删除</a>
+    {{# }else { }}
+         <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-green" lay-event="detail">查看</a>
+    {{# } }}
 </script>
 </body>
 </html>

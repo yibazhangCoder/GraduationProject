@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet">
+    <script th:src="@{/static/js/jquery.js}"></script>
+    <script th:src="@{/static/layui/layui.js}"></script>
+    <script th:src="@{/static/js/timeStampToTime.js}"></script>
+    <style type="text/css">
+        .layui-elem-field {
+            background-color: #f2f2f2;
+            width: 700px;
+            margin-right: auto;
+            margin-left: auto;
+            padding:40px;
+        }
+        .boder-class{
+            border-radius: 10px;
+            border: 2px solid skyblue;
+        }
+    </style>
+</head>
+<body>
+<div style="margin-left:50px;margin-top: 30px">
+    <fieldset class="layui-elem-field boder-class" style="margin-top: 30px;width: 90%;">
+        <form class="layui-form" method="post" id="uploadForm" enctype="multipart/form-data">
+            <input type="text" th:value="${homeWork.getHStarttime()}" id="st" hidden>
+            <input type="text" th:value="${homeWork.getHEndtime()}" id="et" hidden>
+            <input type="text" th:value="${homeWork.getHId()}" id="hId" hidden>
+            <div class="layui-form-item">
+                <div class="layui-input-inline" style="width: 330px">
+                    <label class="layui-form-label">课程名称：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="crName" id="crName" class="layui-input layui-disabled" th:value="${homeWork.crName}" disabled>
+                    </div>
+                </div>
+
+                <div class="layui-input-inline" style="margin-left:20px;width: 350px">
+                    <label class="layui-form-label">课程编号：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="hCourse" id="crId"   class="layui-input layui-disabled" th:value="${homeWork.crId}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item"  style="margin-top: 50px">
+                <div class="layui-input-inline" style="width: 350px">
+                    <label class="layui-form-label">发布时间：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" class="layui-input layui-disabled"  name="hStarttime" id="startTime" disabled>
+                    </div>
+                </div>
+                <div class="layui-input-inline" style="width: 350px">
+                    <label class="layui-form-label">截至时间：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" class="layui-input  layui-disabled"  name="hEndtime" id="hEndtime" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 50px">
+                <label class="layui-form-label" style="width: 100px">作业名称：</label>
+                <div class="layui-input-block">
+                    <div class="layui-input-inline">
+                        <input  type="text" class="layui-input  layui-disabled"  name="hRealname" id="hRealname" th:value="${homeWork.getHRealname()}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 50px">
+                <div class="layui-input-inline" style="width: 600px">
+                    <label class="layui-form-label" style="width: 100px">作业说明：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="hComment" id="comments" class="layui-input  layui-disabled" th:value="${homeWork.getHComment()}" disabled>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </fieldset>
+    <hr class="layui-bg-orange">
+        <div class="layui-form-item" style="margin-left:30%;">
+            <div class="layui-input-inline">
+                <h2>应交<span style="color: #00FF00" th:text="${shouldCount}"></span>人</h2>
+            </div>
+            <div class="layui-input-inline">
+                <h2 >实交<span style="color: red;" th:text="${hasCount}"></span>人</h2>
+            </div>
+        </div>
+    <hr class="layui-bg-orange">
+    <fieldset class="layui-elem-field boder-class" style="margin-top: 20px;">
+        <legend>已提交作业的学生</legend>
+        <table class="layui-hide" id="commitedStudent" lay-filter="commitedStudent"></table>
+    </fieldset>
+</div>
+<script th:inline="none">
+    layui.use(['table', 'layer','form','laydate','upload'], function(){
+        var table = layui.table
+            ,$=layui.$
+            ,layer=layui.layer;
+
+        $(function () {
+            var startTime = $('#st').val();
+            var endTime = $('#et').val();
+            $('#startTime').val(timeStampToTime(startTime));
+            $('#hEndtime').val(timeStampToTime(endTime));
+
+        });
+
+        //第一个实例
+        var commitedTable = table.render({
+            elem: '#commitedStudent'
+            ,height: 350
+            ,width:888
+            ,method:'post'
+            ,skin:'row'
+            ,even:true
+            ,where:{
+                hId:$('#hId').val()
+            }
+            ,url: '/teacherHomework/selectCommitedStudents' //数据接口
+            , loading: true
+            , text:{none:'没有查到更多数据～'}
+            ,page: true
+            ,parseData: function(res){ //res 即为原始返回的数据
+                console.log(res);
+                return {
+                    "code": JSON.parse(res.data.code), //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.data //解析数据列表
+                };
+            }
+            ,id:'homeworkCommitedTable'
+            ,cols: [[ //表头
+                {field: 'sId', title: '学号', width:180,align:'center'}
+                ,{field: 'sName', title: '姓名', width:180,align:'center'}
+                ,{field: 'cName', title: '班级', width:180,align:'center'}
+                ,{field: 'commitTime', title: '提交时间', width:200,align:'center',templet: function (d) {
+                        return d.commitTime != null ?timeStampToTime(d.commitTime): '';
+                }}
+                ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150,align:'center'}
+            ]]
+        });
+
+        table.on('tool(commitedStudent)',function (obj) {
+            var data = obj.data;
+            var event = obj.event;
+            if(event ==='receive'){
+
+            }else if(event === 'comment'){
+
+            }
+        })
+
+    });
+</script>
+<script type="text/html" id="bar">
+    {{# if(d.isReceived == 1){ }}
+        <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-green" lay-event="comment">评价</a>
+    {{# }else{ }}
+        <a class="layui-btn  layui-btn-xs layui-btn-radius layui-bg-blue" lay-event="receive">接收</a>
+    {{# } }}
+</script>
+</body>
+</html>

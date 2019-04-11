@@ -18,7 +18,8 @@
             c.cr_name crName,
             hw.h_uptime hUptime,
             hw.h_starttime hStarttime,
-            hw.h_endtime hEndtime
+            hw.h_endtime hEndtime,
+            hw.h_comment hComment
         FROM
             home_work hw
         LEFT JOIN course c ON hw.h_course = c.cr_id

@@ -12,7 +12,6 @@ public class EnclosureJsonData {
 		//这里转换日期格式为yyyy-MM-dd
 		String js = JSON.toJSONStringWithDateFormat(data,"yyyy-MM-dd  HH:mm:ss");
 		String result = "{\"code\":0,\"msg\":\"\",\"count\":"+count+",\"data\":"+js+"}";
-		logger.info(result);
 		return result;
 	}
 	

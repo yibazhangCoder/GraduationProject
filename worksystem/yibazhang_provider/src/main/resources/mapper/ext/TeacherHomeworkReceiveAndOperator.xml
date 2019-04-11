@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.ext.TeacherHomeworkReceiveAndOperatorMapper">
+
+    <delete id="deleteHomeworkBatch" parameterType="list">
+        DELETE FROM home_work  WHERE
+        h_id in
+        <foreach collection="ids" item="hId" open="(" close=")" separator=",">
+            #{hId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteHomeworkOfStudentBatch" parameterType="list">
+        DELETE FROM homework_student WHERE
+        h_id in
+        <foreach collection="ids" item="hId" open="(" close=")" separator=",">
+            #{hId}
+        </foreach>
+    </delete>
+
+    <!--查询当前已交作业人数-->
+    <select id="selectCurrentHomeworkCommitedCount" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT
+            count(DISTINCT hts.h_id) commitCount FROM homework_teacher_student hts
+        WHERE
+            hts.h_id = #{hId}
+    </select>
+
+    <select id="selectShouldCommitedCount" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT count(DISTINCT hs.s_id) shouldCount FROM homework_student hs WHERE  hs.h_id=#{hId}
+    </select>
+
+    <!--查询已提交作业的学生的信息-->
+    <select id="selectCommitedStudent" parameterType="map" resultType="map">
+        SELECT
+            s.s_id sId,
+            s.s_name sName,
+            c.c_name cName,
+            shc.commited_time commitTime,
+            shc.student_homework_path path,
+            shc.student_homework_name filename,
+            hts.is_received isReceived,
+            hts.id id
+        FROM
+            homework_teacher_student hts
+        LEFT JOIN student s ON hts.s_id = s.s_id
+        LEFT JOIN student_homework_commit shc ON hts.s_id = shc.s_id
+        AND hts.h_id = shc.h_id
+        LEFT JOIN class c ON s.s_class = c.c_id
+        WHERE
+            hts.t_id = #{tId}
+        AND hts.h_id = #{hId}
+    </select>
+</mapper>
