@@ -11,9 +11,9 @@ import java.util.Map;
  **/
 public interface TeacherHomeworkReceiveAndOperatorMapper {
 
-    Integer deleteHomeworkBatch(List<Long> ids);
+    Integer deleteHomeworkBatch(Map<String,Object> map);
 
-    Integer deleteHomeworkOfStudentBatch(List<Long> ids);
+    Integer deleteHomeworkOfStudentBatch(Map<String,Object> map);
 
     Long selectCurrentHomeworkCommitedCount(Long hId);
 

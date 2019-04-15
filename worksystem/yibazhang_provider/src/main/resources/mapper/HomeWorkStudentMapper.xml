@@ -6,9 +6,10 @@
     <result column="s_id" jdbcType="INTEGER" property="sId" />
     <result column="h_id" jdbcType="BIGINT" property="hId" />
     <result column="h_status_stu" jdbcType="INTEGER" property="hStatusStu" />
+    <result column="release_is_new" jdbcType="INTEGER" property="releaseIsNew" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, s_id, h_id, h_status_stu
+    id, s_id, h_id, h_status_stu, release_is_new
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -22,9 +23,9 @@
   </delete>
   <insert id="insert" parameterType="com.yibazhang.provider.entity.HomeWorkStudent">
     insert into homework_student (id, s_id, h_id, 
-      h_status_stu)
+      h_status_stu, release_is_new)
     values (#{id,jdbcType=INTEGER}, #{sId,jdbcType=INTEGER}, #{hId,jdbcType=BIGINT}, 
-      #{hStatusStu,jdbcType=INTEGER})
+      #{hStatusStu,jdbcType=INTEGER}, #{releaseIsNew,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.HomeWorkStudent">
     insert into homework_student
@@ -41,6 +42,9 @@
       <if test="hStatusStu != null">
         h_status_stu,
       </if>
+      <if test="releaseIsNew != null">
+        release_is_new,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -54,6 +58,9 @@
       </if>
       <if test="hStatusStu != null">
         #{hStatusStu,jdbcType=INTEGER},
+      </if>
+      <if test="releaseIsNew != null">
+        #{releaseIsNew,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -69,6 +76,9 @@
       <if test="hStatusStu != null">
         h_status_stu = #{hStatusStu,jdbcType=INTEGER},
       </if>
+      <if test="releaseIsNew != null">
+        release_is_new = #{releaseIsNew,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -76,7 +86,8 @@
     update homework_student
     set s_id = #{sId,jdbcType=INTEGER},
       h_id = #{hId,jdbcType=BIGINT},
-      h_status_stu = #{hStatusStu,jdbcType=INTEGER}
+      h_status_stu = #{hStatusStu,jdbcType=INTEGER},
+      release_is_new = #{releaseIsNew,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

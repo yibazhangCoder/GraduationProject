@@ -29,48 +29,46 @@
             <input type="text" th:value="${homeWork.getHEndtime()}" id="et" hidden>
             <input type="text" th:value="${homeWork.getHId()}" id="hId" hidden>
             <div class="layui-form-item">
-                <div class="layui-input-inline" style="width: 330px">
+                <div class="layui-input-inline" style="width:33%">
                     <label class="layui-form-label">课程名称：</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="crName" id="crName" class="layui-input layui-disabled" th:value="${homeWork.crName}" disabled>
+                        <input type="text" name="crName" id="crName" class="layui-input" th:value="${homeWork.crName}" readonly>
                     </div>
                 </div>
 
-                <div class="layui-input-inline" style="margin-left:20px;width: 350px">
+                <div class="layui-input-inline" style="width:33%">
                     <label class="layui-form-label">课程编号：</label>
                     <div class="layui-input-inline">
-                        <input  type="text" name="hCourse" id="crId"   class="layui-input layui-disabled" th:value="${homeWork.crId}" disabled>
+                        <input  type="text" name="hCourse" id="crId"   class="layui-input" th:value="${homeWork.crId}" readonly>
+                    </div>
+                </div>
+                <div class="layui-input-inline"  style="margin-left: -3%;width:33%">
+                    <label class="layui-form-label" >作业名称：</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline">
+                            <input  type="text" class="layui-input "  name="hRealname" id="hRealname" th:value="${homeWork.getHRealname()}" readonly>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item"  style="margin-top: 50px">
-                <div class="layui-input-inline" style="width: 350px">
+            <div class="layui-form-item"  style="margin-top: 10px">
+                <div class="layui-input-inline" style="width: 33%">
                     <label class="layui-form-label">发布时间：</label>
                     <div class="layui-input-inline">
-                        <input  type="text" class="layui-input layui-disabled"  name="hStarttime" id="startTime" disabled>
+                        <input  type="text" class="layui-input"  name="hStarttime" id="startTime" readonly >
                     </div>
                 </div>
-                <div class="layui-input-inline" style="width: 350px">
+                <div class="layui-input-inline" style="width:33%">
                     <label class="layui-form-label">截至时间：</label>
                     <div class="layui-input-inline">
-                        <input  type="text" class="layui-input  layui-disabled"  name="hEndtime" id="hEndtime" disabled>
+                        <input  type="text" class="layui-input"  name="hEndtime" id="hEndtime" readonly>
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item" style="margin-top: 50px">
-                <label class="layui-form-label" style="width: 100px">作业名称：</label>
-                <div class="layui-input-block">
-                    <div class="layui-input-inline">
-                        <input  type="text" class="layui-input  layui-disabled"  name="hRealname" id="hRealname" th:value="${homeWork.getHRealname()}" disabled>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item" style="margin-top: 50px">
-                <div class="layui-input-inline" style="width: 600px">
-                    <label class="layui-form-label" style="width: 100px">作业说明：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="hComment" id="comments" class="layui-input  layui-disabled" th:value="${homeWork.getHComment()}" disabled>
-                    </div>
+                <div class="layui-input-inline" style="margin-left: -3%;width:33%">
+                        <label class="layui-form-label" >作业说明：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="hComment" id="comments" class="layui-input" th:value="${homeWork.getHComment()}" readonly>
+                        </div>
                 </div>
             </div>
         </form>
@@ -144,8 +142,10 @@
             var data = obj.data;
             var event = obj.event;
             if(event ==='receive'){
-
+                console.log(data)
             }else if(event === 'comment'){
+
+            }else if(event === 'again'){
 
             }
         })
@@ -155,8 +155,11 @@
 <script type="text/html" id="bar">
     {{# if(d.isReceived == 1){ }}
         <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-green" lay-event="comment">评价</a>
+    <a  href="/downloadTea?hName={{d.hName}}&sName={{d.sName}}&path={{d.path+d.filename}}&again=0"
+        class="layui-btn  layui-btn-xs layui-btn-radius layui-bg-blue" lay-event="again">重新接收</a>
     {{# }else{ }}
-        <a class="layui-btn  layui-btn-xs layui-btn-radius layui-bg-blue" lay-event="receive">接收</a>
+        <a href="/downloadTea?hId={{d.hId}}&hName={{d.hName}}&sId={{d.sId}}&sName={{d.sName}}&path={{d.path+d.filename}}&id={{d.id}}"
+           class="layui-btn  layui-btn-xs layui-btn-radius layui-bg-blue" lay-event="receive">接收</a>
     {{# } }}
 </script>
 </body>

@@ -93,19 +93,12 @@
                 <div class="layui-input-block">
                     <div class="layui-upload">
                         <button type="button" class="layui-btn layui-btn-normal" id="fileSelectBtn">选择作业</button>
-                        <div class="layui-upload-list">
-                            <table class="layui-table">
-                                <thead>
-                                <tr><th>文件名</th>
-                                    <th>大小</th>
-                                    <th>状态</th>
-                                    <th>操作</th>
-                                </tr></thead>
-                                <tbody id="fileList"></tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">注意：</label>
+                <div class="layui-form-mid layui-word-aux"><span style="color: red;font-weight: bold">*作业格式只能是zip、doc、docx、pdf，多个作业请打包为zip格式*</span></div>
             </div>
             <div class="layui-form-item" style="margin-top: 50px">
                 <div class="layui-input-inline" style="width: 600px">
@@ -136,13 +129,13 @@
         laydate.render({
             elem: '#startTime'
             ,type: 'datetime'
-            ,min:0
+            ,min:1
             ,max:7
         });
         laydate.render({
             elem: '#endTime'
             ,type: 'datetime'
-            ,min:1
+            ,min:2
             ,max:15
         });
 
@@ -179,14 +172,12 @@
         });
 
             //多文件列表示例
-            var demoListView = $('#fileList')
-                ,uploadListIns = upload.render({
+            var uploadListIns = upload.render({
                 elem: '#fileSelectBtn'
                 ,url: '/homework/teaFileUpload'
                 ,accept: 'file'
-                ,multiple: true
-                ,number:5
                 ,auto: false
+                ,size:100*1024
                 ,exts:'zip|docx|doc|pdf'
                 ,bindAction: '#fileListAction'
                 ,before:function (obj) {
@@ -198,65 +189,29 @@
                         'professionId':$("#professionId").val(),
                         'hComment':$("#comments").val()
                     };
-                    layer.loading;
+                    layer.load();
                 }
-                ,choose: function(obj){
-                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-                    //读取本地文件
-                    obj.preview(function(index, file, result){
-                        var tr = $(['<tr id="upload-'+ index +'">'
-                            ,'<td>'+ file.name +'</td>'
-                            ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
-                            ,'<td>等待上传</td>'
-                            ,'<td>'
-                            ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
-                            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
-                            ,'</td>'
-                            ,'</tr>'].join(''));
-
-                        //单个重传
-                        tr.find('.demo-reload').on('click', function(){
-                            obj.upload(index, file);
-                        });
-
-                        //删除
-                        tr.find('.demo-delete').on('click', function(){
-                            delete files[index]; //删除对应的文件
-                            tr.remove();
-                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                        });
-
-                        demoListView.append(tr);
-                    });
-                }
-               ,done: function(res, index, upload){
+               ,done: function(res){
+                    console.log(res)
                     if(res.code !=408){ //上传成功
                         if(res.code==401){
-                            layer.msg(res.msg,{icon:3,time:3000},function () {
-                                window.location.href="/teacher/hwList";
-                            })
+                            layer.msg(res.msg,{icon:3,time:0,btn:['了解'],yes:function () {
+                                    window.location.href="/teacher/hwList";
+                                }});
                         }else if(res.code==200||res.code==0){
                             layer.msg(res.msg,{icon:1,time:3000},function () {
                                 window.location.href="/teacher/hwList";
                             });
                         }
-                        var tr = demoListView.find('tr#upload-'+ index)
-                            ,tds = tr.children();
-                        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                        tds.eq(3).html(''); //清空操作
-                         delete this.files[index]; //删除文件队列已经上传成功的文件
-
                     }else if(res.code==408){
                         layer.msg(res.msg,{icon:5})
-                        return this.error(index, upload);
+                    }else{
+                        layer.msg(res.msg,{icon:5})
                     }
 
                 }
-                ,error: function(index, upload){
-                    var tr = demoListView.find('tr#upload-'+ index)
-                        ,tds = tr.children();
-                    tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-                    tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                ,error:function () {
+                    layer.msg("上传失败！",{icon:5});
                 }
             });
 

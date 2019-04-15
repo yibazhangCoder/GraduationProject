@@ -11,6 +11,8 @@ public class HomeWorkStudent implements Serializable {
 
     private Integer hStatusStu;
 
+    private Integer releaseIsNew;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -45,6 +47,14 @@ public class HomeWorkStudent implements Serializable {
         this.hStatusStu = hStatusStu;
     }
 
+    public Integer getReleaseIsNew() {
+        return releaseIsNew;
+    }
+
+    public void setReleaseIsNew(Integer releaseIsNew) {
+        this.releaseIsNew = releaseIsNew;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -60,7 +70,8 @@ public class HomeWorkStudent implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getsId() == null ? other.getsId() == null : this.getsId().equals(other.getsId()))
             && (this.gethId() == null ? other.gethId() == null : this.gethId().equals(other.gethId()))
-            && (this.gethStatusStu() == null ? other.gethStatusStu() == null : this.gethStatusStu().equals(other.gethStatusStu()));
+            && (this.gethStatusStu() == null ? other.gethStatusStu() == null : this.gethStatusStu().equals(other.gethStatusStu()))
+            && (this.getReleaseIsNew() == null ? other.getReleaseIsNew() == null : this.getReleaseIsNew().equals(other.getReleaseIsNew()));
     }
 
     @Override
@@ -71,6 +82,7 @@ public class HomeWorkStudent implements Serializable {
         result = prime * result + ((getsId() == null) ? 0 : getsId().hashCode());
         result = prime * result + ((gethId() == null) ? 0 : gethId().hashCode());
         result = prime * result + ((gethStatusStu() == null) ? 0 : gethStatusStu().hashCode());
+        result = prime * result + ((getReleaseIsNew() == null) ? 0 : getReleaseIsNew().hashCode());
         return result;
     }
 }

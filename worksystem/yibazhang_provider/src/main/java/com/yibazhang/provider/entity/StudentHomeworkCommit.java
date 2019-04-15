@@ -34,16 +34,16 @@ public class StudentHomeworkCommit implements Serializable {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Long gethId() {
         return hId;
     }
 
     public void sethId(Long hId) {
         this.hId = hId;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getsId() {
@@ -139,8 +139,8 @@ public class StudentHomeworkCommit implements Serializable {
         }
         StudentHomeworkCommit other = (StudentHomeworkCommit) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getsId() == null ? other.getsId() == null : this.getsId().equals(other.getsId()))
             && (this.gethId() == null ? other.gethId() == null : this.gethId().equals(other.gethId()))
+            && (this.getsId() == null ? other.getsId() == null : this.getsId().equals(other.getsId()))
             && (this.getsName() == null ? other.getsName() == null : this.getsName().equals(other.getsName()))
             && (this.getStudentHomeworkPath() == null ? other.getStudentHomeworkPath() == null : this.getStudentHomeworkPath().equals(other.getStudentHomeworkPath()))
             && (this.getStudentHomeworkName() == null ? other.getStudentHomeworkName() == null : this.getStudentHomeworkName().equals(other.getStudentHomeworkName()))
@@ -157,8 +157,8 @@ public class StudentHomeworkCommit implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getsId() == null) ? 0 : getsId().hashCode());
         result = prime * result + ((gethId() == null) ? 0 : gethId().hashCode());
+        result = prime * result + ((getsId() == null) ? 0 : getsId().hashCode());
         result = prime * result + ((getsName() == null) ? 0 : getsName().hashCode());
         result = prime * result + ((getStudentHomeworkPath() == null) ? 0 : getStudentHomeworkPath().hashCode());
         result = prime * result + ((getStudentHomeworkName() == null) ? 0 : getStudentHomeworkName().hashCode());

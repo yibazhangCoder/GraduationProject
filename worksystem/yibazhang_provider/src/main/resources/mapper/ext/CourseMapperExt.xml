@@ -113,7 +113,7 @@
     <select id="selectStudentWithCourse" parameterType="map" resultType="map">
             SELECT
                 cs.s_id sId,
-                cs.cr_id crId,
+                cs.cr_id crId
             FROM
                 course_student cs
             LEFT JOIN course_teacher ct ON cs.cr_id = ct.cr_id
@@ -145,7 +145,7 @@
             <if test="tIds">
             AND ct.t_id in
                 <foreach collection="tIds" item="item3" index="index" open="(" separator="," close=")">
-                    #{item2}
+                    #{item3}
                 </foreach>
             </if>
     </select>

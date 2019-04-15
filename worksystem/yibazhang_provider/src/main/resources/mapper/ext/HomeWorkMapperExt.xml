@@ -53,6 +53,7 @@
             and hw.h_starttime <![CDATA[ >= ]]> #{hStarttime}
             and hw.h_endtime  <![CDATA[ <= ]]> #{hEndtime}
         </if>
+        order by hw.h_uptime desc
     </select>
 
     <select id="selectHomeworkOfStudent" resultType="map" parameterType="com.yibazhang.provider.entity.ext.HomeWorkExt">
@@ -94,6 +95,7 @@
         <if test="hStatus!=null">
             and hs.h_status_stu=#{hStatus}
         </if>
+        order by hw.h_starttime desc
     </select>
 
 
@@ -114,9 +116,11 @@
 
     <select id="selectDownloadFileOfTeacher" parameterType="map" resultType="map">
         SELECT
+            shc.h_id hId,
+            shc.s_id sId,
             shc.student_homework_path path,
             shc.student_homework_name uuidName,
-            hw.h_realname realName
+            hw.h_realname hName
         FROM student_homework_commit shc
          left join  home_work hw on hw.h_id = shc.h_id
          WHERE

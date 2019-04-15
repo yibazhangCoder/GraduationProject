@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yibazhang.provider.mapper.ext.TeacherHomeworkReceiveAndOperatorMapper">
 
-    <delete id="deleteHomeworkBatch" parameterType="list">
+    <delete id="deleteHomeworkBatch" parameterType="map">
         DELETE FROM home_work  WHERE
         h_id in
         <foreach collection="ids" item="hId" open="(" close=")" separator=",">
@@ -10,7 +10,7 @@
         </foreach>
     </delete>
 
-    <delete id="deleteHomeworkOfStudentBatch" parameterType="list">
+    <delete id="deleteHomeworkOfStudentBatch" parameterType="map">
         DELETE FROM homework_student WHERE
         h_id in
         <foreach collection="ids" item="hId" open="(" close=")" separator=",">

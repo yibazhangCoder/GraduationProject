@@ -2,6 +2,7 @@ package com.yibazhang.consumer.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.yibazhang.api.bean.HomeWorkDTO;
+import com.yibazhang.api.bean.HomeWorkTeacherStudentDTO;
 import com.yibazhang.api.service.TeacherHomeworkReceivedAPI;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,8 @@ public class TeacherHomeworkReceivedService {
     TeacherHomeworkReceivedAPI teacherHomeworkReceivedAPI;
 
 
-    public boolean deleteHomeworkBatch(List<Long> ids){
-        if (ids.isEmpty())return false;
-        return teacherHomeworkReceivedAPI.deleteHomeworkBatch(ids);
+    public boolean deleteHomeworkBatch(Map<String,Object> map,Integer type){
+        return teacherHomeworkReceivedAPI.deleteHomeworkBatch(map,type);
     }
 
     public boolean updateHomework(HomeWorkDTO homeWorkDTO){
@@ -41,5 +41,10 @@ public class TeacherHomeworkReceivedService {
 
     public List<Map<String,Object>> selectCommitedStudents(Map<String,Object> map) {
         return teacherHomeworkReceivedAPI.selectCommitedHomeworkStudent(map);
+    }
+
+
+    public boolean updateHomeworkStudentTeacher(HomeWorkTeacherStudentDTO homeWorkTeacherStudentDTO){
+        return teacherHomeworkReceivedAPI.updateTeacherStudentHomeworkStatus(homeWorkTeacherStudentDTO);
     }
 }

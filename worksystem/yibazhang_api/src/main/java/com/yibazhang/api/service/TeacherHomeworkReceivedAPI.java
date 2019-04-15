@@ -1,6 +1,7 @@
 package com.yibazhang.api.service;
 
 import com.yibazhang.api.bean.HomeWorkDTO;
+import com.yibazhang.api.bean.HomeWorkTeacherStudentDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -14,11 +15,12 @@ import java.util.Map;
 public interface TeacherHomeworkReceivedAPI {
 
     /**
-     * 删除作业  同时会删除未到发布时间的学生作业
-     * @param ids
+     *  删除作业  当type==1 时 同时会删除未到发布时间的学生作业
+     *            当type==0 时 删除作业本身但是不删除布置给学生的作业
+     * @param map
      * @return
      */
-    boolean deleteHomeworkBatch(List<Long> ids);
+    boolean deleteHomeworkBatch(Map<String,Object> map,Integer type);
 
     /**
      * 修改作业信息
@@ -47,4 +49,11 @@ public interface TeacherHomeworkReceivedAPI {
      * @return
      */
     List<Map<String,Object>> selectCommitedHomeworkStudent(Map<String,Object> map);
+
+    /**
+     * 更新接收状态 和设置评分
+     * @param homeWorkTeacherStudentDTO
+     * @return
+     */
+    Boolean updateTeacherStudentHomeworkStatus(HomeWorkTeacherStudentDTO homeWorkTeacherStudentDTO);
 }

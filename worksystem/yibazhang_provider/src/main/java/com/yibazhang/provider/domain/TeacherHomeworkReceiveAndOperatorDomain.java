@@ -1,8 +1,10 @@
 package com.yibazhang.provider.domain;
 
 import com.yibazhang.provider.entity.HomeWork;
+import com.yibazhang.provider.entity.HomeWorkTeacherStudent;
 import com.yibazhang.provider.mapper.HomeWorkMapper;
 import com.yibazhang.provider.mapper.HomeWorkStudentMapper;
+import com.yibazhang.provider.mapper.HomeWorkTeacherStudentMapper;
 import com.yibazhang.provider.mapper.ext.TeacherHomeworkReceiveAndOperatorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +29,23 @@ public class TeacherHomeworkReceiveAndOperatorDomain {
     @Autowired
     HomeWorkMapper homeWorkMapper;
 
+    @Autowired
+    HomeWorkTeacherStudentMapper homeWorkTeacherStudentMapper;
+
+
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteHomeworkBatch(List<Long> ids){
-        if(ids.isEmpty())return false;
-        int i = teacherHomeworkReceiveAndOperatorMapper.deleteHomeworkBatch(ids);
-        int j=0;
-        if(i>0)j=teacherHomeworkReceiveAndOperatorMapper.deleteHomeworkOfStudentBatch(ids);
-        return j>0;
+    public boolean deleteHomeworkBatch(Map<String,Object> map,Integer type){
+        if(type==0) {
+            int i = teacherHomeworkReceiveAndOperatorMapper.deleteHomeworkBatch(map);
+            return i>0;
+        }
+        if(type==1) {
+            int i = teacherHomeworkReceiveAndOperatorMapper.deleteHomeworkBatch(map);
+            int j = 0;
+            if (i > 0) j = teacherHomeworkReceiveAndOperatorMapper.deleteHomeworkOfStudentBatch(map);
+            return i>0||j > 0;
+        }
+        return false;
     }
 
 
@@ -54,5 +66,10 @@ public class TeacherHomeworkReceiveAndOperatorDomain {
 
     public List<Map<String,Object>> selectCommitedHomeworkStudent(Map<String,Object> map){
         return teacherHomeworkReceiveAndOperatorMapper.selectCommitedStudent(map);
+    }
+
+
+    public boolean updateTeacherHomeworkStatusIsReceived(HomeWorkTeacherStudent homeWorkTeacherStudent){
+        return homeWorkTeacherStudentMapper.updateByPrimaryKeySelective(homeWorkTeacherStudent)>0;
     }
 }

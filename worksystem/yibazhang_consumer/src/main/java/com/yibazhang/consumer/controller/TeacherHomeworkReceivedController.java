@@ -46,18 +46,22 @@ public class TeacherHomeworkReceivedController extends BaseController {
     @ResponseBody
     public JSONObject deleteHomework(@RequestParam(required = false,value = "ids[]") List<Long> ids,
                                      @RequestParam(value = "hId")Long hId,
-                                     Integer type){
+                                     Integer type,
+                                     Integer res){
 
-        if(ids.isEmpty()&&hId==null)return fail4Param("参数错误");
+        if(ids==null&&hId==null)return fail4Param("参数错误");
+        Map<String,Object> map = new HashMap<>();
         if(type==0&&hId!=null){
             List<Long> list = new ArrayList<>();
             list.add(hId);
-            boolean flag = teacherHomeworkReceivedService.deleteHomeworkBatch(list);
+            map.put("ids",list);
+            boolean flag = teacherHomeworkReceivedService.deleteHomeworkBatch(map,res);
             if(!flag)return fail(401,"删除失败！");
         }
 
-        if(type==1&&!ids.isEmpty()){
-            boolean flag1 = teacherHomeworkReceivedService.deleteHomeworkBatch(ids);
+        if(type==1&ids!=null){
+            map.put("ids",ids);
+            boolean flag1 = teacherHomeworkReceivedService.deleteHomeworkBatch(map,res);
             if(!flag1)return fail(401,"删除失败！");
         }
         return success("删除成功！");

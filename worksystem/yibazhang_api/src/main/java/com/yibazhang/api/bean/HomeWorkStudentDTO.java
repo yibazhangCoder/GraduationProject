@@ -16,4 +16,6 @@ public class HomeWorkStudentDTO extends BaseDTO {
 
     private Integer hStatusStu;
 
+    private Integer releaseIsNew;
+
 }

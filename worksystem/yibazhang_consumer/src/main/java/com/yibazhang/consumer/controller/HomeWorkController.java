@@ -41,32 +41,29 @@ public class HomeWorkController extends BaseController {
 
     @RequestMapping("/teaFileUpload")
     @ResponseBody
-    public JSONObject upLoadFile(HomeWorkDTO homeWorkDTO, MultipartFile[] file, HttpServletRequest request){
+    public JSONObject upLoadFile(HomeWorkDTO homeWorkDTO, MultipartFile file, HttpServletRequest request){
         try {
            UserDTO userDTO = (UserDTO) request.getSession().getAttribute("userInfo");
            String uploadDir = FolderCreateUtils.getRootPath();
            String path = FolderCreateUtils.createFolder(uploadDir,userDTO.getUserRoleId());
-           for (MultipartFile f:
-                   file) {
-               // 文件后缀名
-               String suffix = f.getOriginalFilename().substring(f.getOriginalFilename().lastIndexOf("."));
-               // 上传文件名 - UUID
-               String filename = UUID.randomUUID() + suffix;
-               homeWorkDTO.setHId(IdUtils.make());
-               homeWorkDTO.setHUuidname(filename);
-               homeWorkDTO.setHRealname(f.getOriginalFilename().substring(0,f.getOriginalFilename().lastIndexOf(".")));
-               homeWorkDTO.setHPath(path);
-               homeWorkDTO.setHUper(userDTO.getUserId());
-               homeWorkDTO.setHUptime(DateUtils.getDate());
-               homeWorkDTO.setHStatus(0);
-               executeUpload(path,f,filename);
-               boolean flag = homeWorkService.saveHomework(homeWorkDTO);
-               if(flag){
-                   int j =homeWorkService.insertHomeworkToStudent(homeWorkDTO);
-                   if(j==100)return fail(401,"该专业无学生！请联系管理员添加学生后重新发放！");
-                   if(j==101)return fail(401,"暂无选该课程的学生，请通知相关同学选课后重新发放！");
-               }
-           }
+           // 文件后缀名
+            String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            // 上传文件名 - UUID
+            String filename = UUID.randomUUID() + suffix;
+            homeWorkDTO.setHId(IdUtils.make());
+            homeWorkDTO.setHUuidname(filename);
+            homeWorkDTO.setHRealname(file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf(".")));
+            homeWorkDTO.setHPath(path);
+            homeWorkDTO.setHUper(userDTO.getUserId());
+            homeWorkDTO.setHUptime(DateUtils.getDate());
+            homeWorkDTO.setHStatus(0);
+            executeUpload(path,file,filename);
+            boolean flag = homeWorkService.saveHomework(homeWorkDTO);
+            if(flag){
+                int j =homeWorkService.insertHomeworkToStudent(homeWorkDTO);
+                if(j==100)return fail(401,"该专业无学生！请联系管理员添加学生后重新发放！");
+                if(j==101)return fail(401,"暂无选该课程的学生，请通知相关同学选课后重新发放！");
+            }
        }catch (IOException e){
            e.printStackTrace();
            return fail(408,"上传失败");

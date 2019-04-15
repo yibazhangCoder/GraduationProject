@@ -9,9 +9,10 @@
     <result column="is_received" jdbcType="INTEGER" property="isReceived" />
     <result column="t_remark" jdbcType="VARCHAR" property="tRemark" />
     <result column="s_score" jdbcType="DOUBLE" property="sScore" />
+    <result column="commited_is_new" jdbcType="INTEGER" property="commitedIsNew" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, t_id, h_id, s_id, is_received, t_remark, s_score
+    id, t_id, h_id, s_id, is_received, t_remark, s_score, commited_is_new
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -26,10 +27,10 @@
   <insert id="insert" parameterType="com.yibazhang.provider.entity.HomeWorkTeacherStudent">
     insert into homework_teacher_student (id, t_id, h_id, 
       s_id, is_received, t_remark, 
-      s_score)
+      s_score, commited_is_new)
     values (#{id,jdbcType=INTEGER}, #{tId,jdbcType=INTEGER}, #{hId,jdbcType=BIGINT}, 
       #{sId,jdbcType=INTEGER}, #{isReceived,jdbcType=INTEGER}, #{tRemark,jdbcType=VARCHAR}, 
-      #{sScore,jdbcType=DOUBLE})
+      #{sScore,jdbcType=DOUBLE}, #{commitedIsNew,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yibazhang.provider.entity.HomeWorkTeacherStudent">
     insert into homework_teacher_student
@@ -55,6 +56,9 @@
       <if test="sScore != null">
         s_score,
       </if>
+      <if test="commitedIsNew != null">
+        commited_is_new,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -77,6 +81,9 @@
       </if>
       <if test="sScore != null">
         #{sScore,jdbcType=DOUBLE},
+      </if>
+      <if test="commitedIsNew != null">
+        #{commitedIsNew,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -101,6 +108,9 @@
       <if test="sScore != null">
         s_score = #{sScore,jdbcType=DOUBLE},
       </if>
+      <if test="commitedIsNew != null">
+        commited_is_new = #{commitedIsNew,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -111,7 +121,8 @@
       s_id = #{sId,jdbcType=INTEGER},
       is_received = #{isReceived,jdbcType=INTEGER},
       t_remark = #{tRemark,jdbcType=VARCHAR},
-      s_score = #{sScore,jdbcType=DOUBLE}
+      s_score = #{sScore,jdbcType=DOUBLE},
+      commited_is_new = #{commitedIsNew,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

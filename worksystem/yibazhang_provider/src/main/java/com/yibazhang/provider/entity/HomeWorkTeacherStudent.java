@@ -17,6 +17,8 @@ public class HomeWorkTeacherStudent implements Serializable {
 
     private Double sScore;
 
+    private Integer commitedIsNew;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -75,6 +77,14 @@ public class HomeWorkTeacherStudent implements Serializable {
         this.sScore = sScore;
     }
 
+    public Integer getCommitedIsNew() {
+        return commitedIsNew;
+    }
+
+    public void setCommitedIsNew(Integer commitedIsNew) {
+        this.commitedIsNew = commitedIsNew;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -93,7 +103,8 @@ public class HomeWorkTeacherStudent implements Serializable {
             && (this.getsId() == null ? other.getsId() == null : this.getsId().equals(other.getsId()))
             && (this.getIsReceived() == null ? other.getIsReceived() == null : this.getIsReceived().equals(other.getIsReceived()))
             && (this.gettRemark() == null ? other.gettRemark() == null : this.gettRemark().equals(other.gettRemark()))
-            && (this.getsScore() == null ? other.getsScore() == null : this.getsScore().equals(other.getsScore()));
+            && (this.getsScore() == null ? other.getsScore() == null : this.getsScore().equals(other.getsScore()))
+            && (this.getCommitedIsNew() == null ? other.getCommitedIsNew() == null : this.getCommitedIsNew().equals(other.getCommitedIsNew()));
     }
 
     @Override
@@ -107,6 +118,7 @@ public class HomeWorkTeacherStudent implements Serializable {
         result = prime * result + ((getIsReceived() == null) ? 0 : getIsReceived().hashCode());
         result = prime * result + ((gettRemark() == null) ? 0 : gettRemark().hashCode());
         result = prime * result + ((getsScore() == null) ? 0 : getsScore().hashCode());
+        result = prime * result + ((getCommitedIsNew() == null) ? 0 : getCommitedIsNew().hashCode());
         return result;
     }
 }

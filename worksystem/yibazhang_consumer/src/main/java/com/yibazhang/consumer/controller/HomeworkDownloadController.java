@@ -1,8 +1,10 @@
 package com.yibazhang.consumer.controller;
 
+import com.yibazhang.api.bean.HomeWorkTeacherStudentDTO;
 import com.yibazhang.api.bean.sys.UserDTO;
 import com.yibazhang.consumer.common.BaseController;
 import com.yibazhang.consumer.service.HomeWorkService;
+import com.yibazhang.consumer.service.TeacherHomeworkReceivedService;
 import com.yibazhang.consumer.utils.FolderCreateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,8 @@ public class HomeworkDownloadController extends BaseController {
     @Autowired
     HomeWorkService homeWorkService;
 
+    @Autowired
+    TeacherHomeworkReceivedService teacherHomeworkReceivedService;
     /**
      * 文件下载
      * @param request
@@ -83,6 +87,48 @@ public class HomeworkDownloadController extends BaseController {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/downloadTea")
+    public void downloadTeacher(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            HomeWorkTeacherStudentDTO homeWorkTeacherStudentDTO,
+            Integer again
+    ){
+        if(homeWorkTeacherStudentDTO==null)return;
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("userInfo");
+        if(again==null){
+            try {
+                Map<String,Object> map = new HashMap<>();
+                if(homeWorkTeacherStudentDTO.getHId()!=null){
+                    List<Long> list = new ArrayList<>();
+                    list.add(homeWorkTeacherStudentDTO.getHId());
+                    map.put("ids",list);
+                }
+                homeWorkTeacherStudentDTO.setIsReceived(1);
+                map.put("sId",homeWorkTeacherStudentDTO.getSId());
+                map.put("hStatusStu",3);
+                downloadSingle(response,homeWorkTeacherStudentDTO.getPath(),homeWorkTeacherStudentDTO.getSName()+"_"+homeWorkTeacherStudentDTO.getHName());
+                boolean flag =teacherHomeworkReceivedService.updateHomeworkStudentTeacher(homeWorkTeacherStudentDTO);
+                if(flag){
+                    int i =homeWorkService.updateHomeworkStatusBatch(map,1);
+                    if (i>0)logger.info("更新状态成功！");
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                logger.error("下载失败");
+                return;
+            }
+        }else if(again==0) {
+            try {
+                downloadSingle(response,homeWorkTeacherStudentDTO.getPath(),homeWorkTeacherStudentDTO.getSName()+"_"+homeWorkTeacherStudentDTO.getHName());
+                logger.info("再次下载成功！");
+            } catch (UnsupportedEncodingException e) {
+                logger.info("再次下载失败！");
+                e.printStackTrace();
+            }
         }
     }
 

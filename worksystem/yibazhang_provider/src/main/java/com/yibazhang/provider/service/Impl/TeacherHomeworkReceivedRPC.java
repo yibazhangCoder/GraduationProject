@@ -2,9 +2,11 @@ package com.yibazhang.provider.service.Impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.yibazhang.api.bean.HomeWorkDTO;
+import com.yibazhang.api.bean.HomeWorkTeacherStudentDTO;
 import com.yibazhang.api.service.TeacherHomeworkReceivedAPI;
 import com.yibazhang.provider.domain.TeacherHomeworkReceiveAndOperatorDomain;
 import com.yibazhang.provider.entity.HomeWork;
+import com.yibazhang.provider.entity.HomeWorkTeacherStudent;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,8 +26,8 @@ public class TeacherHomeworkReceivedRPC implements TeacherHomeworkReceivedAPI {
     TeacherHomeworkReceiveAndOperatorDomain teacherHomeworkReceiveAndOperatorDomain;
 
     @Override
-    public boolean deleteHomeworkBatch(List<Long> ids) {
-        return teacherHomeworkReceiveAndOperatorDomain.deleteHomeworkBatch(ids);
+    public boolean deleteHomeworkBatch(Map<String,Object> map,Integer type) {
+        return teacherHomeworkReceiveAndOperatorDomain.deleteHomeworkBatch(map,type);
     }
 
     @Override
@@ -48,5 +50,13 @@ public class TeacherHomeworkReceivedRPC implements TeacherHomeworkReceivedAPI {
     @Override
     public List<Map<String, Object>> selectCommitedHomeworkStudent(Map<String, Object> map) {
         return teacherHomeworkReceiveAndOperatorDomain.selectCommitedHomeworkStudent(map);
+    }
+
+    @Override
+    public Boolean updateTeacherStudentHomeworkStatus(HomeWorkTeacherStudentDTO homeWorkTeacherStudentDTO) {
+        if(homeWorkTeacherStudentDTO.getHId()==null)return false;
+        HomeWorkTeacherStudent homeWorkTeacherStudent = new HomeWorkTeacherStudent();
+        BeanUtils.copyProperties(homeWorkTeacherStudentDTO,homeWorkTeacherStudent);
+        return teacherHomeworkReceiveAndOperatorDomain.updateTeacherHomeworkStatusIsReceived(homeWorkTeacherStudent);
     }
 }

@@ -292,20 +292,37 @@
                     }
                 });
             }else if(event === 'del'){
+
                 layer.confirm("确定删除【"+data.hName+"】作业吗？"
                     ,{btn:['确定','取消']},function () {
+                        var startTime = new Date(data.hStarttime);
+                        var endTime = new Date(data.hEndtime);
+                        var upTime = new Date(data.hUptime);
+                        var today = new Date();
+                        var res;
+                        if(upTime<today&&today<startTime){
+                            res=1;
+                        }else if(today>endTime){
+                            res=0;
+                        }
                         $.ajax({
                             url:'/teacherHomework/deleteHomework',
                             type:'post',
                             data:{
+                                res:res,
+                                type:0,
                                 hId:data.hId
                             },
                             success:function (res) {
                                 console.log(res)
                                 if(res.code==200){
-                                    layer.msg(res.data,{icon:6});
+                                    layer.msg(res.data,{icon:6,time:3000},function () {
+                                        location.reload();
+                                    });
                                 }else {
-                                    layer.msg(res.msg,{icon:5});
+                                    layer.msg(res.msg,{icon:5,time:3000},function () {
+                                        location.reload();
+                                    });
                                 }
                             }
 
@@ -323,7 +340,7 @@
                     },
                     success:function (res) {
                         if(res.code==200) {
-                            if(res.data.hasCount==null||res.data.hasCount==''){
+                            if(res.data.hasCount==null||res.data.hasCount==0){
                                 layer.msg("当前没有人提交作业");
                                 return;
                             }else {
