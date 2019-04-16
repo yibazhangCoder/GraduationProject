@@ -88,6 +88,24 @@
         <table class="layui-hide" id="commitedStudent" lay-filter="commitedStudent"></table>
     </fieldset>
 </div>
+
+
+<div  class="layui-form" id="homeworkPop" style="padding:10px;display: none;">
+    <form class="layui-form layui-form-pane" >
+        <div class="layui-form-item">
+            <label class="layui-form-label">分数</label>
+            <div class="layui-input-block">
+                <input type="number" step="1" value="60" name="score" id="score"  class="layui-input ">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">评语</label>
+            <div class="layui-input-block">
+                <textarea rows="5" cols="5" id="updateComment" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </form>
+
 <script th:inline="none">
     layui.use(['table', 'layer','form','laydate','upload'], function(){
         var table = layui.table
@@ -132,7 +150,7 @@
                 ,{field: 'sName', title: '姓名', width:180,align:'center'}
                 ,{field: 'cName', title: '班级', width:180,align:'center'}
                 ,{field: 'commitTime', title: '提交时间', width:200,align:'center',templet: function (d) {
-                        return d.commitTime != null ?timeStampToTime(d.commitTime): '';
+                    return d.commitTime != null ?timeStampToTime(d.commitTime): '';
                 }}
                 ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150,align:'center'}
             ]]
@@ -142,11 +160,52 @@
             var data = obj.data;
             var event = obj.event;
             if(event ==='receive'){
-                console.log(data)
+                layer.load(2, {time: 8*1000});
+                setTimeout(function () {
+                    location.reload();
+                },5000);
             }else if(event === 'comment'){
+                console.log(data);
+                $('#score').val(data.score);
+                $('#updateComment').val(data.tRemark);
+                layer.open({
+                    type:1,
+                    skin:"layui-layer-molv",
+                    title:"作业评分",
+                    anim: 1,
+                    area:['350px','300px'],
+                    content:$("#homeworkPop"),
+                    btn:['提交','取消'],
+                    yes:function () {
+                        var score = $('#score').val();
+                        var updateComment = $('#updateComment').val();
+                        $.ajax({
+                            url:'/teacherHomework/settingScore',
+                            type:'post',
+                            data:{
+                                id:data.id1,
+                                sScore:score,
+                                tRemark:updateComment,
+                            },
+                            success:function (res) {
+                                if(res.code==200){
+                                    layer.msg(res.data,{icon:6},function () {
+                                        location.reload()
+                                    });
+                                }else {
+                                    layer.msg(res.msg,{icon:5})
+                                    return;
+                                }
 
+                            }
+                        });
+                    },
+                    end:function () {
+                        window.location.reload();
+                    }
+                });
             }else if(event === 'again'){
-
+                layer.load(2, {time: 3*1000});
             }
         })
 
@@ -154,11 +213,11 @@
 </script>
 <script type="text/html" id="bar">
     {{# if(d.isReceived == 1){ }}
-        <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-green" lay-event="comment">评价</a>
-    <a  href="/downloadTea?hName={{d.hName}}&sName={{d.sName}}&path={{d.path+d.filename}}&again=0"
+        <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-green" lay-event="comment">评分</a>
+    <a  href="/downloadTea?id={{d.id}}&sName={{d.sName}}&again=0"
         class="layui-btn  layui-btn-xs layui-btn-radius layui-bg-blue" lay-event="again">重新接收</a>
     {{# }else{ }}
-        <a href="/downloadTea?hId={{d.hId}}&hName={{d.hName}}&sId={{d.sId}}&sName={{d.sName}}&path={{d.path+d.filename}}&id={{d.id}}"
+        <a href="/downloadTea?id={{d.id}}&sName={{d.sName}}&id1={{d.id1}}"
            class="layui-btn  layui-btn-xs layui-btn-radius layui-bg-blue" lay-event="receive">接收</a>
     {{# } }}
 </script>

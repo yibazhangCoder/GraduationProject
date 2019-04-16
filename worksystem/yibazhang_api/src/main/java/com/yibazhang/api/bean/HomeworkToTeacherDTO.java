@@ -28,4 +28,6 @@ public class HomeworkToTeacherDTO extends BaseDTO {
     private Double sScore;
 
     private String hName;
+
+    private Integer commitedIsNew;
 }

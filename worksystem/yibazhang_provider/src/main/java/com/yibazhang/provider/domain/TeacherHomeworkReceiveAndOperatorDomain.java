@@ -69,7 +69,9 @@ public class TeacherHomeworkReceiveAndOperatorDomain {
     }
 
 
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateTeacherHomeworkStatusIsReceived(HomeWorkTeacherStudent homeWorkTeacherStudent){
         return homeWorkTeacherStudentMapper.updateByPrimaryKeySelective(homeWorkTeacherStudent)>0;
     }
+
 }

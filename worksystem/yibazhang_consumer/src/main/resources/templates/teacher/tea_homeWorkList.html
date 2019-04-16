@@ -370,7 +370,7 @@
                     },
                     success:function (res) {
                         if(res.code==200) {
-                            if(res.data.count==null||res.data.count==''){
+                            if(res.data.hasCount==null||res.data.hasCount==0){
                                 layer.msg("当前没有人提交作业");
                             }else {
                                 layer.msg("当前有【"+res.data.hasCount+"】人提交作业！")
@@ -400,7 +400,7 @@
         <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-green" lay-event="toDetail">查看</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="del">删除</a>
     {{# }else { }}
-         <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-green" lay-event="detail">查看</a>
+         <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-green" lay-event="toDetail">查看</a>
     {{# } }}
 </script>
 </body>

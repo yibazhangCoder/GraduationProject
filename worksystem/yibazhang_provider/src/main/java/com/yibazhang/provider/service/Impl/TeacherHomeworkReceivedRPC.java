@@ -54,9 +54,10 @@ public class TeacherHomeworkReceivedRPC implements TeacherHomeworkReceivedAPI {
 
     @Override
     public Boolean updateTeacherStudentHomeworkStatus(HomeWorkTeacherStudentDTO homeWorkTeacherStudentDTO) {
-        if(homeWorkTeacherStudentDTO.getHId()==null)return false;
+        if(homeWorkTeacherStudentDTO.getId()==null)return false;
         HomeWorkTeacherStudent homeWorkTeacherStudent = new HomeWorkTeacherStudent();
         BeanUtils.copyProperties(homeWorkTeacherStudentDTO,homeWorkTeacherStudent);
         return teacherHomeworkReceiveAndOperatorDomain.updateTeacherHomeworkStatusIsReceived(homeWorkTeacherStudent);
     }
+
 }

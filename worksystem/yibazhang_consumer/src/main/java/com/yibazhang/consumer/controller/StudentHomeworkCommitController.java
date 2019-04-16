@@ -1,6 +1,7 @@
 package com.yibazhang.consumer.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.yibazhang.api.bean.HomeWorkStudentDTO;
 import com.yibazhang.api.bean.HomeworkToTeacherDTO;
 import com.yibazhang.api.bean.StudentCommitHomeworkDTO;
 import com.yibazhang.api.bean.sys.UserDTO;
@@ -80,19 +81,18 @@ public class StudentHomeworkCommitController extends BaseController {
             studentCommitHomeworkDTO.setCommitedTime(DateUtils.getDate());
             studentCommitHomeworkDTO.setStudentHomeworkPath(path);
             studentCommitHomeworkDTO.setStudentHomeworkName(uuidName);
+            studentCommitHomeworkDTO.setStudentHomeworkStatus(1);//设置当前作业为最新保存的
             Boolean flag = studentCommitHomeworkService.saveStudentCommitHomework(studentCommitHomeworkDTO);
             if(!flag)return fail(401,"保存失败！");
+            homeworkToTeacherDTO.setCommitedIsNew(1);//设置当前作业为最新提交的
             Boolean flag1= studentCommitHomeworkService.insertHomeworkToTeacher(homeworkToTeacherDTO);
             if(!flag1)return fail(401,"提交失败！");
-            Map<String,Object> map = new HashMap<>();
-            List<Long> list = new ArrayList<>();
-            list.add(homeworkToTeacherDTO.getHId());
-            map.put("ids",list);
-            map.put("sId",homeworkToTeacherDTO.getSId());
-            map.put("hStatusStu",2);
-            map.put("ids",list);
-            Integer i = homeWorkService.updateHomeworkStatusBatch(map,u.getUserRoleId());
-            if(i<1)return fail(401,"状态更新失败！");
+            HomeWorkStudentDTO homeWorkStudentDTO = new HomeWorkStudentDTO();
+            homeWorkStudentDTO.setHId(homeworkToTeacherDTO.getHId());
+            homeWorkStudentDTO.setSId(homeworkToTeacherDTO.getSId());
+            homeWorkStudentDTO.setHStatusStu(2);
+            boolean flag2 = studentCommitHomeworkService.updateStudentHomeworkStatus(homeWorkStudentDTO);
+            if(!flag2)return fail(401,"状态更新失败！");
         } catch (IOException e) {
             e.printStackTrace();
             return fail(401,"上传失败！");

@@ -1,5 +1,7 @@
 package com.yibazhang.provider.mapper.ext;
 
+import com.yibazhang.provider.entity.HomeWorkTeacherStudent;
+
 import java.util.List;
 import java.util.Map;
 
@@ -20,4 +22,5 @@ public interface TeacherHomeworkReceiveAndOperatorMapper {
     Long selectShouldCommitedCount(Long hId);
 
     List<Map<String,Object>> selectCommitedStudent(Map<String,Object> map);
+
 }

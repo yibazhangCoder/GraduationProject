@@ -1,5 +1,6 @@
 package com.yibazhang.api.service;
 
+import com.yibazhang.api.bean.HomeWorkStudentDTO;
 import com.yibazhang.api.bean.HomeworkToTeacherDTO;
 import com.yibazhang.api.bean.StudentCommitHomeworkDTO;
 
@@ -11,7 +12,25 @@ import com.yibazhang.api.bean.StudentCommitHomeworkDTO;
  **/
 public interface StudentCommitHomeworkAPI {
 
+    /**
+     * 保存学生要提交的作业
+     * @param studentCommitHomeworkDTO
+     * @return
+     */
     Boolean insertStudentCommitHomework(StudentCommitHomeworkDTO studentCommitHomeworkDTO);
 
+
+    /**
+     * 提交学生的作业给老师
+     * @param homeworkToTeacherDTO
+     * @return
+     */
     Boolean insertHomeworkToTeacher(HomeworkToTeacherDTO homeworkToTeacherDTO);
+
+    /**
+     * 更新学生的作业状态
+     * @param homeWorkStudentDTO
+     * @return
+     */
+    boolean updateStudentHomeworkStatus(HomeWorkStudentDTO homeWorkStudentDTO);
 }

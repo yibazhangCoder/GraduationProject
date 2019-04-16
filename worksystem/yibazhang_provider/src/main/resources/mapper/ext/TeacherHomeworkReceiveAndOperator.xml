@@ -21,11 +21,15 @@
     <!--查询当前已交作业人数-->
     <select id="selectCurrentHomeworkCommitedCount" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT
-            count(DISTINCT hts.h_id) commitCount FROM homework_teacher_student hts
+            count(hts.s_id) commitCount
+        FROM
+            homework_teacher_student hts
         WHERE
             hts.h_id = #{hId}
+        AND hts.commited_is_new = 1
     </select>
 
+    <!--应该提交的人数-->
     <select id="selectShouldCommitedCount" resultType="java.lang.Long" parameterType="java.lang.Long">
         SELECT count(DISTINCT hs.s_id) shouldCount FROM homework_student hs WHERE  hs.h_id=#{hId}
     </select>
@@ -37,10 +41,11 @@
             s.s_name sName,
             c.c_name cName,
             shc.commited_time commitTime,
-            shc.student_homework_path path,
-            shc.student_homework_name filename,
             hts.is_received isReceived,
-            hts.id id
+            shc.id id,
+            hts.id id1,
+            hts.s_score score,
+            hts.t_remark tRemark
         FROM
             homework_teacher_student hts
         LEFT JOIN student s ON hts.s_id = s.s_id
@@ -50,5 +55,8 @@
         WHERE
             hts.t_id = #{tId}
         AND hts.h_id = #{hId}
+        and hts.commited_is_new=1
+        and shc.student_homework_status=1
     </select>
+
 </mapper>

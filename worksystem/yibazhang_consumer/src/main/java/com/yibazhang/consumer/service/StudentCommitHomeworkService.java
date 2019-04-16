@@ -1,6 +1,7 @@
 package com.yibazhang.consumer.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.yibazhang.api.bean.HomeWorkStudentDTO;
 import com.yibazhang.api.bean.HomeworkToTeacherDTO;
 import com.yibazhang.api.bean.StudentCommitHomeworkDTO;
 import com.yibazhang.api.service.StudentCommitHomeworkAPI;
@@ -29,5 +30,12 @@ public class StudentCommitHomeworkService {
                 ||homeworkToTeacherDTO.getHId()==null)
             return false;
         return studentCommitHomeworkAPI.insertHomeworkToTeacher(homeworkToTeacherDTO);
+    }
+
+    public boolean updateStudentHomeworkStatus(HomeWorkStudentDTO homeWorkStudentDTO){
+        if(homeWorkStudentDTO.getHStatusStu()==null
+                ||homeWorkStudentDTO.getSId()==null
+                ||homeWorkStudentDTO.getHId()==null)return false;
+        return studentCommitHomeworkAPI.updateStudentHomeworkStatus(homeWorkStudentDTO);
     }
 }

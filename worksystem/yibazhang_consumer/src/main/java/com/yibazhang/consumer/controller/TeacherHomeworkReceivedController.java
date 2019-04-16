@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yibazhang.api.bean.HomeWorkDTO;
+import com.yibazhang.api.bean.HomeWorkTeacherStudentDTO;
 import com.yibazhang.api.bean.sys.UserDTO;
 import com.yibazhang.consumer.common.BaseController;
 import com.yibazhang.consumer.service.TeacherHomeworkReceivedService;
@@ -120,6 +121,16 @@ public class TeacherHomeworkReceivedController extends BaseController {
         modelAndView.addObject("hasCount",hasCount);
         modelAndView.addObject("shouldCount",shouldCount);
         return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/settingScore",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject settingScoreAndRemark(HomeWorkTeacherStudentDTO homeWorkTeacherStudentDTO){
+        if(homeWorkTeacherStudentDTO.getId()==null)return fail4Param("参数错误");
+        boolean flag = teacherHomeworkReceivedService.updateHomeworkStudentTeacher(homeWorkTeacherStudentDTO);
+        if(!flag)return fail(401,"评分失败");
+        return success("评分成功");
     }
 }
 

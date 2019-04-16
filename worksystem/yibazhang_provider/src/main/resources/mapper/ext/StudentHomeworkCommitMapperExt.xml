@@ -2,4 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yibazhang.provider.mapper.ext.StudentHomeworkCommitMapperExt">
 
+    <!--在保存作业之前先跟新之前保存的作业为过期状态-->
+    <update id="updateStudentCommitedHomeworkStatus" parameterType="com.yibazhang.provider.entity.StudentHomeworkCommit">
+         update student_homework_commit
+            set student_homework_status = 0
+            where 1=1 and student_homework_status=1
+            <if test="hId!=null">
+              and  h_id = #{hId}
+            </if>
+            <if test="sId!=null">
+              and  s_id = #{sId}
+            </if>
+    </update>
+
+
+    <!--提交作业之前跟新之前提交的作业状态为过期状态-->
+    <update id="updateHomeworkToTeacherStatus" parameterType="com.yibazhang.provider.entity.HomeWorkTeacherStudent">
+            update homework_teacher_student
+            set
+              commited_is_new = 0
+            where 1=1 and commited_is_new =1
+             <if test="tId!=null">
+                 and t_id = #{tId}
+             </if>
+             <if test="hId!=null">
+                 and h_id = #{hId}
+             </if>
+             <if test="sId!=null">
+                 and s_id = #{sId}
+             </if>
+    </update>
+
+    <!--更新学生作业状态-->
+    <update id="updateStudentHomeoworkStatus" parameterType="com.yibazhang.provider.entity.HomeWorkStudent">
+            update homework_student
+            set
+              h_status_stu = #{hStatusStu,jdbcType=INTEGER}
+            where 1=1
+            <if test="sId!=null">
+                and s_id = #{sId}
+            </if>
+            <if test="hId!=null">
+                and h_id = #{hId}
+            </if>
+    </update>
 </mapper>

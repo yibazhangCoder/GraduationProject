@@ -1,5 +1,6 @@
 package com.yibazhang.api.service;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.yibazhang.api.bean.HomeWorkDTO;
 import com.yibazhang.api.bean.HomeWorkTeacherStudentDTO;
 
@@ -56,4 +57,6 @@ public interface TeacherHomeworkReceivedAPI {
      * @return
      */
     Boolean updateTeacherStudentHomeworkStatus(HomeWorkTeacherStudentDTO homeWorkTeacherStudentDTO);
+
+
 }

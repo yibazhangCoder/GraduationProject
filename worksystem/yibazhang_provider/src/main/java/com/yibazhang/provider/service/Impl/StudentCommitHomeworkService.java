@@ -1,14 +1,17 @@
 package com.yibazhang.provider.service.Impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.yibazhang.api.bean.HomeWorkStudentDTO;
 import com.yibazhang.api.bean.HomeworkToTeacherDTO;
 import com.yibazhang.api.bean.StudentCommitHomeworkDTO;
 import com.yibazhang.api.service.StudentCommitHomeworkAPI;
 import com.yibazhang.provider.domain.StudentHomeworkCommitDomain;
+import com.yibazhang.provider.entity.HomeWorkStudent;
 import com.yibazhang.provider.entity.HomeWorkTeacherStudent;
 import com.yibazhang.provider.entity.StudentHomeworkCommit;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 
 /**
  * @Author 一巴掌
@@ -41,5 +44,15 @@ public class StudentCommitHomeworkService implements StudentCommitHomeworkAPI {
         HomeWorkTeacherStudent homeWorkTeacherStudent = new HomeWorkTeacherStudent();
         BeanUtils.copyProperties(homeworkToTeacherDTO,homeWorkTeacherStudent);
         return studentHomeworkCommitDomain.insertHomeworkToTeacher(homeWorkTeacherStudent);
+    }
+
+    @Override
+    public boolean updateStudentHomeworkStatus(HomeWorkStudentDTO homeWorkStudentDTO) {
+        if(homeWorkStudentDTO.getHId()==null
+                ||homeWorkStudentDTO.getSId()==null
+                ||homeWorkStudentDTO.getHStatusStu()==null)return false;
+        HomeWorkStudent homeWorkStudent = new HomeWorkStudent();
+        BeanUtils.copyProperties(homeWorkStudentDTO,homeWorkStudent);
+        return studentHomeworkCommitDomain.updateStudentHomeworkStatus(homeWorkStudent);
     }
 }

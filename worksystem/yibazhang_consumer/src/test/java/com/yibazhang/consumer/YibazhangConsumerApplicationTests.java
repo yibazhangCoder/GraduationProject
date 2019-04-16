@@ -1,7 +1,9 @@
 package com.yibazhang.consumer;
 
 import com.yibazhang.api.bean.HomeWorkDTO;
+import com.yibazhang.api.bean.HomeWorkTeacherStudentDTO;
 import com.yibazhang.consumer.service.HomeWorkService;
+import com.yibazhang.consumer.service.TeacherHomeworkReceivedService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class YibazhangConsumerApplicationTests {
 
     @Autowired
     HomeWorkService homeWorkService;
+
+    @Autowired
+    TeacherHomeworkReceivedService teacherHomeworkReceivedService;
 
     @Test
     public void contextLoads() {
@@ -57,6 +62,13 @@ public class YibazhangConsumerApplicationTests {
              list) {
             System.out.println(map.get("hId"));
         }
+    }
+
+    @Test
+    public void testUpdateHomeworkStatusByTeacher(){
+        HomeWorkTeacherStudentDTO homeWorkTeacherStudentDTO = new HomeWorkTeacherStudentDTO();
+
+        teacherHomeworkReceivedService.updateHomeworkStudentTeacher(homeWorkTeacherStudentDTO);
     }
 }
 

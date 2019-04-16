@@ -101,7 +101,7 @@
             ,exts:'zip|docx|doc|pdf'
             ,bindAction: '#fileAction'
             ,before:function (obj) {
-                layer.loading;
+                layer.load();
                 this.data={
                     'tId':$("#tId").val(),
                     'sId':$("#sId").val(),

@@ -183,6 +183,7 @@
             var data = obj.data;
             var event = obj.event;
             if(event === "getFile"){
+                layer.load(2, {time: 10*1000});
                 setTimeout(function () {
                     location.reload();
                 },5000);
@@ -202,6 +203,9 @@
 </script>
 
 <script type="text/html" id="buttons">
+    {{#  var startTime = new Date(d.hStarttime)}}
+    {{#  var endTime = new Date(d.hEndtime)}}
+    {{#  var today = new Date()}}
     {{#  if(d.hStatusStu == 0){ }}
          <a href='/download?hId={{d.hId}}&type=0' class="layui-btn  layui-btn-radius layui-btn-sm" lay-event="getFile">领取</a>
     {{#  } else if(d.hStatusStu ==1){ }}
@@ -209,6 +213,9 @@
          <a href="/download?hId={{d.hId}}&type=0&again=0" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-orange" lay-event="reGetFile">重新领取</a>
     {{#  } else if(d.hStatusStu ==2){ }}
          <a  class="layui-btn  layui-btn-radius layui-btn-sm layui-bg-red" lay-event="detail">查看</a>
+        {{#  if(today < endTime && today>startTime){ }}
+    <a href="/download?hId={{d.hId}}&type=0&again=0" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-orange" lay-event="reGetFile">重新提交</a>
+        {{#  }  }}
     {{#  } else if(d.hStatusStu ==3){ }}
         <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-red" lay-event="detail">查看</a>
         <a href="#" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-cyan" lay-event="comment">评论</a>
