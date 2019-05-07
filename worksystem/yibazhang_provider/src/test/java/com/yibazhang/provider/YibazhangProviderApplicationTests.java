@@ -4,6 +4,7 @@ import com.yibazhang.provider.domain.HomeworkDomain;
 import com.yibazhang.provider.domain.TeacherHomeworkReceiveAndOperatorDomain;
 import com.yibazhang.provider.entity.HomeWork;
 import com.yibazhang.provider.entity.Student;
+import com.yibazhang.provider.entity.ext.StudentExt;
 import com.yibazhang.provider.entity.sys.ext.SysUserExt;
 import com.yibazhang.provider.mapper.HomeWorkMapper;
 import com.yibazhang.provider.mapper.StudentMapper;
@@ -129,7 +130,7 @@ public class YibazhangProviderApplicationTests {
 
     @Test
     public void testSelectStudent(){
-        Student student =new Student();
+        StudentExt student =new StudentExt();
         student.setsAca(10001);
         student.setsProfession(100001);
         List<Map<String,Object>> list = studentMapperExt.selectStudents(student);

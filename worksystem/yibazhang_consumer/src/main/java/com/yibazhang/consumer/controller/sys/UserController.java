@@ -7,10 +7,11 @@ import com.yibazhang.consumer.common.BaseController;
 import com.yibazhang.consumer.service.sys.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 /**
  * @Author 一巴掌
@@ -31,14 +32,20 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject userLogin(UserDTO userDTO,HttpSession session){
+    public String userLogin(UserDTO userDTO, HttpSession session, Model model){
         if (userDTO.getUserId()==null||userDTO.getPassword()==null) {
-            return fail4Param("用户名和密码不能为空！");
+            model.addAttribute("msg","用户名或者密码不能为空！");
+            return "login";
         }
         UserDTO dto = service.userLogin(userDTO.getUserId(),userDTO.getPassword());
-        if(dto==null)return fail(405,"用户名或密码错误！");
-        if(dto.getUserId()==null||dto.getUserName()==null||dto.getUserRoleId()==null)return fail(405,"用户名或密码错误！ ");
+        if(dto==null){
+            model.addAttribute("msg","用户名或者密码错误！");
+            return "login";
+        }
+        if(dto.getUserId()==null||dto.getUserName()==null||dto.getUserRoleId()==null){
+            model.addAttribute("msg","用户名或者密码错误！");
+            return "login";
+        }
         if(dto.getUserRoleId()!=null) {
             if (dto.getUserRoleId() == 0) dto.setAdmin(true);
             else if (dto.getUserRoleId() == 1) dto.setStudent(true);
@@ -46,11 +53,11 @@ public class UserController extends BaseController {
         }
         if(dto!=null&&(dto.getUserId()!=null&&dto.getUserName()!=null)){
             session.setAttribute("userInfo",dto);
-            return success("登陆成功！");
         }else {
-            return fail(405,"用户名或密码错误！");
+            model.addAttribute("msg","用户名或者密码错误！");
+            return "login";
         }
-
+        return  "redirect:/success.html";
     }
 
     /**
@@ -65,7 +72,6 @@ public class UserController extends BaseController {
         if (student.getSId()==null
                 ||student.getSName()==null
                 ||student.getSEmail()==null
-                ||student.getSAge()==null
                 ||student.getSSex()==null
                 ||student.getSAca()==null
                 ||student.getSProfession()==null

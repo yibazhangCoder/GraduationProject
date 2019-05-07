@@ -26,7 +26,7 @@
         <form class="layui-form" method="post" id="uploadForm" enctype="multipart/form-data">
             <input type="text" id="tId" th:value="${session.userInfo.userId}" hidden>
             <div class="layui-form-item">
-                <div class="layui-input-inline" style="width: 330px">
+                <div class="layui-input-inline" style="width:40%">
                     <label class="layui-form-label">课程名称：</label>
                     <div class="layui-input-inline">
                         <select name="crName" id="crName" lay-verify="required" lay-filter="nextQueryProject">
@@ -35,7 +35,7 @@
                     </div>
                 </div>
 
-                <div class="layui-input-inline" style="margin-left:20px;width: 350px">
+                <div class="layui-input-inline" style="margin-left:5%;width: 40%">
                     <label class="layui-form-label">课程编号：</label>
                     <div class="layui-input-inline">
                         <input  type="text" name="hCourse" id="crId"  autocomplete="off" class="layui-input layui-disabled" disabled>
@@ -43,13 +43,13 @@
                 </div>
             </div>
             <div class="layui-form-item"  style="margin-top: 50px">
-                <div class="layui-input-inline" style="width: 350px">
+                <div class="layui-input-inline" style="width: 40%">
                     <label class="layui-form-label">发布时间：</label>
                     <div class="layui-input-inline">
                         <input  type="text" class="layui-input" lay-verify="required" name="hStarttime" id="startTime" placeholder="yyyy-MM-dd HH:mm:ss">
                     </div>
                 </div>
-                <div class="layui-input-inline" style="width: 350px">
+                <div class="layui-input-inline" style="width: 40%;margin-left: 5%">
                     <label class="layui-form-label">截至时间：</label>
                     <div class="layui-input-inline">
                         <input  type="text" class="layui-input" id="endTime" lay-verify="required" name="hEndtime" placeholder="yyyy-MM-dd HH:mm:ss">
@@ -57,31 +57,31 @@
                 </div>
             </div>
             <div class="layui-form-item" style="margin-top: 50px">
-                <div class="layui-input-inline" style="width: 400px">
-                    <label class="layui-form-label" style="width: 100px">按选课发布：</label>
-                    <div class="layui-input-inline" style="margin-left: 50px">
+                <div class="layui-input-inline" style="width:50%">
+                    <label class="layui-form-label" style="width: 40%">按选课发布：</label>
+                    <div class="layui-input-inline" style="margin-left: 5%">
                         <input  type="radio" name="publictype" value="0"  lay-filter="publictype" checked>
                     </div>
                 </div>
-                <div class="layui-input-inline" style="margin-left: -50px;width: 400px">
-                    <label class="layui-form-label" style="width: 100px">按专业发布：</label>
-                    <div class="layui-input-inline" style="margin-left: 50px">
+                <div class="layui-input-inline" style="margin-left:-5%;width: 50%">
+                    <label class="layui-form-label" style="width: 40%">按专业发布：</label>
+                    <div class="layui-input-inline" style="margin-left:5%">
                         <input  type="radio" name="publictype" value="1" lay-filter="publictype" style="margin-left: 50px">
                     </div>
                 </div>
             </div>
             <div class="layui-form-item layui-hide" style="margin-top: 50px" id="selectPro" hidden>
-                <div class="layui-input-inline" style="width: 400px">
-                    <label class="layui-form-label" style="width: 100px">请选择学院：</label>
-                    <div class="layui-input-inline" style="width:200px;">
+                <div class="layui-input-inline" style="width: 50%">
+                    <label class="layui-form-label" style="width: 30%">请选择学院：</label>
+                    <div class="layui-input-inline" style="width:50%;">
                         <select class="layui-input" name="acaId" id="acaId" lay-filter="aca_select">
                             <option value="">--请选择--</option>
                         </select>
                     </div>
                 </div>
-                <div class="layui-input-inline" style="width: 400px">
-                    <label class="layui-form-label" style="width: 100px">请选择专业：</label>
-                    <div class="layui-input-inline" style="width:200px;">
+                <div class="layui-input-inline" style="width: 50%;margin-left: -5%">
+                    <label class="layui-form-label" style="width: 30%">请选择专业：</label>
+                    <div class="layui-input-inline" style="width:50%;">
                         <select class="layui-input" name="professionId" id="professionId">
                             <option value="">--请选择--</option>
                         </select>
@@ -89,7 +89,7 @@
                 </div>
             </div>
             <div class="layui-form-item" style="margin-top: 50px">
-                <label class="layui-form-label" style="width: 100px">作业上传：</label>
+                <label class="layui-form-label" >作业上传：</label>
                 <div class="layui-input-block">
                     <div class="layui-upload">
                         <button type="button" class="layui-btn layui-btn-normal" id="fileSelectBtn">选择作业</button>
@@ -97,12 +97,12 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 100px">注意：</label>
+                <label class="layui-form-label" >注意：</label>
                 <div class="layui-form-mid layui-word-aux"><span style="color: red;font-weight: bold">*作业格式只能是zip、doc、docx、pdf，多个作业请打包为zip格式*</span></div>
             </div>
             <div class="layui-form-item" style="margin-top: 50px">
-                <div class="layui-input-inline" style="width: 600px">
-                    <label class="layui-form-label" style="width: 100px">作业说明：</label>
+                <div class="layui-input-inline" style="width: 50%">
+                    <label class="layui-form-label" >作业说明：</label>
                     <div class="layui-input-inline">
                         <input type="text" name="hComment" id="comments" class="layui-input">
                     </div>
@@ -158,8 +158,10 @@
             }
             uploadListIns.upload();
         });
+
+        var typeVal;
         form.on('radio(publictype)',function (data) {
-            var typeVal = data.value;
+             typeVal = data.value;
             if(typeVal==0){
                 $("#selectPro").addClass('layui-hide').attr('hidden',true);
                 $("#acaId").val("");
@@ -181,12 +183,13 @@
                 ,exts:'zip|docx|doc|pdf'
                 ,bindAction: '#fileListAction'
                 ,before:function (obj) {
+                    console.log(typeVal)
                     this.data={'crName':$("#crName").val(),
                         'hCourse':$("#crId").val(),
                         'hStarttime':$("#startTime").val(),
                         'hEndtime':$("#endTime").val(),
-                        'acaId':$("#acaId").val(),
-                        'professionId':$("#professionId").val(),
+                        'acaId':typeVal==1?$("#acaId").val():"",
+                        'professionId':typeVal==1?$("#professionId").val():"",
                         'hComment':$("#comments").val()
                     };
                     layer.load();

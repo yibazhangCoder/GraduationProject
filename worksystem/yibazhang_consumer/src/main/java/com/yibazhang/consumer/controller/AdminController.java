@@ -1,14 +1,18 @@
 package com.yibazhang.consumer.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.corba.se.spi.ior.ObjectKey;
 import com.yibazhang.api.bean.*;
 import com.yibazhang.api.bean.ext.AcaDTOExt;
 import com.yibazhang.consumer.common.BaseController;
 import com.yibazhang.consumer.service.AdminService;
+import com.yibazhang.consumer.service.StudentService;
 import com.yibazhang.consumer.utils.EnclosureJsonData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Jsp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +34,8 @@ public class AdminController extends BaseController {
     @Autowired
     AdminService adminService;
 
+    @Autowired
+    StudentService studentService;
     /**
      *根据type添加信息
      * 当
@@ -162,5 +168,26 @@ public class AdminController extends BaseController {
         if(!adminService.selectCourses(courseDTO).isEmpty())return fail(401,"课程信息已存在");
         if(adminService.addCourseInfo(courseDTO))return success("课程信息添加成功！");
         return fail(400,"信息添加失败");
+    }
+
+    @RequestMapping("/getStudents")
+    @ResponseBody
+    public JSONObject getStudents(Student student){
+        if(student.getPage()==null)student.setPage(1);
+        if(student.getLimit()==null)student.setLimit(5);
+        PageHelper.startPage(student.getPage(),student.getLimit());
+        JSONObject jsonObject = new JSONObject();
+        if(student.getSelType()!=null&&student.getSelVal()!=null){
+            if(student.getSelType()==0)student.setAcaName(student.getSelVal().trim());
+            if(student.getSelType()==1)student.setProfessionName(student.getSelVal().trim());
+            if(student.getSelType()==2)student.setSId(Integer.parseInt(student.getSelVal()));
+            if(student.getSelType()==3)student.setSName(student.getSelVal());
+        }
+        List<Map<String,Object>> list = studentService.getStudents(student);
+        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(list,5);
+        jsonObject.put("code",0);
+        jsonObject.put("count",pageInfo.getTotal());
+        jsonObject.put("data",pageInfo.getList());
+        return success(jsonObject);
     }
 }

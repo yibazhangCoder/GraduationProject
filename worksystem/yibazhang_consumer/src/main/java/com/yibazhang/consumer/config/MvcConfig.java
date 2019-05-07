@@ -32,23 +32,29 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
-                .excludePathPatterns("/","/sys/userLogin","/index.html","/sys/userRegister","/toRegister","/toForgetPWD","/sys/forgetPWD")
-                .excludePathPatterns("/admin/selectAcaInfo","/mail/getCheckCode")
+                .excludePathPatterns("/","/sys/userLogin","/index.html","/toRegister","/toForgetPWD","/sys/forgetPWD")
+                .excludePathPatterns("/mail/getCheckCode")
                 .excludePathPatterns("/static/**");
     }
+
+
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("login");
         registry.addViewController("/index.html").setViewName("login");
         registry.addViewController("/success.html").setViewName("main");
+        registry.addViewController("/welcome.html").setViewName("welcome");
 
         //路由配置
         registry.addViewController("/admin/AcaManage").setViewName("admin/InfoManage/AcaInfoAdd");
         registry.addViewController("/admin/teaInfoList").setViewName("admin/InfoManage/TeacherInfoList");
         registry.addViewController("/admin/teaInfoAdd").setViewName("admin/InfoManage/TeacherInfoAdd");
+        registry.addViewController("/admin/stuInfoList").setViewName("admin/InfoManage/StudentInfoList");
+        registry.addViewController("/admin/stuInfoAdd").setViewName("admin/InfoManage/StudentInfoAdd");
         registry.addViewController("/admin/courseInfoManage").setViewName("admin/InfoManage/CourseInfoManage");
         registry.addViewController("/course/selectCourse").setViewName("course/courseSelect");
+
 
         registry.addViewController("/student/hwList").setViewName("student/stu_homeWorkList");
         registry.addViewController("/student/hwAdd").setViewName("student/stu_homeWorkUp");

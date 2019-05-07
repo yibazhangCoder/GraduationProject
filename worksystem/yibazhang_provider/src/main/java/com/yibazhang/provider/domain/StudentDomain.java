@@ -1,6 +1,7 @@
 package com.yibazhang.provider.domain;
 
 import com.yibazhang.provider.entity.Student;
+import com.yibazhang.provider.entity.ext.StudentExt;
 import com.yibazhang.provider.mapper.ext.StudentMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,7 @@ public class StudentDomain {
     StudentMapperExt studentMapperExt;
 
 
-    public List<Map<String,Object>>  getStudents(Student student){
-        if (student==null)return null;
+    public List<Map<String,Object>>  getStudents(StudentExt student){
         return studentMapperExt.selectStudents(student);
     }
 }

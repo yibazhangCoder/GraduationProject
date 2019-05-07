@@ -68,4 +68,10 @@ public class StudentHomeworkCommitDomain {
                 ||homeWorkStudent.gethStatusStu()==null)return false;
         return studentHomeworkCommitMapperExt.updateStudentHomeoworkStatus(homeWorkStudent)>0;
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateStudentHomework(StudentHomeworkCommit studentHomeworkCommit){
+        if(studentHomeworkCommit==null)return false;
+        return homeworkCommitMapper.updateByPrimaryKeySelective(studentHomeworkCommit)>0;
+    }
 }

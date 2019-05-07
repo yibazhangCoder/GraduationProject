@@ -1,0 +1,32 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibazhang.provider.mapper.ext.CountMapper">
+
+    <select id="selectCommentTOPDESC" parameterType="java.lang.Integer" resultType="java.lang.String">
+                SELECT
+            hw.h_realname
+        FROM
+            home_work hw
+        LEFT JOIN student_homework_commit shc ON shc.h_id = hw.h_id
+        AND shc.student_homework_status = 1
+        WHERE
+            hw.h_uper = #{tId}
+        AND shc.pleasured IN (3, 4, 5)
+        AND shc.difficult IN (3, 4, 5)
+        ORDER BY shc.pleasured DESC
+    </select>
+
+    <select id="selectCommentTOPASC" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT
+            hw.h_realname
+        FROM
+            home_work hw
+        LEFT JOIN student_homework_commit shc ON shc.h_id = hw.h_id
+        AND shc.student_homework_status = 1
+        WHERE
+            hw.h_uper = #{tId}
+        AND shc.pleasured IN (1, 2)
+        AND shc.difficult IN (1, 2)
+        ORDER BY shc.pleasured ASC
+    </select>
+
+</mapper>

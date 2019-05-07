@@ -79,6 +79,24 @@
         <table class="layui-hide" id="homeworkTable" lay-filter="homeworkTable"></table>
     </fieldset>
 </div>
+
+<div  class="layui-form" id="homeworkPop" style="padding:10px;display: none;">
+    <form class="layui-form layui-form-pane" >
+        <div class="layui-form-item">
+            <label class="layui-form-label">分数</label>
+            <div class="layui-input-block">
+                <input type="number" step="1" value="60" name="score" id="score"  class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">教师评语</label>
+            <div class="layui-input-block">
+                <textarea rows="5" cols="5" id="updateComment" class="layui-textarea" readonly></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
 <script th:inline="none">
     layui.use(['table', 'layer','form','laydate'], function(){
         var table = layui.table
@@ -192,10 +210,25 @@
                 if(data.hStatusStu==2){
                     layer.msg("已提交，作业状态正常",{icon:6});
                 }
-            }else if(event === "comment"){
-
-            }else if(event === "sub"){
-
+            }else if(event === "detail2"){
+                layer.msg("老师未对您的作业做出评价",{icon:5,time:2000});
+            }else if(event === "detail1"){
+                $('#score').val(data.score);
+                $('#updateComment').val(data.tRemark);
+                layer.open({
+                    type:1,
+                    skin:"layui-layer-molv",
+                    title:"作业评分",
+                    anim: 1,
+                    area:['350px','300px'],
+                    content:$("#homeworkPop"),
+                    btn:['收到'],
+                    yes:function (index) {
+                        layer.msg("点击评价可对本次作业进行匿名评论！",{icon:3,time:2000},function () {
+                            layer.close(index);
+                        });
+                    }
+                });
             }
         });
 
@@ -217,8 +250,12 @@
     <a href="/download?hId={{d.hId}}&type=0&again=0" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-orange" lay-event="reGetFile">重新提交</a>
         {{#  }  }}
     {{#  } else if(d.hStatusStu ==3){ }}
-        <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-red" lay-event="detail">查看</a>
-        <a href="#" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-cyan" lay-event="comment">评论</a>
+        {{# if(d.score!=null){ }}
+            <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-red" lay-event="detail1">查看<span class="layui-badge-dot layui-bg-orange"></span></a>
+        {{# }else{ }}
+            <a  class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-red" lay-event="detail2">查看</a>
+        {{# } }}
+        <a href="/studentCommit/toDetail?tName={{d.tName}}&hName={{d.hName}}&crId={{d.crId}}&crName={{d.crName}}&id={{d.id}}" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-cyan" lay-event="comment">评论</a>
     {{#  }  }}
 
 </script>

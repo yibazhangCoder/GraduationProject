@@ -67,6 +67,7 @@ public class UserService implements UserApi {
         BeanUtils.copyProperties(student,student1);
         com.yibazhang.provider.entity.Student student2 = userDomain.userRegister(student1);
         Student student3 = new Student();
+        if(student2==null)return null;
         BeanUtils.copyProperties(student2,student3);
         return student3;
     }

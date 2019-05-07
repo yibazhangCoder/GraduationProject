@@ -1,89 +1,50 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="no-js" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>登录界面</title>
-    <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" th:href="@{/static/favicon.ico}">
-    <script th:src="@{/static/js/jquery.js}"></script>
-    <script th:src="@{/static/layui/layui.js}"></script>
-    <style type="text/css">
-        .center{
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 5%;
-        }
-        .margin-x{
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 15px;
-            width: 90%;
-            height: 100%;
-            background-color: #dddddd;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/normalize.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/login.css}" />
+    <!--必要样式-->
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/component.css}" />
+    <!--[if IE]>
+    <script th:src="@{/static/js/html5.js}"></script>
+    <![endif]-->
 </head>
-<body style="background: url(/static/images/bg1.jpg) center no-repeat;'">
-    <div class="margin-x" style="background-color: rgba(0,0,0,0.5)">
-        <div class="margin-x" style="height:100px;width: 30%;padding-top: 30px;background-color: rgba(0,0,0,0.1)">
-            <h1 style="font-size:40px;font-weight: bold">作&nbsp;&nbsp;业&nbsp;&nbsp;管&nbsp;&nbsp;理&nbsp;&nbsp;系&nbsp;&nbsp;统</h1>
+<body>
+<div class="container demo-1">
+    <div class="content">
+        <div id="large-header" class="large-header">
+            <canvas id="demo-canvas"></canvas>
+            <div class="logo_box">
+                <h3>作业系统入口</h3>
+                <form action="/sys/userLogin" id="form"  method="post">
+                    <div class="input_outer">
+                        <span class="u_user"></span>
+                        <input name="userId" class="text"   style="color: #FFFFFF !important" type="text" placeholder="请输入账户">
+                    </div>
+                    <div class="input_outer">
+                        <span class="us_uer"></span>
+                        <input name="password" class="text"   style="color: #FFFFFF !important; position:absolute; z-index:100;" type="password" placeholder="请输入密码">
+                    </div>
+                    <span style="color: red" >[[${msg}]]</span>
+                    <div class="mb2"><a class="act-but submit" id="submit" href="javascript:;" style="color: #FFFFFF">登录</a></div>
+                </form>
+            </div>
         </div>
     </div>
-    <div class="layui-layout-admin">
-        <div class="layui-layout-body center" style="background-color: rgba(0,0,0,0.5);width: 400px;height: 300px">
-            <form class="layui-form">
-                <div class="layui-form center" style="margin-top: 15%">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">账号</label>
-                        <div class="layui-input-inline">
-                            <input  type="text" name="userId" required  lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input layui-btn-radius">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">密码</label>
-                        <div class="layui-input-inline">
-                            <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input layui-btn-radius">
-                        </div>
-                        <span><a th:href="@{/toForgetPWD}" >忘记密码？</a></span>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit lay-filter="formSubmit"  >登录</button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button type="reset" class="layui-btn layui-btn-primary" >重置</button>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <span>没有账号？<a th:href="@{/toRegister}">点击这里注册</a></span>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <script>
-        layui.use('form', function(){
-            var form = layui.form,
-                $=layui.$;
-            //监听提交
-            form.on('submit(formSubmit)', function(data){
-                $.ajax({
-                    url:"/sys/userLogin",
-                    data:data.field,
-                    type:"post",
-                    success:function (res) {
-                        if(res.code==200){
-                            layer.msg(res.msg,{icon:1});
-                            window.location="/success.html";
-                        }else {
-                            layer.msg(res.msg, {icon: 2});
-                        }
-                    }
-                });
-                return false;
-            });
-        });
-    </script>
+</div><!-- /container -->
+<script th:src="@{/static/js/TweenLite.min.js}"></script>
+<script th:src="@{/static/js/EasePack.min.js}"></script>
+<script th:src="@{/static/js/rAF.js}"></script>
+<script th:src="@{/static/js/login-1.js}"></script>
+<script th:src="@{/static/js/jquery.js}"></script>
+<script>
+    $("#submit").click(function () {
+        $("#form").submit();
+    });
+</script>
 </body>
 </html>

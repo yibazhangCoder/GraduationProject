@@ -1,10 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet">
+    <script th:src="@{/static/js/jquery.js}"></script>
+    <script th:src="@{/static/layui/layui.js}"></script>
+    <style type="text/css">
+        .layui-elem-field {
+            background-color: #f2f2f2;
+            width: 700px;
+            margin-right: auto;
+            margin-left: auto;
+            padding:40px;
+        }
+        .boder-class{
+            border-radius: 10px;
+            border: 2px solid skyblue;
+        }
+    </style>
 </head>
 <body>
+    <section id="teacherSection" th:if="${session.userInfo.teacher}">
+        <div style="float: left;width: 50%">
+            <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;width: 80%">
+                <legend>作业好评top5</legend>
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th>作业名称</th>
+                            <th>名次</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+        <div style="float: left;width: 50%">
+            <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;width: 80%">
+                <legend>作业差评top5</legend>
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>作业名称</th>
+                        <th>名次</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;width: 80%">
+                <legend>选课学生统计</legend>
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>课程名称</th>
+                        <th>学生人数</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </section>
+    <section id="studentSection" th:if="${session.userInfo.student}">
+    </section>
 </body>
 </html>

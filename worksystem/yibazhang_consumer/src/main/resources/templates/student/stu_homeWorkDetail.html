@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet">
+    <script th:src="@{/static/js/jquery.js}"></script>
+    <script th:src="@{/static/js/timeStampToTime.js}"></script>
+    <script th:src="@{/static/layui/layui.js}"></script>
+    <style type="text/css">
+        .layui-elem-field {
+            background-color: #f2f2f2;
+            width: 700px;
+            margin-right: auto;
+            margin-left: auto;
+            padding:40px;
+        }
+        .boder-class{
+            border-radius: 10px;
+            border: 2px solid skyblue;
+        }
+    </style>
+</head>
+<body>
+<div style="margin-left:50px;margin-top: 30px">
+    <fieldset class="layui-elem-field boder-class" style="margin-top: 30px;width: 90%;">
+        <form class="layui-form" method="post" id="uploadForm" enctype="multipart/form-data">
+            <input type="text" id="id" name="id" th:value="${id}" class="layui-hide" hidden>
+            <div class="layui-form-item">
+                <div class="layui-input-inline" style="width: 330px">
+                    <label class="layui-form-label">课程名称：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="crName" id="crName"  autocomplete="off" class="layui-input" readonly th:value="${crName}">
+                    </div>
+                </div>
+
+                <div class="layui-input-inline" style="margin-left:20px;width: 350px">
+                    <label class="layui-form-label">课程编号：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="crId" id="crId"  autocomplete="off" class="layui-input" readonly th:value="${crId}">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline" style="width: 330px">
+                    <label class="layui-form-label">作业名称：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="hName" id="hName"  autocomplete="off" class="layui-input " readonly th:value="${hName}">
+                    </div>
+                </div>
+
+                <div class="layui-input-inline" style="margin-left:20px;width: 350px">
+                    <label class="layui-form-label">任课老师：</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="tName" id="tName"  autocomplete="off" class="layui-input" readonly th:value="${tName}">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline" style="margin-left:20px;width: 40%">
+                    <fieldset class="layui-elem-field layui-field-title" style="width:100%">
+                        <legend>困难度</legend>
+                        <div id="difficult"></div>
+                    </fieldset>
+                </div>
+                <div class="layui-input-inline" style="width: 40%">
+                    <fieldset class="layui-elem-field layui-field-title" style="width: 100%" >
+                        <legend>满意度</legend>
+                        <div id="pleasured"></div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="layui-form-item "  >
+                <div class="layui-input-block" >
+                    <button type="button" class="layui-btn"  lay-submit id="fileAction" lay-filter="*" style="margin-left: 40%">提交</button>
+                </div>
+            </div>
+        </form>
+    </fieldset>
+</div>
+<script th:inline="none">
+    layui.use(['table', 'layer','form','rate'], function(){
+        var $=layui.$
+            ,form=layui.form
+            ,layer=layui.layer
+            ,rate = layui.rate;
+        var diffcult;
+        var use_time;
+        var pleasured;
+        //自定义文本
+        rate.render({
+            elem: '#difficult'
+            ,value: 3
+            ,text: true
+            ,setText: function(value){
+                var arrs = {
+                    '1': '极差'
+                    ,'2': '差'
+                    ,'3': '中等'
+                    ,'4': '好'
+                    ,'5': '极好'
+                };
+                this.span.text(arrs[value] || ( value + "星"));
+            },choose:function (value) {
+                diffcult=value;
+            }
+        })
+        rate.render({
+            elem: '#pleasured'
+            ,value: 3
+            ,text: true
+            ,setText: function(value){
+                var arrs = {
+                    '1': '极差'
+                    ,'2': '差'
+                    ,'3': '中等'
+                    ,'4': '好'
+                    ,'5': '极好'
+                };
+                this.span.text(arrs[value] || ( value + "星"));
+            },choose:function (value) {
+                pleasured=value;
+            }
+        });
+
+        form.on("submit(*)",function () {
+           $.ajax({
+            url:'/studentCommit/setComment',
+            type:'post',
+            data:{
+                id:$("#id").val(),
+                difficult:diffcult,
+                pleasured:pleasured
+            },success:function (res) {
+                console.log(res)
+                if(res.code==200){
+                    layer.msg(res.data,{icon:6,time:2000},function () {
+                        location.href="/student/hwList"
+                    })
+                }else {
+                    layer.msg(res.msg)
+                }
+            }
+           });
+        });
+
+    });
+</script>
+</body>
+</html>

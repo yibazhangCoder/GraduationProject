@@ -55,4 +55,12 @@ public class StudentCommitHomeworkService implements StudentCommitHomeworkAPI {
         BeanUtils.copyProperties(homeWorkStudentDTO,homeWorkStudent);
         return studentHomeworkCommitDomain.updateStudentHomeworkStatus(homeWorkStudent);
     }
+
+    @Override
+    public boolean updateStudentCommitedHomework(StudentCommitHomeworkDTO studentCommitHomeworkDTO) {
+        if(studentCommitHomeworkDTO==null)return false;
+        StudentHomeworkCommit studentHomeworkCommit = new StudentHomeworkCommit();
+        BeanUtils.copyProperties(studentCommitHomeworkDTO,studentHomeworkCommit);
+        return studentHomeworkCommitDomain.updateStudentHomework(studentHomeworkCommit);
+    }
 }

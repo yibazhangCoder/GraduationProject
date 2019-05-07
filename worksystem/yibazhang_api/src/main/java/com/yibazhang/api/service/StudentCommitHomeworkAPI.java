@@ -33,4 +33,9 @@ public interface StudentCommitHomeworkAPI {
      * @return
      */
     boolean updateStudentHomeworkStatus(HomeWorkStudentDTO homeWorkStudentDTO);
+
+    /**
+     * 学生评价接口
+     */
+    boolean updateStudentCommitedHomework(StudentCommitHomeworkDTO studentCommitHomeworkDTO);
 }

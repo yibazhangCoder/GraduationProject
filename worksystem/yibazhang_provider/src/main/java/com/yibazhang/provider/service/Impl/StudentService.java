@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.yibazhang.api.bean.Student;
 import com.yibazhang.api.service.StudentApi;
 import com.yibazhang.provider.domain.StudentDomain;
+import com.yibazhang.provider.entity.ext.StudentExt;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,9 +26,10 @@ public class StudentService implements StudentApi {
 
     @Override
     public List<Map<String, Object>> getStudents(Student student) {
-        if(student==null)return null;
-        com.yibazhang.provider.entity.Student s = new com.yibazhang.provider.entity.Student();
-        BeanUtils.copyProperties(student,s);
+        StudentExt s = new StudentExt();
+        if(student!=null){
+            BeanUtils.copyProperties(student,s);
+        }
         return studentDomain.getStudents(s);
     }
 }

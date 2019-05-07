@@ -31,11 +31,11 @@ public enum HomeWorkStatusEnum implements BaseEnum<HomeWorkStatusEnum,Integer> {
 
     Integer value;
 
-    String name;
+    String key;
 
-    HomeWorkStatusEnum(Integer value,String name){
+    HomeWorkStatusEnum(Integer value,String key){
         this.value=value;
-        this.name=name;
+        this.key=key;
     }
     @Override
     public Integer getValue() {
@@ -44,7 +44,7 @@ public enum HomeWorkStatusEnum implements BaseEnum<HomeWorkStatusEnum,Integer> {
 
     @Override
     public String getDisplayName() {
-        return name;
+        return key;
     }
 
     public static HomeWorkStatusEnum valueOf(Integer value){

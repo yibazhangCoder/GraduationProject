@@ -13,6 +13,7 @@ import com.yibazhang.consumer.utils.FolderCreateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,5 +100,32 @@ public class StudentHomeworkCommitController extends BaseController {
         }
 
         return success();
+    }
+
+
+    @RequestMapping("/toDetail")
+    public ModelAndView toDetail(@RequestParam(value = "tName")String tName,
+                                 @RequestParam(value = "hName")String hName,
+                                 @RequestParam(value = "crId")Integer crId,
+                                 @RequestParam(value = "crName")String crName,
+                                 @RequestParam(value = "id")Integer id
+                                 ){
+        ModelAndView modelAndView = new ModelAndView("student/stu_homeWorkDetail");
+        modelAndView.addObject("tName",tName);
+        modelAndView.addObject("hName",hName);
+        modelAndView.addObject("crId",crId);
+        modelAndView.addObject("id",id);
+        modelAndView.addObject("crName",crName);
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/setComment",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject settingStudnetComment(StudentCommitHomeworkDTO studentCommitHomeworkDTO){
+        if(studentCommitHomeworkDTO.getId()==null)return fail4Param("参数错误");
+        boolean flag = studentCommitHomeworkService.settingStudentComment(studentCommitHomeworkDTO);
+        if(!flag)return fail(401,"更新失败");
+        return success("提交成功");
     }
 }

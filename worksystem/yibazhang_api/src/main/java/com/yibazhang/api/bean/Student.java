@@ -1,5 +1,6 @@
 package com.yibazhang.api.bean;
 
+import com.yibazhang.api.common.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import java.io.Serializable;
 
 @Setter
 @Getter
-public class Student implements Serializable {
+public class Student extends BaseDTO {
     private Integer sId;
 
     private Integer sAge;
@@ -25,4 +26,8 @@ public class Student implements Serializable {
     private Integer sProfession;
 
     private Integer sClass;
+
+    private String acaName;
+
+    private String professionName;
 }

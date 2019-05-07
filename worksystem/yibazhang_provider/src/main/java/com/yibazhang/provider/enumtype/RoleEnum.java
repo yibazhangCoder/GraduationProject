@@ -20,11 +20,11 @@ public enum RoleEnum implements BaseEnum<RoleEnum,Integer>{
 
     Integer value;
 
-    String name;
+    String key;
 
-    RoleEnum(Integer value,String name){
+    RoleEnum(Integer value,String key){
         this.value=value;
-        this.name=name;
+        this.key=key;
     }
     @Override
     public Integer getValue() {
@@ -33,7 +33,7 @@ public enum RoleEnum implements BaseEnum<RoleEnum,Integer>{
 
     @Override
     public String getDisplayName() {
-        return name;
+        return key;
     }
 
     public static RoleEnum valueOf(Integer value){

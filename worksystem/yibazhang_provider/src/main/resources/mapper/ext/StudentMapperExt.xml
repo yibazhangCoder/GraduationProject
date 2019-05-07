@@ -31,5 +31,14 @@
          <if test="sId!=null">
              and s.s_id=#{sId}
          </if>
+         <if test="sName!=null">
+             and s.s_name like   concat(concat('%',#{sName}),'%')
+         </if>
+        <if test="professionName!=null">
+            and p.profession_name like   concat(concat('%',#{professionName}),'%')
+        </if>
+        <if test="acaName!=null">
+            and a.aca_name like concat(concat('%',#{acaName}),'%')
+        </if>
     </select>
 </mapper>

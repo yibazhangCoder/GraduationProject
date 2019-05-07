@@ -38,4 +38,8 @@ public class StudentCommitHomeworkService {
                 ||homeWorkStudentDTO.getHId()==null)return false;
         return studentCommitHomeworkAPI.updateStudentHomeworkStatus(homeWorkStudentDTO);
     }
+
+    public boolean settingStudentComment(StudentCommitHomeworkDTO studentCommitHomeworkDTO){
+        return studentCommitHomeworkAPI.updateStudentCommitedHomework(studentCommitHomeworkDTO);
+    }
 }
