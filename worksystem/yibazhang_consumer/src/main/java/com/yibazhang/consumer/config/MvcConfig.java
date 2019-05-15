@@ -70,6 +70,9 @@ public class MvcConfig implements WebMvcConfigurer {
 
         registry.addViewController("/error").setViewName("common/error");
         registry.addViewController("/success").setViewName("common/success");
+
+        registry.addViewController("/updatePWD").setViewName("common/updatePassword");
+        registry.addViewController("/personInfo").setViewName("common/personInfoDetail");
     }
 
     @Override

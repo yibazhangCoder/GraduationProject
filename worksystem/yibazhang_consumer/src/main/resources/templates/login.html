@@ -21,6 +21,7 @@
             <div class="logo_box">
                 <h3>作业系统入口</h3>
                 <form action="/sys/userLogin" id="form"  method="post">
+                    <input id="hasUser" type="text" th:value="${hasUser}" hidden>
                     <div class="input_outer">
                         <span class="u_user"></span>
                         <input name="userId" class="text"   style="color: #FFFFFF !important" type="text" placeholder="请输入账户">
@@ -41,9 +42,18 @@
 <script th:src="@{/static/js/rAF.js}"></script>
 <script th:src="@{/static/js/login-1.js}"></script>
 <script th:src="@{/static/js/jquery.js}"></script>
+<script th:src="@{/static/layui/layui.js}"></script>
 <script>
-    $("#submit").click(function () {
-        $("#form").submit();
+    layui.use(['element','layer'], function() {
+        $("#submit").click(function () {
+            $("#form").submit();
+        });
+        var hasUser = $("#hasUser").val();
+        if (hasUser != '') {
+            layer.msg(hasUser, {icon: 3}, function () {
+                window.location.href = "/success.html"
+            })
+        }
     });
 </script>
 </body>

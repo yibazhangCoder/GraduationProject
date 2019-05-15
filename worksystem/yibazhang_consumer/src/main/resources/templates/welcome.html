@@ -23,10 +23,16 @@
 </head>
 <body>
     <section id="teacherSection" th:if="${session.userInfo.teacher}">
+        <div>
+            <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;width: 80%">
+                <legend>通知栏</legend>
+
+            </fieldset>
+        </div>
         <div style="float: left;width: 50%">
             <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;width: 80%">
                 <legend>作业好评top5</legend>
-                <table class="layui-table">
+                <table class="layui-table" id="TOPDESC">
                     <thead>
                         <tr>
                             <th>作业名称</th>
@@ -34,7 +40,6 @@
                         </tr>
                     </thead>
                     <tbody>
-
                     </tbody>
                 </table>
             </fieldset>
@@ -42,37 +47,57 @@
         <div style="float: left;width: 50%">
             <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;width: 80%">
                 <legend>作业差评top5</legend>
-                <table class="layui-table">
+                <table class="layui-table" id="TOPASC">
                     <thead>
-                    <tr>
-                        <th>作业名称</th>
-                        <th>名次</th>
-                    </tr>
+                        <tr>
+                            <th>作业名称</th>
+                            <th>名次</th>
+                        </tr>
                     </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
-            </fieldset>
-        </div>
-        <div>
-            <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;width: 80%">
-                <legend>选课学生统计</legend>
-                <table class="layui-table">
-                    <thead>
-                    <tr>
-                        <th>课程名称</th>
-                        <th>学生人数</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </fieldset>
         </div>
     </section>
     <section id="studentSection" th:if="${session.userInfo.student}">
     </section>
+    <script th:inline="none">
+        layui.use( 'layer', function(){
+            var $=layui.$
+                ,layer=layui.layer;
+            $(function () {
+               $.ajax({
+                   url:'/count/selectTOP',
+                   type:'post',
+                   data:{
+                       type:1
+                   },
+                   success:function (res) {
+                       var arr =res.data.homeworks;
+                       $.each(arr,function (index,item) {
+                           var hName = $("<td></td>").append(item);
+                           var i =$("<td></td>").append(index++);
+                           $("<tr></tr>").append(hName).append(i).appendTo("#TOPDESC");
+                       })
+                   }
+               }) ;
+               $.ajax({
+                   url:'/count/selectTOP',
+                   type:'post',
+                   data:{
+                       type:0
+                   },
+                   success:function (res) {
+                       var arr =res.data.homeworks;
+                       $.each(arr,function (index,item) {
+                           var hName = $("<td></td>").append(item);
+                           var i =$("<td></td>").append(++index);
+                           $("<tr></tr>").append(hName).append(i).appendTo("#TOPASC");
+                       })
+                   }
+               });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -162,6 +162,8 @@
                 ,{field: 'status', title: '作业状态', width:120,align:'center',templet: function (d) {
 
                         var temp = d.hStatusStu;
+                        var endTime = new Date(d.hEndtime);
+                        var today = new Date()
                         var res="";
                         if(temp==0){
                             res="待领取";
@@ -171,6 +173,9 @@
                             res="已提交";
                         }else if(temp==3){
                             res="已收取";
+                        }
+                        if(temp==0&&today>endTime){
+                            res ="不可领取";
                         }
                         return res;
                 }}
@@ -240,7 +245,11 @@
     {{#  var endTime = new Date(d.hEndtime)}}
     {{#  var today = new Date()}}
     {{#  if(d.hStatusStu == 0){ }}
-         <a href='/download?hId={{d.hId}}&type=0' class="layui-btn  layui-btn-radius layui-btn-sm" lay-event="getFile">领取</a>
+        {{# if(today > endTime){ }}
+            <a href="#" class="layui-btn  layui-btn-radius layui-bg-gray" disabled>已结束</a>
+        {{# }else{  }}
+            <a href='/download?hId={{d.hId}}&type=0' class="layui-btn  layui-btn-radius layui-btn-sm" lay-event="getFile">领取</a>
+        {{# } }}
     {{#  } else if(d.hStatusStu ==1){ }}
          <a href="/studentCommit/toPage?hId={{d.hId}}&hUper={{d.hUper}}&hName={{d.hName}}&crId={{d.crId}}&crName={{d.crName}}&hEndtime={{d.hEndtime}}" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-blue" lay-event="sub">提交</a>
          <a href="/download?hId={{d.hId}}&type=0&again=0" class="layui-btn  layui-btn-radius layui-btn-xs layui-bg-orange" lay-event="reGetFile">重新领取</a>

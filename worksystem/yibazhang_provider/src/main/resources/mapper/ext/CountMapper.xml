@@ -13,6 +13,7 @@
         AND shc.pleasured IN (3, 4, 5)
         AND shc.difficult IN (3, 4, 5)
         ORDER BY shc.pleasured DESC
+        LIMIT 5
     </select>
 
     <select id="selectCommentTOPASC" parameterType="java.lang.Integer" resultType="java.lang.String">
@@ -27,6 +28,7 @@
         AND shc.pleasured IN (1, 2)
         AND shc.difficult IN (1, 2)
         ORDER BY shc.pleasured ASC
+        LIMIT 5
     </select>
 
 </mapper>

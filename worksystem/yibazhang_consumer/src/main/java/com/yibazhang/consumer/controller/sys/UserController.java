@@ -46,6 +46,11 @@ public class UserController extends BaseController {
             model.addAttribute("msg","用户名或者密码错误！");
             return "login";
         }
+        UserDTO dto1 =(UserDTO) session.getAttribute("userInfo");
+        if(dto1!=null){
+            model.addAttribute("hasUser","当前用户【"+dto1.getUserName()+"】已登录！");
+            return  "login";
+        }
         if(dto.getUserRoleId()!=null) {
             if (dto.getUserRoleId() == 0) dto.setAdmin(true);
             else if (dto.getUserRoleId() == 1) dto.setStudent(true);
