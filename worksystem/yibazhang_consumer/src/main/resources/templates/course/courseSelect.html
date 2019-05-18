@@ -9,7 +9,7 @@
     <style type="text/css">
         .layui-elem-field {
             background-color: #f2f2f2;
-            width: 700px;
+            width: 75%;
             margin-right: auto;
             margin-left: auto;
             padding:40px;
@@ -82,8 +82,8 @@
         //第一个实例
         var courseTable = table.render({
             elem: '#courseTable'
+            ,width:'80%'
             ,height: 300
-            ,width:650
             ,skin:'row'
             ,even:true
             ,toolbar:'#toolbar'
@@ -94,7 +94,7 @@
             ,id:'courseTable'
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'crId', title: '课程编号', width:160,align:'center'}
+                ,{field: 'crId', title: '课程编号', width:170,align:'center'}
                 ,{field: 'crName', title: '课程名', width:180,align:'center'}
                 ,{field: 'acaName', title: '所属学院', width:160,align:'center'}
                 ,{fixed: 'right', title:'操作', toolbar: '#bar', width:100,align:'center'}
@@ -158,8 +158,8 @@
         //教师已选课程
         var courseTabled = table.render({
             elem: '#courseTabled'
+            ,width:'80%'
             ,height: 300
-            ,width:650
             ,skin:'row'
             ,even:true
             ,toolbar:'#toolbared'
@@ -173,14 +173,14 @@
             ,id:'courseTabled'
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'id', title: 'id', width:120,align:'center',hide:true}
-                ,{field: 'crId', title: '课程编号', width:120,align:'center'}
+                ,{field: 'id', title: 'id', width:125,align:'center',hide:true}
+                ,{field: 'crId', title: '课程编号', width:125,align:'center'}
                 ,{field: 'crName', title: '课程名', width:140,align:'center'}
-                ,{field: 'acaName', title: '所属学院', width:160,align:'center'}
-                ,{field: 'selectStatus', title: '状态', width:100,align:'center', templet: function (d) {
+                ,{field: 'acaName', title: '所属学院', width:165,align:'center'}
+                ,{field: 'selectStatus', title: '状态', width:105,align:'center', templet: function (d) {
                         return d.selectStatus==1?'正常':'已退';
                     }}
-                ,{fixed: 'right', title:'操作', toolbar: '#bared', width:100,align:'center'}
+                ,{fixed: 'right', title:'操作', toolbar: '#bared', width:105,align:'center'}
             ]]
         });
 
@@ -229,8 +229,8 @@
         //学生选课
         var courseTable1 = table.render({
             elem: '#courseTable1'
+            ,width:'80%'
             ,height: 300
-            ,width:650
             ,skin:'row'
             ,even:true
             ,toolbar:'#toolbar'
@@ -309,7 +309,7 @@
         var courseTabled1 = table.render({
             elem: '#courseTabled1'
             ,height: 300
-            ,width:650
+            ,width:'80%'
             ,skin:'row'
             ,even:true
             ,toolbar:'#toolbared'

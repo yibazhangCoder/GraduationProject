@@ -6,8 +6,130 @@
     <link th:href="@{/static/layui/css/layui.css}" rel="stylesheet">
     <script th:src="@{/static/js/jquery.js}"></script>
     <script th:src="@{/static/layui/layui.js}"></script>
+    <style type="text/css">
+        .layui-elem-field {
+            background-color: #f2f2f2;
+            width: 75%;
+            margin-right: auto;
+            margin-left: auto;
+            padding:40px;
+        }
+        .boder-class{
+            border-radius: 10px;
+            border: 2px solid skyblue;
+        }
+    </style>
 </head>
 <body>
+    <section id="teacherSection" th:if="${session.userInfo.teacher}">
+        <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;">
+            <legend>教师个人信息</legend>
+            <form class="layui-form">
+                <div class="layui-form-item">
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">教工编号：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled  th:value="${userInfo.tId}">
+                        </div>
+                    </div>
 
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">教工名称：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled  th:value="${userInfo.tName}" >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">电话：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled th:value="${userInfo.tMobile}">
+                        </div>
+                    </div>
+
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">邮箱：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled th:value="${userInfo.tEmail}">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">所属学院：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled th:value="${userInfo.acaName}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
+    </section>
+
+    <section id="studentSection" th:if="${session.userInfo.student}">
+        <fieldset class="layui-elem-field boder-class" style="margin-top: 50px;">
+            <legend>学生个人信息</legend>
+            <form class="layui-form">
+                <div class="layui-form-item">
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">学号：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled th:value="${userInfo.sId}">
+                        </div>
+                    </div>
+
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">学生姓名：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled th:value="${userInfo.sName}" >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">手机：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled th:value="${userInfo.sMobile}">
+                        </div>
+                    </div>
+
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">邮箱：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled th:value="${userInfo.sEmail}">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">所属学院：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled th:value="${userInfo.acaName}">
+                        </div>
+                    </div>
+
+                    <div class="layui-input-inline" style="width: 45%">
+                        <label class="layui-form-label">所属班级：</label>
+                        <div class="layui-input-inline">
+                            <input  type="text"  class="layui-input layui-disabled" disabled th:value="${userInfo.cName}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
+    </section>
+    <fieldset class="layui-elem-field">
+        <span style="color: red">上述信息如若有误<a id="tips">点击此处</a>，并将错误信息反馈到弹框内。</span>
+    </fieldset>
+<script>
+    layui.use('layer',function () {
+        var $ = layui.$,
+            layer = layui.layer;
+            $("#tips").click(function () {
+               layer.msg("该功能待完善!")
+            });
+    });
+</script>
 </body>
 </html>
